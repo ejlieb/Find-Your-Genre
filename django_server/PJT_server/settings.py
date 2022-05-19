@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     # 3rd party library
     'rest_framework',
     'django_extensions',
-    'corsheaders'
+    'corsheaders',
 
     # native
     'django.contrib.admin',
