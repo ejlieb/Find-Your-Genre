@@ -3,6 +3,7 @@
     <div class="for-nav"></div>
     <div class="choose-movie-container container">
       <p id="instruction" >재미있게 봤던, 혹은 보고싶은 영화를 10개 이상 골라주세요!</p>
+      <p>{{ choosedMovie}} </p>
       <p v-if="choosedMovie.length < 10">아직 {{ 10 - choosedMovie.length }}개의 영화를 더 고르셔야 합니다.</p>
       <div v-else>
         <p>다음 단계로 넘어가세요!</p>
@@ -56,9 +57,19 @@ export default {
       target.classList.remove('show')
     },
     addMovie: function(id) {
-      this.choosedMovie.push(id)
-      let target = this.$el.querySelector(`#movieselected-${id}`)
-      target.setAttribute('style', 'opacity:10%;')
+      if (this.choosedMovie.includes(id) === false) {
+          this.choosedMovie.push(id)
+          let target = this.$el.querySelector(`#movieselected-${id}`)
+          target.setAttribute('style', 'opacity:10%;')
+      }
+      else {
+        this.choosedMovie = this.choosedMovie.filter( function(ele){
+          return ele !== id
+        })
+        let target = this.$el.querySelector(`#movieselected-${id}`)
+        target.setAttribute('style', 'opacity:100%;')
+      }
+      
     }
   }
 }
