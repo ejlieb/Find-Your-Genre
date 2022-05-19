@@ -38,6 +38,16 @@ INSTALLED_APPS = [
     
     # 3rd party library
     'rest_framework',
+    # token_authentication
+    'rest_framework.authtoken',
+    # DRF auth 담당
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    # django allauth
+    'allauth',
+    'allauth.account',
+    # allauth 사용을 위해 필요
+    'django.contrib.sites',
     'django_extensions',
     'corsheaders',
 
@@ -139,3 +149,20 @@ AUTH_USER_MODEL = 'accounts.User'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
+
+# django.contrib.sites 에서 등록 필요
+SITE_ID = 1
+
+# drf 설정
+REST_FRAMEWORK = {
+    # 기본 인증방식 설정
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
+    # 기본 권한 설정
+    'DEFAULT_PERMISSION_CLASSES' : [
+        # 'rest_framework.permissions.AllowAny',        # => 기본적으로 모두에게 허용
+         'rest_framework.permissions.IsAuthenticated',  # => 기본적으로 인증받아야 사용
+    ],
+}
