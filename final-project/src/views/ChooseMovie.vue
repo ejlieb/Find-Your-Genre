@@ -3,6 +3,7 @@
     <div class="for-nav"></div>
     <div class="choose-movie-container container">
       <p id="instruction" >재미있게 봤던, 혹은 보고싶은 영화를 골라주세요!</p>
+      <p>{{ movieList }}</p>
       <div class="row mt-5">
         <!-- div에 v-for 돌리기 키값으로 title div에 id 줘서 숨겼다 보였다-->
         <div class="poster-card col-2" @mouseover= "showTitle" @mouseout= "hideTitle" id="">
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ChooseMovie',
   data: function() {
@@ -24,10 +26,22 @@ export default {
       
     }
   },
+  computed: {
+    movieList: function() {
+      return this.$store.getters.movieForChoose
+    }
+  },
+
+  beforeMount: function() {
+      this.$store.dispatch('getMovieForChoose')
+    },
+
   methods: {
     showTitle: function() {
+    },
+    hideTitle: function() {
       
-    }
+    },
   }
 }
 </script>
