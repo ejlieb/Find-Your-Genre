@@ -17,6 +17,10 @@ class Movie(models.Model):
     vote_average = models.FloatField()
     genres_id = models.ManyToManyField(Genre, related_name='movies')
     imdb_id = models.CharField(max_length=10, null=True)
+    metacritic_average = models.FloatField(null=True)
+    rotten_average = models.FloatField(null=True)
+    imdb_average = models.FloatField(null=True)
+
 
 class Actor(models.Model):
     actor_id = models.IntegerField(primary_key=True)
