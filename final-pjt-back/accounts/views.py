@@ -20,22 +20,32 @@ def likes_movie(request):
     # username으로 해당 유저를 조회함 
     user = User.objects.get(username=username)
     
+
     # 받은 영화 목록을 유저의 좋아요 영화 목록에 추가함 
     for movie_id in movie_ids:
         movie = Movie.objects.get(movie_id=movie_id)
         user.movie_likes.add(movie)
-        genres_ids = list(movie.genres_id.all())
+        genres = list(movie.genres_id.all())  # 장르 객체들의 리스트
         
-        temp = str(list(movie.genres_id.all()))
-        
-        # for genre_id in genres_ids:
-        #     genre_cnt = GenreCounts.objects.get(genre_id=genre_id, user_id=user.pk)
-        #     genre_cnt.genre_cnt += 1
+        # results = GenreCounts.objects.filter(genre=genre, user=user)
+        for genre in genres:
+            genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
+            if genre_cnt:
+                genre_cnt[0].genre_cnt += 1
+                genre_cnt[0].save()
+            else:
+                genre_cnt = GenreCounts(genre=genre, user=user)
+                genre_cnt.genre_cnt = 1
+                genre_cnt.save()
+    
+    beloved_genre = GenreCounts.objects.filter(user=user).order_by('-genre_cnt')[:1][0].genre
     
     # 받은 영화의 장르를 장르 카운트에 반영해줌 
     results = {
-        'result': temp
+        'beloved_genre_id': beloved_genre.genre_id,
+        'beloved_genre_name': beloved_genre.genre_name
     }
+    
     return Response(results)
     
 
