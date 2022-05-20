@@ -6,14 +6,65 @@ from pprint import pprint
 from .models import Genre, Movie, Actor, MovieImage
 from .serializers import SignupMovieSerializer
 
-@api_view(('GET',))
+# 로그인을 하면서 동시에 좋아하는 영활를 고를 수 있도록 영화 360개를 송출합니다.
+@api_view(['GET',])
 def signup_movie_serializer(request):
     movies = get_list_or_404(Movie)
+    # 평점이 매겨진 개수가 많은 순서대로 정렬을 하고 상위 360개만을 남깁니다.
     movies.sort(key=lambda x: x.vote_count, reverse=True)
     movies = movies[:360]
+    
     serializer = SignupMovieSerializer(movies, many=True)
     
     return Response(serializer.data)
+
+
+# 장르페이지 이전 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
+@api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
+def main_page_recommend(request):
+    pass
+
+
+# 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
+@api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
+def genre_page_recommend(request):
+    pass
+
+
+# 장르별 평점 순위 10 영화 추천 
+@api_view(['GET', 'POST',])
+def genre_top_ten(request):
+    pass
+'''
+request로 해당 페이지의 장르 그룹을 받음. (1~7)
+해당 장르 그룹에 포함된 장르의 영화들을 모두 조회함. (Genre.objects.filter)
+각 그룹당 10개씩 뽑아서 넣고 random.shuffle로 섞어준 다음에 10개를 뽑아서 보내줌
+'''
+
+
+
+# 좋아하는 배우가 나오는 영화들 무작위 추천
+@api_view(['GET', 'POST'])
+def actor_top_ten(request):
+    pass
+
+'''
+좋아하는 배우가 나오는 영화를 추천함
+만일 좋아하는 배우가 3명 미만인 경우 ==> 자신이 좋아하는 영화 중 가장 많이 등장한 배우의 필모그래피들을 섞어줌
+'''
+
+
+
+# 각 세부 장르별 추천
+@api_view(['GET', 'POST'])
+def each_genre_recommend(request):
+    pass
+
+'''
+요청이 온 장르 그룹에 속하는 영화들 중에서 평점 높은 순으로 50개를 뽑고 랜덤 10개씩 추출
+'''
+
+
 
 
 
