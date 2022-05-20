@@ -3,9 +3,36 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer
+from django.contrib.auth import get_user_model
 
 
-# # Create your views here.
+
+User = get_user_model()
+
+@api_view(['GET', 'POST'])
+def likes_movie(request):
+    movie_ids = request.data.get('likedMovieIds')
+    username = request.data.get('username')
+    user = User.Obejcts.get(username=username)
+    
+    for movie_id in movie_ids:
+        pass
+
+
+    context = {
+        'results': results,
+    }
+
+    return render(request, 'accounts/request_check.html', context)
+    
+    
+
+
+    
+
+
+
+
 # @api_view(['POST'])
 # def signup(request):
 #     password = request.data.get('password')
