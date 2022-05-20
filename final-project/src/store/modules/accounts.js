@@ -24,7 +24,8 @@ export default {
 
   mutations: {
     SET_TOKEN: (state, token) => state.token = token,
-    SET_CURRENT_USER: (state, user) => state.currentUser = user,
+    SET_CURRENT_USER: (state, user) => {
+      state.currentUser = user},
     SET_PROFILE: (state, profile) => state.profile = profile,
     SET_AUTH_ERROR: (state, error) => state.authError = error
   },
@@ -36,6 +37,7 @@ export default {
       localStorage에 token 추가
       */
       commit('SET_TOKEN', token)
+      console.log('done')
       localStorage.setItem('token', token)
     },
 
@@ -67,7 +69,7 @@ export default {
           const token = res.data.key
           dispatch('saveToken', token)
           dispatch('fetchCurrentUser')
-          router.push({ name: 'articles' })
+          router.push({ name: 'home' })
         })
         .catch(err => {
           console.error(err.response.data)
@@ -94,7 +96,7 @@ export default {
           const token = res.data.key
           dispatch('saveToken', token)
           dispatch('fetchCurrentUser')
-          router.push({ name: 'choosemovie' })
+          router.push({ name: 'choosemovie', params: {username: credentials.username}})
         })
         .catch(err => {
           console.error(err.response.data)
@@ -144,7 +146,8 @@ export default {
           method: 'get',
           headers: getters.authHeader,
         })
-          .then(res => commit('SET_CURRENT_USER', res.data))
+          .then(res => {
+            commit('SET_CURRENT_USER', res.data)})
           .catch(err => {
             if (err.response.status === 401) {
               dispatch('removeToken')
