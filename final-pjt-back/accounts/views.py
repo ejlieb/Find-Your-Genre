@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
-from movies.models import Movie
+from .models import GenreCounts
+from movies.models import Movie, Genre
 
 
 
@@ -12,20 +13,52 @@ User = get_user_model()
 
 @api_view(['GET', 'POST'])
 def likes_movie(request):
-    movie_ids = request.data.get('likedMovieIds')
-    # username = request.data.get('username')
-    # user = User.objects.get(username=username)
+    # 좋아요 누른 영화 목록과 username을 받아온다
+    movie_ids = request.data.get('likeMovieIds')
+    username = request.data.get('username')
     
-    # for movie_id in movie_ids:
-    #     movie = Movie.objects.get(movie_id=movie_id)
-    #     user.movie_likes.add(movie)
-
-    return Response(request)
+    # username으로 해당 유저를 조회함 
+    user = User.objects.get(username=username)
+    
+    # 받은 영화 목록을 유저의 좋아요 영화 목록에 추가함 
+    for movie_id in movie_ids:
+        movie = Movie.objects.get(movie_id=movie_id)
+        user.movie_likes.add(movie)
+        genres_ids = list(movie.genres_id.all())
+        
+        temp = str(list(movie.genres_id.all()))
+        
+        # for genre_id in genres_ids:
+        #     genre_cnt = GenreCounts.objects.get(genre_id=genre_id, user_id=user.pk)
+        #     genre_cnt.genre_cnt += 1
+    
+    # 받은 영화의 장르를 장르 카운트에 반영해줌 
+    results = {
+        'result': temp
+    }
+    return Response(results)
     
 
+'''
+이후 가장 좋아하는 장르를 추출해서 API로 정보를 쏴주어야 함.
+어떻게 좋아하는 장르를 빠른 시간 내에 추출할 수 있을까?
+1) 해당 User가 좋아하는 영화들 목록을 추출 (-> 이건 빠름)
+2) 추출된 영화 목록을 순회 (-> 이건 n배 늘어남)
+3) 해당 영화가 속한 장르들 누적해서 세어 줌  (-> 이걸 따로 칼럼에 적어주는 게 나을까?)
+   어차피 영화를 좋아할 때만 좋아하는 장르가 달라지니 기록해주는 게 나을 듯.  
+'''
+
+
+# User 데이터를 보내면서 좋아하는 영화의 모든 정보까지 다 보낸다 
+@api_view(['GET'])
+def profile(request, username):  # 해당 request에 username이 함께 옴
+    profile_user = get_object_or_404(User, username=username)
+    
+    serializer = UserProfileSerializer(profile_user)
+
+    return Response(serializer.data)
 
     
-
 
 
 
