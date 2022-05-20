@@ -6,6 +6,8 @@ import BoardView from '../views/BoardView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import SignUp from '../views/SignUp.vue'
 import ChooseMovie from '../views/ChooseMovie.vue'
+import SignIn from '../views/SignIn.vue'
+import LogOut from '../views/LogoutView.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -31,7 +33,7 @@ const routes = [
     component: BoardView,
   },
   {
-    path: '/profile/:profileId',
+    path: '/profile/:username',
     name: 'profile',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -47,13 +49,30 @@ const routes = [
     component: SignUp,
   },
   {
-    path: '/signup/choose',
+    path: '/signup/choose/:username',
     name: 'choosemovie',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: ChooseMovie,
-  }
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: SignIn,
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: LogOut,
+  },
+
 ]
 
 const router = new VueRouter({
