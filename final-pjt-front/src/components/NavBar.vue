@@ -9,10 +9,10 @@
 
 
       <ul class="navbar-nav mb-2 mb-lg-0 me-3">
-        <li class="nav-item">
-          <router-link :to="{name: 'profile', params: { username } }">Profile {{username}}</router-link>|
+        <li class="nav-item" v-if="isLoggedIn">
+          <router-link :to="{name: 'profile', params: { username } }">Profile</router-link>|
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isLoggedIn">
           <router-link :to="{name: 'signup'}">SignUp</router-link>|
         </li>
         <li class="nav-item" v-if="isLoggedIn">
