@@ -87,6 +87,7 @@ export default {
         url: drf.accounts.saveLikes(),
         data: this.data
       })
+      // 리스폰스 받아서 장르 페이지로 보내주기
       .then(
         this.$router.push({ name: 'home' })
       )
