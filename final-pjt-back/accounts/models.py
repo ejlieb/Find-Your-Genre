@@ -4,8 +4,8 @@ from movies.models import Movie
 
 class User(AbstractUser):
     followings = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='followers')
-    movie_list = models.ManyToManyField(Movie, related_name = 'listing_users')
-    movie_likes = models.ManyToManyField(Movie, related_name = 'liking_users')
+    movie_list = models.ManyToManyField(Movie, related_name = 'listing_users')  # 찜한 영화 등록
+    movie_likes = models.ManyToManyField(Movie, related_name = 'liking_users')  # 좋아요한 영화 등록
     # article_likes = models.ManyToManyField
     # comment_likes
     # 
