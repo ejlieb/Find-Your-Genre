@@ -33,8 +33,8 @@ export default {
       choosedMovie: [],
       test: null,
       data: {
-        username: this.$route.params.usename,
-        likeMovieIds: this.choosedMovie
+        username: this.$route.params.username,
+        likeMovieIds: [],
       }
       
     }
@@ -81,6 +81,7 @@ export default {
       
     },
     saveLikes: function() {
+      this.data.likeMovieIds = this.choosedMovie
       axios({
         method: 'post',
         url: drf.accounts.saveLikes(),
