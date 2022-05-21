@@ -23,7 +23,7 @@ def signup_movies(request):
 
 # 장르페이지 이전 메인 화면에 최애 장르의 랜덤 영화 추천
 # 로그인한 사용자라면 가장 좋아하는 장르의 id, 이름과 해당 장르 영화 3개 랜덤으로 추천받음
-# 만일 로그인하지 않았다면, 적당히 유명하고 평점이 괜찮은 영화 하나를 랜덤으로 추천받음
+# 만일 로그인하지 않았다면, 적당히 유명하고 평점이 괜찮은 영화 세 개를 랜덤으로 추천받음
 @api_view(['GET',])  
 def main_page_recommend(request):
     if request.user.is_authenticated:  
@@ -51,8 +51,9 @@ def main_page_recommend(request):
         }
     
     else:
-        movies = list(Movie.objects.filter(vote_count__gte=3000, vote_average__gte=8.0))
-        random_movie = MovieSerializerWithImages(random.sample(movies, 1)[0])
+        movies = list(Movie.objects.filter(vote_count__gte=3000, vote_average__gte=7.5))
+        movies = random.sample(movies, 3)
+        random_movie = MovieSerializerWithImages([movie for movie in movies], many=True)
     
 
     
