@@ -31,15 +31,26 @@ export default {
         })
     },
     getMovieForHome: function( { commit, getters }) {
-      axios({
+      const axiosObject = {
         method: 'get',
         url: drf.movies.homeMainMovies(),
-        headers: getters.authHeader,
-      })
+      }
+      console.log('hi')
+      if (getters.isLoggedIn) {
+        axiosObject.headers = getters.authHeader
+      }
+
+      axios(axiosObject)
         .then(res => {
+          console.log('hi')
           commit('setMovieForHome', res.data)
         })
-    } 
+        .catch(err => {
+          console.error(err.response.data)
+          commit('SET_AUTH_ERROR', err.response.data)
+        })
+    },
+    
   },
 }
 

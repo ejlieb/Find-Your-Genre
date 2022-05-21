@@ -1,44 +1,67 @@
 <template>
-  <div class="home-main">
-    <div class="for-nav"></div>
-    <button @click="test">click</button>
-    <p>{{ homeMainMovies }}</p>
-    <div class="main-box">
-      <div class="movie-title">
-        <span style="font-size: 5em;">Movie Title</span>
-      </div>
-      <div class="movie-overview">
-        <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto, rerum. Sed dicta, ipsam aliquid illo mollitia omnis incidunt amet ratione corrupti aperiam consectetur, recusandae quam optio ducimus minima natus rerum. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto, rerum. Sed dicta, ipsam aliquid illo mollitia omnis incidunt amet ratione corrupti aperiam consectetur, recusandae quam optio ducimus minima natus rerum. </span>
-        <div class="movie-info">
-        <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
-        <button type="button" class="btn btn-outline-light mx-2">Genre</button> 
-        <button type="button" class="btn btn-outline-light mx-2">8.0</button> 
-          <div class="movie-add">
-          <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
-          <button type="button" class="btn btn-danger mx-2">Detail</button>
-          <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+  <div>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="home-main carousel-item active" v-for="movie, index in homeMainMovies.favorite_genre_movies" :key="index" :style="`background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL });`" >
+      <div class="for-nav"></div>
+      <p>{{ movie.movieimage_set[0].image_URL}}</p>
+      <div class="main-box">
+        <div class="movie-title">
+          <span style="font-size: 5em;">{{ movie.title }}</span>
+        </div>
+        <div class="movie-overview">
+          <span>{{ movie.overview }}</span>
+          <div class="movie-info">
+          <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
+          <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres_id" :key="idx">{{ genre }}</button> 
+          <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
+            <div class="movie-add">
+            <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
+            <button type="button" class="btn btn-danger mx-2">Detail</button>
+            <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+            </div>
           </div>
         </div>
       </div>
     </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+
+
   </div>
+
+
+
+  
 </template>
 
 <script>
 export default {
   name: "HomeMain",
-  // mounted: function() {
-  //     this.$store.dispatch('getMovieForHome')
-  //   },
+  mounted: function() {
+      this.$store.dispatch('getMovieForHome')
+    },
+  data: function() {
+    return {
+      url: 'https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg'
+    }
+  },
   computed: {
       homeMainMovies: function() {
         return this.$store.getters.movieForHome
       }
     },
   methods: {
-    test: function() {
-      this.$store.dispatch('getMovieForHome')
-    }
+
   }
 }
 </script>
@@ -46,8 +69,11 @@ export default {
 <style>
 .home-main {
   height:60em;
-  background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url('https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg');
+  /* background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url('https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg'); */
   overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  
 }
 .home-img {
   width: 100%;
