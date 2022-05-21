@@ -1,9 +1,15 @@
 from tkinter import CASCADE
 from django.db import models
 
+
+class GenreSort(models.Model):  # 장르 구분을 위한 모델. 수동으로 입력해주어야 함.
+    pass
+
 class Genre(models.Model):
     genre_id = models.IntegerField(primary_key=True)
     genre_name = models.CharField(max_length=20)
+    genre_sort = models.ForeignKey(GenreSort, related_name='genres', null=True, on_delete=models.SET_NULL)
+
 
 class Movie(models.Model):
     movie_id = models.IntegerField(primary_key=True)
@@ -34,3 +40,5 @@ class Actor(models.Model):
 class MovieImage(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     image_URL = models.CharField(max_length=500)
+
+
