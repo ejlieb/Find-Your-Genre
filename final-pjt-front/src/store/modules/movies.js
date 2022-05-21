@@ -30,10 +30,11 @@ export default {
           commit('setMovieForChoose', res.data)
         })
     },
-    getMovieForHome: function( { commit }) {
+    getMovieForHome: function( { commit, getters }) {
       axios({
         method: 'get',
-        url: drf.movies.homeMainMovies()
+        url: drf.movies.homeMainMovies(),
+        headers: getters.authHeader,
       })
         .then(res => {
           commit('setMovieForHome', res.data)
