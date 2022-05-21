@@ -1,6 +1,8 @@
 <template>
   <div class="home-main">
     <div class="for-nav"></div>
+    <button @click="test">click</button>
+    <p>{{ homeMainMovies }}</p>
     <div class="main-box">
       <div class="movie-title">
         <span style="font-size: 5em;">Movie Title</span>
@@ -25,6 +27,19 @@
 <script>
 export default {
   name: "HomeMain",
+  // mounted: function() {
+  //     this.$store.dispatch('getMovieForHome')
+  //   },
+  computed: {
+      homeMainMovies: function() {
+        return this.$store.getters.movieForHome
+      }
+    },
+  methods: {
+    test: function() {
+      this.$store.dispatch('getMovieForHome')
+    }
+  }
 }
 </script>
 
