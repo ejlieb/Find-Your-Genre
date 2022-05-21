@@ -25,7 +25,7 @@ def likes_movie(request):
     for movie_id in movie_ids:
         movie = Movie.objects.get(movie_id=movie_id)
         user.movie_likes.add(movie)
-        genres = list(movie.genres_id.all())  # 장르 객체들의 리스트
+        genres = list(movie.genres.all())  # 장르 객체들의 리스트
         
         # results = GenreCounts.objects.filter(genre=genre, user=user)
         for genre in genres:

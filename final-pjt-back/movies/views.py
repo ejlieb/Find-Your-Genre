@@ -55,7 +55,6 @@ def main_page_recommend(request):
         movies = random.sample(movies, 3)
         random_movie = MovieSerializerWithImages([movie for movie in movies], many=True)
     
-
     
         results = {
             'random_movie': random_movie.data,
