@@ -27,6 +27,7 @@ export default {
       HOST + ARTICLES + `${articlePk}/` + COMMENTS + `${commentPk}/`,
   },
   movies: {
-    chooseMovies: () => HOST + MOVIES + 'test/'
+    chooseMovies: () => HOST + MOVIES + 'signup_movies//',
+    homeMainMovies: () => HOST + MOVIES + 'main_page_recommend/'
   }
 }
