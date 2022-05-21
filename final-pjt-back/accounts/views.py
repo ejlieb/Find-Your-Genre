@@ -11,7 +11,7 @@ from movies.models import Movie, Genre
 
 User = get_user_model()
 
-@api_view(['GET', 'POST'])
+@api_view(['POST',])
 def likes_movie(request):
     # 좋아요 누른 영화 목록과 username을 받아온다
     movie_ids = request.data.get('likeMovieIds')
@@ -46,7 +46,12 @@ def likes_movie(request):
         'beloved_genre_name': beloved_genre.genre_name
     }
     
-    return Response(results)
+    return Response(results)  
+
+
+@api_view(['POST',])
+def dislikes_movie(reuqest):
+    pass
     
 
 '''

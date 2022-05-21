@@ -4,7 +4,9 @@ from . import views
 app_name = 'movies'
 
 urlpatterns = [
-    path('test/', views.signup_movie_serializer)
+    path('signup_movies/', views.signup_movies),
+    path('main_page_recommend/', views.main_page_recommend),
+
 
 
     # 이하는 TMDB서버에서 장고 서버로 데이터 받아오는 URL

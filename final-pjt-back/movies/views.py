@@ -1,28 +1,65 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import requests
+import requests, random
 from pprint import pprint
 from .models import Genre, Movie, Actor, MovieImage
-from .serializers import SignupMovieSerializer
+from accounts.models import User, GenreCounts
+from .serializers import SignupMovieSerializer, MovieSerializerWithImages
 
 # 로그인을 하면서 동시에 좋아하는 영활를 고를 수 있도록 영화 360개를 송출합니다.
 @api_view(['GET',])
-def signup_movie_serializer(request):
+def signup_movies(request):
     movies = get_list_or_404(Movie)
     # 평점이 매겨진 개수가 많은 순서대로 정렬을 하고 상위 360개만을 남깁니다.
     movies.sort(key=lambda x: x.vote_count, reverse=True)
     movies = movies[:360]
+    random.shuffle(movies)  # 영화를 섞어줌 
     
     serializer = SignupMovieSerializer(movies, many=True)
     
     return Response(serializer.data)
 
 
-# 장르페이지 이전 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
-@api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
+# 장르페이지 이전 메인 화면에 최애 장르의 랜덤 영화 추천
+# 로그인한 사용자라면 가장 좋아하는 장르의 id, 이름과 해당 장르 영화 3개 랜덤으로 추천받음
+# 만일 로그인하지 않았다면, 적당히 유명하고 평점이 괜찮은 영화 하나를 랜덤으로 추천받음
+@api_view(['GET',])  
 def main_page_recommend(request):
-    pass
+    if request.user.is_authenticated:  
+        now_user = User.objects.get(username=request.user)
+        genre_set = list(GenreCounts.objects.filter(user=now_user))
+        favorite_genre = genre_set[0]
+        max_likes = 0
+        for genre in genre_set:
+            if genre.genre_cnt > max_likes:
+                max_likes = genre.genre_cnt
+                favorite_genre = genre.genre
+        
+        # 최애 장르의 영화들 추출
+        favor_movies = list(favorite_genre.movies.all())
+        favor_movies.sort(key=lambda x: (x.vote_count, x.vote_average), reverse=True)
+        random.shuffle(favor_movies)
+        favor_movies = favor_movies[:3]
+        serializer = MovieSerializerWithImages(favor_movies, many=True)
+            
+    
+        results = {
+        'favorite_genre_id': favorite_genre.pk,
+        'favorite_genre_name' : favorite_genre.genre_name,
+        'favorite_genre_movies' : serializer.data,
+        }
+    
+    else:
+        movies = list(Movie.objects.filter(vote_count__gte=3000, vote_average__gte=8.0))
+        random_movie = MovieSerializerWithImages(random.sample(movies, 1)[0])
+    
+
+    
+        results = {
+            'random_movie': random_movie.data,
+        }
+    return Response(results)
 
 
 # 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
@@ -58,6 +95,10 @@ def actor_top_ten(request):
 # 각 세부 장르별 추천
 @api_view(['GET', 'POST'])
 def each_genre_recommend(request):
+    '''
+    각 세부 장르에서 추천되는 영화는 겹치면 안 됨
+
+    '''
     pass
 
 '''
@@ -65,7 +106,7 @@ def each_genre_recommend(request):
 '''
 
 
-
+# 트렌딩 카루셀 따로 만들기
 
 
 # #  이하는 Data 받아오는 함수
