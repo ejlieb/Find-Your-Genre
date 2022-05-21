@@ -1,15 +1,23 @@
 <template>
-  <div>
-    <h1>{{ profile.username }}</h1>
+  <div class="container">
+    <div class="for-nav"></div>
+    <div class="profile-box">
+      <h1>{{ profile.username }}</h1>
     <!-- <h1>{{ profile}}</h1> -->
-    <div class="liked-movie-box d-flex flex-column">
-      <p class="liked-movie-p align-self-start mb-4">Liked Movies</p>
-      <div class="liked-movie-img-box d-flex justify-content-center">
-        <div v-for=" (movie,index) in slicedMovieList" :key="index" class="liked-movie-img" :id="`movie-${index}`">
-          <img :src="poster_path + movie.poster_path" alt="" class="movie-img">
+    </div>
+    
+    <div class="row">
+      <div class="liked-movie-box d-flex flex-column col-12">
+        <p class="liked-movie-p align-self-start mb-4">Liked Movies</p>
+        <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
+          <div v-for=" (movie,index) in slicedMovieList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
+            <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
+            <img :src="poster_path + movie.poster_path" alt="" class="movie-img">
+          </div>
         </div>
       </div>
     </div>
+
     <h2>작성한 글</h2>
     <ul>
       <li v-for="article in profile.articles" :key="article.pk">
@@ -44,7 +52,7 @@ export default {
   computed: {
     ...mapGetters(['profile']),
     slicedMovieList: function() {
-      return this.profile.movie_likes.slice(0,5)
+      return this.profile.movie_likes.slice(0,8)
     }
   },
   methods: {
@@ -59,35 +67,44 @@ export default {
 </script>
 
 <style>
+.for-nav{
+  height: 5em;
+}
+
 h1{
   color: rgba(240,240,240,1);
 }
 
 .liked-movie-box {
-  width: 45em;
-  height: 20em;
-  background:linear-gradient(0deg, rgba(250,250,250,0.4), rgba(250, 250, 250, 0.2))
+  /* width: 45em; */
+  height: 24em;
+  border-radius: 0.8em;
 }
 
 .liked-movie-img-box{
   width: 100%;
-  height: 70%;
-  background: black;
+  height: 80%;
+  background: rgb(10,10,10);
+  border-radius: 1em;
 }
 
 .liked-movie-img {
-  height: 70%;
-  width: 20%;
-}
-.liked-movie-img:not(#movie-0, #movie-1) {
+
   position: relative;
+}
+/* .liked-movie-img:not(#movie-0, #movie-1) {
   right: 5em;
 }
 #movie-1 {
-  position: relative;
+
   right: 2.5em;
-}
+} */
 .movie-img {
   width: 100%;
+  border-radius: 0.5em;
+}
+
+.movie-img:hover {
+  opacity: 50%;
 }
 </style>
