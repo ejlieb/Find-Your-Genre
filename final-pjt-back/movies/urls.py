@@ -6,6 +6,7 @@ app_name = 'movies'
 urlpatterns = [
     path('signup_movies/', views.signup_movies),
     path('main_page_recommend/', views.main_page_recommend),
+    path('search/', views.search)
 
 
 

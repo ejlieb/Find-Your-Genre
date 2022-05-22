@@ -16,6 +16,14 @@ class SignupMovieSerializer(serializers.ModelSerializer):
         fields = ('movie_id', 'title', 'poster_path', 'genres',)
 
 
+# 검색창 API 요청에 대한 응답으로 주어질 serializer
+class MovieSearchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = ('movie_id', 'title', 'poster_path', 'vote_average', 'genres',)
+
+
 class MovieSerializerWithImages(serializers.ModelSerializer):
     
     class GenreNestedSerializer(serializers.ModelSerializer):

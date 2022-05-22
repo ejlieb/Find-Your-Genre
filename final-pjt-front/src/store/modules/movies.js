@@ -59,10 +59,13 @@ export default {
       axios({
         method: 'get',
         url: drf.movies.sendSearchRequest(),
-        data: search,
+        params: {
+          search: search
+        },
       })
         .then(res => {
-          commit('setSearchREsult', res.data)
+          console.log(res)
+          commit('setSearchResult', res.data)
         })
     } 
     

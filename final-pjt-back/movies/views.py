@@ -5,7 +5,7 @@ import requests, random
 from pprint import pprint
 from .models import Genre, Movie, Actor, MovieImage
 from accounts.models import User, GenreCounts
-from .serializers import SignupMovieSerializer, MovieSerializerWithImages
+from .serializers import SignupMovieSerializer, MovieSerializerWithImages, MovieSearchSerializer
 
 # 로그인을 하면서 동시에 좋아하는 영활를 고를 수 있도록 영화 360개를 송출합니다.
 @api_view(['GET',])
@@ -104,6 +104,14 @@ def each_genre_recommend(request):
 '''
 요청이 온 장르 그룹에 속하는 영화들 중에서 평점 높은 순으로 50개를 뽑고 랜덤 10개씩 추출
 '''
+
+@api_view(['GET', ])
+def search(request):
+    words = request.GET.get('search')
+    movies = Movie.objects.filter(title__startswith=words)
+    serializer = MovieSearchSerializer(movies, many=True)
+
+    return Response(serializer.data)
 
 
 # 트렌딩 카루셀 따로 만들기
