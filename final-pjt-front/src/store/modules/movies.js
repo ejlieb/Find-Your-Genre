@@ -7,10 +7,12 @@ export default {
   state: {
     movieForChoose : [],
     movieForHome : [],
+    serachList: [],
   },
   getters: {
     movieForChoose: state => state.movieForChoose,
     movieForHome: state => state.movieForHome,
+    searchList: state => state.searchList,
   },
   mutations: {
     setMovieForChoose: function (state, movieList) {
@@ -18,6 +20,9 @@ export default {
     },
     setMovieForHome: function(state, movieList) {
       state.movieForHome = movieList
+    },
+    setSearchResult: function(state, searchList) {
+      state.searchList = searchList
     }
   },
   actions: {
@@ -50,6 +55,16 @@ export default {
           commit('SET_AUTH_ERROR', err.response.data)
         })
     },
+    sendSearchRequest: function({ commit }, search) {
+      axios({
+        method: 'get',
+        url: drf.movies.sendSearchRequest(),
+        data: search,
+      })
+        .then(res => {
+          commit('setSearchREsult', res.data)
+        })
+    } 
     
   },
 }

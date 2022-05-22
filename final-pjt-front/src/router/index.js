@@ -8,6 +8,7 @@ import SignUp from '../views/SignUp.vue'
 import ChooseMovie from '../views/ChooseMovie.vue'
 import SignIn from '../views/SignIn.vue'
 import LogOut from '../views/LogoutView.vue'
+import MovieDetail from '../views/MovieDetail.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -71,6 +72,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: LogOut,
+  },
+  {
+    path: '/:movieId',
+    name: 'movieDetail',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: MovieDetail,
   },
 
 ]

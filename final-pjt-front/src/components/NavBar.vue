@@ -7,6 +7,21 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <img src="@/assets/My_project.png" alt="" @click= "gotoHome" class="ms-3 me-auto">
 
+      <!-- v-for 작업 마무리하기 -->
+      <div class="list-group" v-if="searchData !== ''">
+        <div class="list-group-item list-group-item-action" aria-current="true" v-for="search, idx in searchList" :key="idx" @click="goToDetail(search)">
+          <div>
+            <img src="" alt="">
+            <p>{{ search.title }}</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="d-flex mx-5" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchData" @keyup="sendSearchRequest">
+      </div>
+
 
       <ul class="navbar-nav mb-2 mb-lg-0 me-3">
         <li class="nav-item" v-if="isLoggedIn">
@@ -22,6 +37,7 @@
           <router-link :to="{ name: 'signin' }">Login</router-link>
         </li>
       </ul>
+      
 
 
     </div>
@@ -33,13 +49,24 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'NavBar',
+  data: function() {
+    return {
+      searchData: '',
+    }
+  },
   methods: {
     gotoHome: function() {
       this.$router.push({ name: 'home'})
     },
+    sendSearchRequest: function() {
+      this.$store.dispatch("sendSearchRequest", this.searchData )
+    },
+    goToDetail: function(movieData) {
+      this.$router.push({name: 'movieDetail', params: { movieId: movieData.Id, movieData: movieData }})
+    }
     },
   computed: {
-    ...mapGetters(['isLoggedIn', 'currentUser']),
+    ...mapGetters(['isLoggedIn', 'currentUser', 'searchList']),
     username() {
       return this.currentUser.username ? this.currentUser.username : 'guest'
     },
@@ -54,5 +81,14 @@ export default {
   }
   img:hover{
     cursor: pointer;
+  }
+  .list-group{
+    position: relative;
+    top: 8.5em;
+    left: 17em;
+    width: 30em;
+  }
+  nav{
+    height: 5em;
   }
 </style>
