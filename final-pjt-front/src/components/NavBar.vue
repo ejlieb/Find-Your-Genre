@@ -5,22 +5,22 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <img src="@/assets/My_project.png" alt="" @click= "gotoHome" class="ms-3 me-auto">
+      <img src="@/assets/My_project.png" alt="" @click= "gotoHome" class="ms-3 me-auto logo">
 
-      <!-- v-for 작업 마무리하기 -->
-      <div class="list-group" v-if="searchData !== ''">
-        <div class="list-group-item list-group-item-action" aria-current="true" v-for="search, idx in searchList" :key="idx" @click="goToDetail(search)">
-          <div>
-            <img src="" alt="">
-            <p>{{ search.title }}</p>
-          </div>
-        </div>
+      <div class="dropdown me-2 ">
+        <input class="form-control dropdown-toggle" type="search" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" :value="searchData" @input="changeKeyword"> 
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" v-show="searchData !== ''" >
+          <li v-for="search, idx in searchList" :key="idx" class="d-flex align-items-center search-item dropdown-item" >
+            <img :src="path + search.poster_path" alt="" class="search-img me-2">
+            <a href="#" style="text-decoration: none;">{{ search.title }}</a>
+          </li>
+        </ul>
       </div>
 
 
-      <div class="d-flex mx-5" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchData" @keyup="sendSearchRequest">
-      </div>
+      <!-- <div class="d-flex mx-5" role="search">
+        <input class="form-control me-2 dropdown-toggle" type="search" id="dropdownMenuButton1"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Search" aria-label="Search" :value="searchData" @input="changeKeyword">
+      </div> -->
 
 
       <ul class="navbar-nav mb-2 mb-lg-0 me-3">
@@ -52,6 +52,7 @@ export default {
   data: function() {
     return {
       searchData: '',
+      path: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/',
     }
   },
   methods: {
@@ -63,6 +64,11 @@ export default {
     },
     goToDetail: function(movieData) {
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.Id, movieData: movieData }})
+    },
+    changeKeyword: function(word) {
+      console.log(word.target.value)
+      this.searchData = word.target.value
+      this.sendSearchRequest()
     }
     },
   computed: {
@@ -76,7 +82,7 @@ export default {
 </script>
 
 <style>
-  img{
+  .logo{
     width:10rem;
   }
   img:hover{
@@ -90,5 +96,11 @@ export default {
   }
   nav{
     height: 5em;
+  }
+  .search-img {
+    height: 5em;
+  }
+  .search-item {
+    border-color: grey;
   }
 </style>
