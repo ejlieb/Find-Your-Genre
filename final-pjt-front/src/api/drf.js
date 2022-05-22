@@ -28,6 +28,7 @@ export default {
   },
   movies: {
     chooseMovies: () => HOST + MOVIES + 'signup_movies/',
-    homeMainMovies: () => HOST + MOVIES + 'main_page_recommend/'
+    homeMainMovies: () => HOST + MOVIES + 'main_page_recommend/',
+    sendSearchRequest: () => HOST + MOVIES + 'search/'
   }
 }
