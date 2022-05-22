@@ -47,7 +47,7 @@ def main_page_recommend(request):
         results = {
         'favorite_genre_id': favorite_genre.pk,
         'favorite_genre_name' : favorite_genre.genre_name,
-        'favorite_genre_movies' : serializer.data,
+        'recommended_movies' : serializer.data,
         }
     
     else:
@@ -57,7 +57,7 @@ def main_page_recommend(request):
     
     
         results = {
-            'random_movie': random_movie.data,
+            'recommended_movies': random_movie.data,
         }
     return Response(results)
 
