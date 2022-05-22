@@ -7,7 +7,7 @@ export default {
   state: {
     movieForChoose : [],
     movieForHome : [],
-    serachList: [],
+    searchList: [],
   },
   getters: {
     movieForChoose: state => state.movieForChoose,
@@ -40,7 +40,6 @@ export default {
         method: 'get',
         url: drf.movies.homeMainMovies(),
       }
-      console.log('hi')
       if (getters.isLoggedIn) {
         axiosObject.headers = getters.authHeader
       }
