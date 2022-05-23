@@ -5,15 +5,20 @@
     <div class="container">
       <div class="row">
         <div class="col-4 poster-box">
-          <img :src="path + movie.poster_path" alt="" class="poster">
+          <img :src="path + detail.poster_path" alt="" class="poster">
         </div>
         <div class="col detail d-flex flex-column">
           <!-- 영화 상세정보 -->
-          <div class="title align-self-start">
-            <h1>{{movie.title}}</h1>
+          <div class="title align-self-start d-flex" >
+            <h1>{{detail.title}}</h1>
+            <button type="button" class="btn btn-outline-light mx-2">Write Review</button>
           </div>
-          <div class="overview aligh-self-start">
-            <p>{{movie.overview}}</p>
+          <div class="botton-box d-flex justify-contetn-start my-2">
+            <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in detail.genres" :key="idx">{{ genre.genre_name }}</button> 
+            <button type="button" class="btn btn-outline-light mx-2">{{detail.vote_average}}</button>
+          </div>
+          <div class="overview aligh-self-start my-2">
+            <p class="text-start">{{detail.overview}}</p>
           </div>
         </div>
       </div>
@@ -31,6 +36,11 @@ export default {
     return {
       movie: this.$route.params.movie,
       path: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/',
+    }
+  },
+  computed:  {
+    detail: function() {
+      return this.$store.getters.movieDetail
     }
   }
 }

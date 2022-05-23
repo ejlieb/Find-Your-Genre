@@ -2,33 +2,29 @@
   <div>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="home-main carousel-item active" v-for="movie, index in homeMainMovies.recommended_movies" :key="index" :style="`background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
-      <div class="for-nav"></div>
-      <!-- <p>{{ movie}}</p> -->
-      <div class="main-box">
-        <div class="movie-title">
-          <span style="font-size: 5em;">{{ movie.title }}</span>
-        </div>
-        <div class="movie-overview">
-          <span>{{ movie.overview }}</span>
-          <div class="movie-info">
-          <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
-          <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
-          <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
-            <div class="movie-add">
-            <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
-            <button type="button" class="btn btn-danger mx-2">Detail</button>
-            <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+        <div class="home-main carousel-item active " v-for="movie, index in homeMainMovies.recommended_movies" :key="index" :style="`background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
+          <div class="for-nav"></div>
+          <!-- <p>{{ movie}}</p> -->
+          <div class="main-box">
+            <div class="movie-title">
+              <span style="font-size: 5em;">{{ movie.title }}</span>
+            </div>
+            <div class="movie-overview">
+              <span>{{ movie.overview }}</span>
+              <div class="movie-info">
+              <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
+              <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
+              <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
+                <div class="movie-add">
+                <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
+                <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
+                <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
       <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
@@ -61,7 +57,10 @@ export default {
       }
     },
   methods: {
-
+    goToDetail: function(movieData) {
+      console.log(movieData)
+      this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
+    },
   }
 }
 </script>
