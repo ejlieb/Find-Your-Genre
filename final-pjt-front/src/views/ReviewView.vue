@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row poster-row">
         <div class="col-4 poster-box">
-          <img :src="path + detail.poster_path" alt="" class="poster">
+          <img :src="path + detail.poster_path" alt="" class="poster" @click="goToDetail(detail)">
           <div class="title align-self-start d-flex flex-column align-items-center" >
             <p>{{detail.title}}</p>
             <div class="botton-box d-flex justify-contetn-start my-2">
@@ -22,12 +22,11 @@
           </div>
           <div class="d-flex">
             <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.rating}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.user_good_eval.length}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.user_bad_eval.length}}</button> 
+            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.good_eval_count}}</button>
+            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.bad_eval_count}}</button> 
           </div>
           <div class="d-flex mt-5">
             <p>{{review.content}}</p>
-            <p>{{review}}</p>
           </div>
         </div>
       </div>
@@ -76,7 +75,11 @@ export default {
     },
     likeReview: function() {
       this.$store.dispatch('sendReviewLikeRequest', this.idPack)
-    }
+    },
+    goToDetail: function(movieData) {
+      console.log(movieData)
+      this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
+    },
   }
 }
 </script>

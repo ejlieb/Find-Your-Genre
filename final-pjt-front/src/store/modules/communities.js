@@ -38,14 +38,14 @@ export default{
         
         )
     },
-    sendReviewLikeRequest: function({commit, getters}, idPack) {
+    sendReviewLikeRequest: function({getters, dispatch}, idPack) {
       axios({
         method: 'post',
         url: drf.communities.reviewLike(idPack.reviewId, idPack.movieId),
         headers: getters.authHeader
       })
-        .then( (res) =>
-          commit('setReviewDetail', res.data)
+        .then( () =>
+          dispatch('sendReviewRequest', idPack)
         )
     }
 
