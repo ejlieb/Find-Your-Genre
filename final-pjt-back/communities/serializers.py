@@ -5,7 +5,17 @@ from .models import Review, Comment
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    class ReviewUserSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = get_user_model()
+                fields = ('pk', 'username', )
 
+    user = ReviewUserSerializer(read_only=True)
+    user_good_eval = ReviewUserSerializer(many=True, read_only=True)
+    good_eval_count = serializers.IntegerField(source='user_good_eval.count', read_only=True)
+    user_bad_eval = ReviewUserSerializer(many=True, read_only=True)
+    bad_eval_count = serializers.IntegerField(source='user_bad_eval.count', read_only=True)
+        
     class Meta:
         model = Review
         fields = '__all__'

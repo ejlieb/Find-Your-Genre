@@ -3,7 +3,7 @@
     <div class="for-nav" style="height: 5em;"></div>
     <div class="for-nav" style="height: 5em;"></div>
     <div class="container">
-      <div class="row">
+      <div class="row poster-row">
         <div class="col-4 poster-box">
           <img :src="path + detail.poster_path" alt="" class="poster">
         </div>
@@ -22,6 +22,7 @@
           </div>
         </div>
       </div>
+      <!-- 캐스팅정보 -->
       <h1>Casting</h1>
       <div class="row p-3 g-3">
         <div class="card border-secondary col mx-2" style="width: 18rem; background:rgb(15,15,15);" v-for="actor in detail.actors" :key="actor.actor_id">
@@ -31,6 +32,21 @@
           </div>
         </div>
       </div>
+      <!-- 리뷰 -->
+      <div class="row mt-5">
+        <ul class="list-group col-12">
+          <li class="list-group-item review-lst-item border-secondary d-flex justify-content-between align-items-center" v-for="review, idx in detail.review_set.slice(0,5)" :key="idx"
+          @click='goToReview(detail.movie_id, review.id)'>
+            <span class="d-flex align-items-center"> {{ review.title}} </span>
+            <span> 
+              <span class="mx-1">username: {{review.user.username}}</span>
+              <span class="mx-1">rating: {{review.rating}}</span>
+              <span class="badge badge-primary badge-pill mx-1">{{review.user_good_eval.length}}</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <h2>{{detail}}</h2>
     </div>
   </div>
 </template>
@@ -49,7 +65,7 @@ export default {
   // },
   data: function() {
     return {
-      movie: this.$route.params.movie,
+      // movie: this.$route.params.movie,
       movieId: this.$route.params.movieId,
       path: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/',
     }
@@ -62,13 +78,16 @@ export default {
   methods: {
     writeReview: function(id) {
       this.$router.push({name: 'writeReview', params: {movieId: id}})
+    },
+    goToReview: function(movieId, reviewId){
+      this.$router.push({name: 'reviewView', params: {movieId: movieId,reviewPk: reviewId }})
     }
   }
 }
 </script>
 
 <style>
-  .row {
+  .poster-row {
     height: 40em;
   }
   .poster{
@@ -77,5 +96,9 @@ export default {
   }
   .poster-box{
     height: 100%;
+  }
+  .review-lst-item {
+    background: rgb(15,15,15);
+    color:rgba(240, 240, 240, 1)
   }
 </style>

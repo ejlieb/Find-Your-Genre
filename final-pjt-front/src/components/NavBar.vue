@@ -89,12 +89,6 @@ export default {
   img:hover{
     cursor: pointer;
   }
-  .list-group{
-    position: relative;
-    top: 8.5em;
-    left: 17em;
-    width: 30em;
-  }
   nav{
     height: 5em;
   }

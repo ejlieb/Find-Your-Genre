@@ -1,8 +1,8 @@
 const HOST = 'http://localhost:8000/api/v1/'
 
 const ACCOUNTS = 'accounts/'
-const ARTICLES = 'communities/'
-const COMMENTS = 'comments/'
+const COMMUNITIES = 'communities/'
+// const COMMENTS = 'comments/'
 const MOVIES = 'movies/'
 
 export default {
@@ -16,17 +16,22 @@ export default {
     profile: username => HOST + ACCOUNTS + 'profile/' + username,
     saveLikes: () => HOST + ACCOUNTS + 'likes_movie/'
   },
-  articles: {
+  communities: {
     // /articles/
-    articles: () => HOST + ARTICLES,
+    // articles: () => HOST + ARTICLES,
     // /articles/1/
-    article: articlePk => HOST + ARTICLES + `${articlePk}/`,
-    likeArticle: articlePk => HOST + ARTICLES + `${articlePk}/` + 'like/',
-    comments: articlePk => HOST + ARTICLES + `${articlePk}/` + COMMENTS,
-    comment: (articlePk, commentPk) =>
-      HOST + ARTICLES + `${articlePk}/` + COMMENTS + `${commentPk}/`,
+    // article: articlePk => HOST + ARTICLES + `${articlePk}/`,
+    // likeArticle: articlePk => HOST + ARTICLES + `${articlePk}/` + 'like/',
+    // comments: articlePk => HOST + ARTICLES + `${articlePk}/` + COMMENTS,
+    // comment: (articlePk, commentPk) =>
+    //   HOST + ARTICLES + `${articlePk}/` + COMMENTS + `${commentPk}/`,
     writeReview: (movieId) =>
-      HOST + ARTICLES + `${movieId}/` +'review_create/'
+      HOST + COMMUNITIES + `${movieId}/` +'review_create/',
+    reviewDetail: (reviewId, movieId) =>
+      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/`,
+    reviewLike: (reviewId, movieId) =>
+      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/` +'good/'
+    
   },
   movies: {
     chooseMovies: () => HOST + MOVIES + 'signup_movies/',
