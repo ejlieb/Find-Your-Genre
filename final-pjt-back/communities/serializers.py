@@ -11,6 +11,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ReviewCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Review
+        fields = ('title', 'content', 'rating', )
+
+
 class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
