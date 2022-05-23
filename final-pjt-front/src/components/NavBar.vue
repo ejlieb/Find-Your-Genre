@@ -24,17 +24,17 @@
 
 
       <ul class="navbar-nav mb-2 mb-lg-0 me-3">
-        <li class="nav-item" v-if="isLoggedIn">
-          <router-link :to="{name: 'profile', params: { username } }">Profile</router-link>|
+        <li class="nav-item nav-route mx-1" v-if="isLoggedIn">
+          <router-link :to="{name: 'profile', params: { username } }" class="nav-route">Profile</router-link>
         </li>
-        <li class="nav-item" v-if="!isLoggedIn">
-          <router-link :to="{name: 'signup'}">SignUp</router-link>|
+        <li class="nav-item nav-route mx-1" v-if="!isLoggedIn">
+          <router-link :to="{name: 'signup'}" class="nav-route">SignUp</router-link>
         </li>
-        <li class="nav-item" v-if="isLoggedIn">
-          <router-link :to="{name: 'logout'}">Logout</router-link>|
+        <li class="nav-item nav-route mx-1" v-if="isLoggedIn">
+          <router-link :to="{name: 'logout' }" class="nav-route">Logout</router-link>
         </li>
-        <li v-if="!isLoggedIn" class="nav-item">
-          <router-link :to="{ name: 'signin' }">Login</router-link>
+        <li v-if="!isLoggedIn" class="nav-item nav-route mx-1">
+          <router-link :to="{ name: 'signin' }" class="nav-route">Login</router-link>
         </li>
       </ul>
       
@@ -97,5 +97,8 @@ export default {
   }
   .search-item {
     border-color: grey;
+  }
+  .nav-route {
+    color: rgba(240, 240, 240, 1)
   }
 </style>
