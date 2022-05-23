@@ -9,8 +9,9 @@ import ChooseMovie from '../views/ChooseMovie.vue'
 import SignIn from '../views/SignIn.vue'
 import LogOut from '../views/LogoutView.vue'
 import MovieDetail from '../views/MovieDetail.vue'
+import WriteReview from '../views/WriteReview.vue'
+import store from '../store'
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
@@ -32,14 +33,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: BoardView,
-  },
-  {
-    path: '/profile/:username',
-    name: 'profile',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: ProfileView,
   },
   {
     path: '/signup',
@@ -66,14 +59,6 @@ const routes = [
     component: SignIn,
   },
   {
-    path: '/logout',
-    name: 'logout',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: LogOut,
-  },
-  {
     path: '/:movieId',
     name: 'movieDetail',
     // route level code-splitting
@@ -82,12 +67,54 @@ const routes = [
     component: MovieDetail,
   },
 
+
+  // 로그인이 필요한 라우팅
+  {
+    path: '/logout',
+    name: 'logout',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: LogOut,
+  },
+  
+  {
+    path: '/review/:movieId',
+    name: 'writeReview',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: WriteReview,
+  },
+  {
+    path: '/profile/:username',
+    name: 'profile',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: ProfileView,
+  },
+
 ]
+
+
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const { isLoggedIn } = store.getters
+  const authPages = ['logout', 'writeReview', 'profile']
+  const isAuthRequired = authPages.includes(to.name)
+  if (isAuthRequired && !isLoggedIn) {
+    next({name: 'signin'})
+  }
+  else {
+    next()
+  }
 })
 
 export default router

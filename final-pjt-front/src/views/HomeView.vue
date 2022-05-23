@@ -1,6 +1,6 @@
 <template>
 <div class="home">
-  <home-main></home-main>
+  <home-main :key="componentKey"></home-main>
   <genre-card></genre-card>
 </div>
 </template>
@@ -16,6 +16,9 @@ export default {
     GenreCard,
     HomeMain
   },
+  data() { return { componentKey: 0, }; }, 
+  methods: { forceRerender() { this.componentKey += 1; } } 
+
   
 }
 </script>

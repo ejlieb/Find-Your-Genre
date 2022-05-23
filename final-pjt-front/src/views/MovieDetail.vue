@@ -11,7 +11,7 @@
           <!-- 영화 상세정보 -->
           <div class="title align-self-start d-flex" >
             <h1>{{detail.title}}</h1>
-            <button type="button" class="btn btn-outline-light mx-2">Write Review</button>
+            <button type="button" class="btn btn-outline-light mx-2" @click="writeReview">Write Review</button>
           </div>
           <div class="botton-box d-flex justify-contetn-start my-2">
             <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in detail.genres" :key="idx">{{ genre.genre_name }}</button> 
@@ -19,6 +19,15 @@
           </div>
           <div class="overview aligh-self-start my-2">
             <p class="text-start">{{detail.overview}}</p>
+          </div>
+        </div>
+      </div>
+      <h1>Casting</h1>
+      <div class="row p-3 g-3">
+        <div class="card border-secondary col mx-2" style="width: 18rem; background:rgb(15,15,15);" v-for="actor in detail.actors" :key="actor.actor_id">
+          <img class="card-img-top mt-2" :src="path + actor.profile_path" alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">{{ actor.name }}</p>
           </div>
         </div>
       </div>
@@ -32,6 +41,12 @@ export default {
   created: function () {
     this.$store.dispatch('sendDetailRequest', this.movie.movie_id)
   },
+  // beforeRouteUpdate(to, from, next){
+  //   console.log('next')
+  //   this.$store.dispatch('sendDetailRequest', this.movie.movie_id)
+  //   console.log(this.movie)
+  //   next()
+  // },
   data: function() {
     return {
       movie: this.$route.params.movie,
@@ -41,6 +56,11 @@ export default {
   computed:  {
     detail: function() {
       return this.$store.getters.movieDetail
+    }
+  },
+  methods: {
+    writeReview: function(id) {
+      this.$router.push({name: 'writeReview', params: {movieId: id}})
     }
   }
 }
