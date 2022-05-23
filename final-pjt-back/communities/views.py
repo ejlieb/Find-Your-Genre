@@ -13,7 +13,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
 
 from .models import Review, Comment
-from.serializers import ReviewSerializer, CommentCreateSerializer
+from movies.models import Movie
+from.serializers import ReviewSerializer, ReviewCreateSerializer, CommentCreateSerializer
 
 # 리뷰는 어떻게 띄울 것?
 
@@ -32,6 +33,22 @@ def review_detail(request, review_pk):
     serializer = ReviewSerializer(review)
     
     return Response(serializer.data)
+
+
+@api_view(['GET', 'POST',])
+def review_create(request, movie_id):
+    movie = get_object_or_404(Movie, movie_id=movie_id)
+    serializer = ReviewCreateSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user, movie=movie)
+        
+        return Response(serializer.data, stats=status.HTTP_201_CREATED)
+    
+    results = {
+        'error': '리뷰 등록에 실패하였습니다',
+    }
+    return Response(results)
+
 
 @api_view(['POST'])
 def comment_create(request, review_pk):
