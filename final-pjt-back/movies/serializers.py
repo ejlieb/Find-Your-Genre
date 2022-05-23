@@ -80,11 +80,13 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
         user = ReviewUserSerializer(read_only=True)
         user_good_eval = ReviewUserSerializer(many=True, read_only=True)
+        good_eval_count = serializers.IntegerField(source='user_good_eval.count', read_only=True)
         user_bad_eval = ReviewUserSerializer(many=True, read_only=True)
+        bad_eval_count = serializers.IntegerField(source='user_bad_eval.count', read_only=True)
 
         class Meta:
             model = Review
-            fields = ('id', 'user', 'title', 'content', 'rating', 'created_at', 'user_good_eval', 'user_bad_eval',)
+            fields = ('id', 'user', 'title', 'content', 'rating', 'created_at', 'user_good_eval', 'good_eval_count', 'user_bad_eval', 'bad_eval_count', )
     
     review_set = ReviewSerializer(many=True, read_only=True)
     actors = ActorSerializer(many=True, read_only=True)
