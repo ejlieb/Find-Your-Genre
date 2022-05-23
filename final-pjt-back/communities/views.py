@@ -42,7 +42,7 @@ def review_create(request, movie_id):
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, movie=movie)
         
-        return Response(serializer.data, stats=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     results = {
         'error': '리뷰 등록에 실패하였습니다',
