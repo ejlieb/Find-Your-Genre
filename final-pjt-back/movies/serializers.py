@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Genre, Movie, MovieImage, Actor
+from communities.models import Comment, Review
+from django.contrib.auth import get_user_model
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -68,8 +70,23 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         class Meta:
             model = MovieImage
             fields = ('image_URL',)
+
+
+    class ReviewSerializer(serializers.ModelSerializer):
+        class ReviewUserSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = get_user_model()
+                fields = ('pk', 'username', )
+
+        user = ReviewUserSerializer(read_only=True)
+        user_good_eval = ReviewUserSerializer(many=True, read_only=True)
+        user_bad_eval = ReviewUserSerializer(many=True, read_only=True)
+
+        class Meta:
+            model = Review
+            fields = ('id', 'user', 'title', 'content', 'rating', 'created_at', 'user_good_eval', 'user_bad_eval',)
     
-    
+    review_set = ReviewSerializer(many=True, read_only=True)
     actors = ActorSerializer(many=True, read_only=True)
     genres = GenreNestedSerializer(many=True, read_only=True)
     movieimage_set = MovieImageSerializer(many=True, read_only=True)
