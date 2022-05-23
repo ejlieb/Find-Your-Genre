@@ -1,7 +1,7 @@
 const HOST = 'http://localhost:8000/api/v1/'
 
 const ACCOUNTS = 'accounts/'
-const ARTICLES = 'articles/'
+const ARTICLES = 'communities/'
 const COMMENTS = 'comments/'
 const MOVIES = 'movies/'
 
@@ -25,6 +25,8 @@ export default {
     comments: articlePk => HOST + ARTICLES + `${articlePk}/` + COMMENTS,
     comment: (articlePk, commentPk) =>
       HOST + ARTICLES + `${articlePk}/` + COMMENTS + `${commentPk}/`,
+    writeReview: (movieId) =>
+      HOST + ARTICLES + `${movieId}/` +'review_create/'
   },
   movies: {
     chooseMovies: () => HOST + MOVIES + 'signup_movies/',

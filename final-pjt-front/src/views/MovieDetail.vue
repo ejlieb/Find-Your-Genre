@@ -11,7 +11,7 @@
           <!-- 영화 상세정보 -->
           <div class="title align-self-start d-flex" >
             <h1>{{detail.title}}</h1>
-            <button type="button" class="btn btn-outline-light mx-2" @click="writeReview">Write Review</button>
+            <button type="button" class="btn btn-outline-light mx-2" @click="writeReview(detail.movie_id  )">Write Review</button>
           </div>
           <div class="botton-box d-flex justify-contetn-start my-2">
             <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in detail.genres" :key="idx">{{ genre.genre_name }}</button> 
@@ -39,7 +39,7 @@
 export default {
   name: "MovieDetail",
   created: function () {
-    this.$store.dispatch('sendDetailRequest', this.movie.movie_id)
+    this.$store.dispatch('sendDetailRequest', this.movieId)
   },
   // beforeRouteUpdate(to, from, next){
   //   console.log('next')
@@ -50,6 +50,7 @@ export default {
   data: function() {
     return {
       movie: this.$route.params.movie,
+      movieId: this.$route.params.movieId,
       path: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/',
     }
   },
