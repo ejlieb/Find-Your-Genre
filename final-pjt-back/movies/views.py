@@ -63,6 +63,19 @@ def main_page_recommend(request):
     return Response(results)
 
 
+@api_view(['GET', ])
+def movie_detail(request, movie_id):
+    movie = get_object_or_404(Movie, movie_id=movie_id)
+    
+    serializer = MovieSerializerWithImages(movie)
+
+
+    return Response(serializer.data)
+
+
+
+
+
 # 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
 @api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
 def genre_page_recommend(request):
