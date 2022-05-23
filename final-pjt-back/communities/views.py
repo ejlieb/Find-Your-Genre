@@ -18,6 +18,8 @@ from.serializers import ReviewSerializer, ReviewCreateSerializer, CommentCreateS
 
 # 리뷰는 어떻게 띄울 것?
 
+User = get_user_model()
+
 @api_view(['GET'])
 def review_list(request):
     reviews = Review.objects.all().order_by('-pk')
@@ -28,7 +30,7 @@ def review_list(request):
 
 # 각 리뷰의 디테일 정보 요청
 @api_view(['GET'])
-def review_detail(request, review_pk):
+def review_detail(request, movie_id, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     serializer = ReviewSerializer(review)
     
@@ -39,10 +41,12 @@ def review_detail(request, review_pk):
 def review_create(request, movie_id):
     movie = get_object_or_404(Movie, movie_id=movie_id)
     serializer = ReviewCreateSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user, movie=movie)
-        
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    user = User.objects.get(username=request.user)
+    if not Review.objects.filter(user=user, movie=movie).exists():
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user, movie=movie)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     results = {
         'error': '리뷰 등록에 실패하였습니다',
@@ -76,3 +80,18 @@ def comment_delete(request, review_id, comment_id):
 
 
 
+# 리뷰에 대한 good 평가를 추가함
+@api_view(['POST'])
+def review_good(request, movie_id, review_pk):
+    user = get_object_or_404(User, username=request.user)
+    review = get_object_or_404(Review, pk=review_pk)
+    if not review.user_good_eval.filter(pk=review_pk).exists():
+        review.user_good_eval.add(user)
+    else:
+        review.user_good_eval.remove(user)
+    
+    # 이미 싫어요 한 유저는 좋아요도 누르지 못하게 해야 함
+    # if user.user_bad_eval.filter(pk=review_pk).exists():
+    #     review.user_bad_eval.remove(request.user)
+    
+    return Response({ f'{review.user.username}의 리뷰에 좋아요를 누르셨습니다': 'success'}, status=status.HTTP_201_CREATED)
