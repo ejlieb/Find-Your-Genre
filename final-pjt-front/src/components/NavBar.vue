@@ -10,7 +10,7 @@
       <div class="dropdown me-2 ">
         <input class="form-control dropdown-toggle" type="search" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" :value="searchData" @input="changeKeyword"> 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" v-show="searchData !== ''" >
-          <li v-for="search, idx in searchList" :key="idx" class="d-flex align-items-center search-item dropdown-item" >
+          <li v-for="search, idx in searchList" :key="idx" class="d-flex align-items-center search-item dropdown-item" @click="goToDetail(search)" >
             <img :src="path + search.poster_path" alt="" class="search-img me-2">
             <a href="#" style="text-decoration: none;">{{ search.title }}</a>
           </li>
@@ -63,7 +63,8 @@ export default {
       this.$store.dispatch("sendSearchRequest", this.searchData )
     },
     goToDetail: function(movieData) {
-      this.$router.push({name: 'movieDetail', params: { movieId: movieData.Id, movieData: movieData }})
+      console.log(movieData)
+      this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
     changeKeyword: function(word) {
       console.log(word.target.value)
