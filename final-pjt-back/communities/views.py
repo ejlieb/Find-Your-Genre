@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-from .models import Review
+from .models import Review, Comment
 from.serializers import ReviewSerializer, CommentCreateSerializer
 
 # 리뷰는 어떻게 띄울 것?
