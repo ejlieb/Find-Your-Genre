@@ -10,6 +10,7 @@ import SignIn from '../views/SignIn.vue'
 import LogOut from '../views/LogoutView.vue'
 import MovieDetail from '../views/MovieDetail.vue'
 import WriteReview from '../views/WriteReview.vue'
+import ReviewView from '../views/ReviewView.vue'
 import store from '../store'
 Vue.use(VueRouter)
 const routes = [
@@ -66,6 +67,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: MovieDetail,
   },
+  {
+    path: '/:movieId/:reviewPk',
+    name: 'reviewView',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: ReviewView,
+  },
 
 
   // 로그인이 필요한 라우팅
@@ -94,7 +103,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: ProfileView,
   },
-
+  
 ]
 
 
