@@ -5,7 +5,10 @@ import requests, random
 from pprint import pprint
 from .models import Genre, Movie, Actor, MovieImage
 from accounts.models import User, GenreCounts
-from .serializers import SignupMovieSerializer, MovieSerializerWithImages, MovieSearchSerializer
+from .serializers import (SignupMovieSerializer,
+                        MovieSerializerWithImages,
+                        MovieSearchSerializer,
+                        MovieDetailSerializer)
 from django.db.models import Q
 
 # 로그인을 하면서 동시에 좋아하는 영활를 고를 수 있도록 영화 360개를 송출합니다.
@@ -63,11 +66,13 @@ def main_page_recommend(request):
     return Response(results)
 
 
+
+# 이후 Review와 합쳐주기 
 @api_view(['GET', ])
 def movie_detail(request, movie_id):
     movie = get_object_or_404(Movie, movie_id=movie_id)
     
-    serializer = MovieSerializerWithImages(movie)
+    serializer = MovieDetailSerializer(movie)
 
 
     return Response(serializer.data)

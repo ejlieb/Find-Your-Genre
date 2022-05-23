@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Genre, Movie, MovieImage
+from .models import Genre, Movie, MovieImage, Actor
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -24,6 +24,15 @@ class MovieSearchSerializer(serializers.ModelSerializer):
         fields = ('movie_id', 'title', 'poster_path', 'vote_average', 'genres',)
 
 
+# 배우 정보 시리얼라이즈 
+class ActorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Actor
+        fields = '__all__'
+
+
+# 영화 이미지(배경)까지 합친 시리얼라이즈 (메인화면용도) 
 class MovieSerializerWithImages(serializers.ModelSerializer):
     
     class GenreNestedSerializer(serializers.ModelSerializer):
@@ -44,3 +53,27 @@ class MovieSerializerWithImages(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = '__all__'
+
+
+# 영화 디테일 페이지 시리얼라이즈
+class MovieDetailSerializer(serializers.ModelSerializer):
+    class GenreNestedSerializer(serializers.ModelSerializer):
+
+        class Meta:
+            model = Genre
+            fields = ('genre_id', 'genre_name',)
+    
+
+    class MovieImageSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = MovieImage
+            fields = ('image_URL',)
+    
+    
+    actors = ActorSerializer(many=True, read_only=True)
+    genres = GenreNestedSerializer(many=True, read_only=True)
+    movieimage_set = MovieImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Movie
+        fields = '__all__'    
