@@ -80,7 +80,7 @@ def comment_delete(request, review_id, comment_id):
 
 
 
-# 리뷰에 대한 good 평가
+# 리뷰에 대한 good 평가를 추가함
 @api_view(['POST'])
 def review_good(request, movie_id, review_pk):
     user = get_object_or_404(User, username=request.user)
