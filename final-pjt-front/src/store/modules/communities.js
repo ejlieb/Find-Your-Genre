@@ -47,6 +47,16 @@ export default{
         .then( () =>
           dispatch('sendReviewRequest', idPack)
         )
+    },
+    sendReviewBadRequest: function({getters, dispatch}, idPack) {
+      axios({
+        method: 'post',
+        url: drf.communities.reviewBad(idPack.reviewId, idPack.movieId),
+        headers: getters.authHeader
+      })
+        .then( () =>
+          dispatch('sendReviewRequest', idPack)
+        )
     }
 
   },
