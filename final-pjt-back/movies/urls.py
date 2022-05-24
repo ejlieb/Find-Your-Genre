@@ -12,7 +12,7 @@ urlpatterns = [
 
 
     # 영화 추천하는 url 모음
-    # path('genre_recommend/<int:genre_sort>', views.genre_recommend),
+    path('genre_main_page/<int:genre_sort>', views.genre_main_page),
     path('genre_top_ten/<int:genre_sort>', views.genre_top_ten),
 
     

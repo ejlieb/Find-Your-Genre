@@ -88,8 +88,13 @@ def movie_detail(request, movie_id):
 
 # 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
 @api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
-def genre_page_recommend(request, genre_sort):
-    genres = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+def genre_main_page(request, genre_sort):
+    genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+    movies = []
+
+    for genre_id in genre_ids:
+        genre = Genre.objects.get(genre_id=genre_id)
+        
     # 영화 추천시 만일 이미 본 영화에 속한다면 
     # 만일 해당 장르에 속하는 좋아요 영화가 n개 이하일 경우 평점이 좋은 영화를 추천
 
@@ -112,9 +117,9 @@ def genre_top_ten(request, genre_sort):
 
     serializer = MovieDetailSerializer(movies, many=True)
         
-    results = {
-        'movies' : str(movies)
-    }
+    # results = {
+    #     'movies' : str(movies)
+    # }
 
     return Response(serializer.data)
 
