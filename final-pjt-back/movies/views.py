@@ -134,6 +134,13 @@ def search(request):
     return Response(serializer.data)
 
 
+@api_view(['GET', ])
+def genre_recommend(request, sort_id):
+    pass
+
+
+
+
 # 트렌딩 카루셀 따로 만들기
 
 
