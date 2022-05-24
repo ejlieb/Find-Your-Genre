@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
-from .models import GenreCounts
+from .models import GenreCounts, ActorCounts
 from movies.models import Movie, Genre
 
 
@@ -21,36 +21,50 @@ def likes_movie(request):
     # username으로 해당 유저를 조회함 
     user = User.objects.get(username=username)
     
-    
+
     # 받은 영화 목록을 유저의 좋아요 영화 목록에 추가함 
     for movie_id in movie_ids:
-        movie = Movie.objects.get(movie_id=movie_id)
-        user.movie_likes.add(movie)
+        movie = get_object_or_404(Movie, movie_id=movie_id)
         genres = list(movie.genres.all())  # 장르 객체들의 리스트
         actors = list(movie.actors.all())  # 배우 객체들의 리스트
         
-        if user.movie_likes.filter(movie=movie).exists():
+        if not user.movie_likes.filter(movie_id=movie_id).exists():
+            user.movie_likes.add(movie)
+
             # results = GenreCounts.objects.filter(genre=genre, user=user)
             for genre in genres:
-                genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
+                genre_cnt = list(GenreCounts.objects.filter(counted_genre=genre, recorded_user=user))
                 if genre_cnt:
                     genre_cnt[0].genre_cnt += 1
                     genre_cnt[0].save()
                 else:
-                    genre_cnt = GenreCounts(genre=genre, user=user)
+                    genre_cnt = GenreCounts(counted_genre=genre, recorded_user=user)
                     genre_cnt.genre_cnt = 1
                     genre_cnt.save()
             for actor in actors:
-                if not user.actor_likes.filter(actor_likes=actor).exists():
-                    user.actor_likes.add(actor)
-        else: # 만일 해당 영화가 좋아하는 영화에 이미 있었다면 
+                actor_cnt = list(ActorCounts.objects.filter(counted_actor=actor, recorded_user=user))
+                if actor_cnt:
+                    actor_cnt[0].actor_cnt += 1
+                    actor_cnt[0].save()
+                else:
+                    actor_cnt = ActorCounts(counted_actor=actor, recorded_user=user)
+                    actor_cnt.actor_cnt = 1
+                    actor_cnt.save()
+        else: # 만일 해당 영화가 좋아하는 영화에 이미 있었다면 좋아요 취소 
+            user.movie_likes.remove(movie)
+
             for genre in genres:
-                genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
+                genre_cnt = list(GenreCounts.objects.filter(counted_genre=genre, recorded_user=user))
                 if genre_cnt:
                     genre_cnt[0].genre_cnt -= 1
                     genre_cnt[0].save()
+            for actor in actors:
+                actor_cnt = list(ActorCounts.objects.filter(counted_actor=genre, recorded_user=user))
+                if actor_cnt:
+                    actor_cnt[0].actor_cnt -= 1
+                    actor_cnt[0].save()
     
-    beloved_genre = GenreCounts.objects.filter(user=user).order_by('-genre_cnt')[:1][0].genre
+    beloved_genre = GenreCounts.objects.filter(recorded_user=user).order_by('-genre_cnt')[:1][0].counted_genre
     
     # 받은 영화의 장르를 장르 카운트에 반영해줌
     results = {

@@ -17,9 +17,6 @@ urlpatterns = [
 
     
     
-
-
-
     # 이하는 TMDB서버에서 장고 서버로 데이터 받아오는 URL
     # path('genre/', views.genre_register),
     # path('movie/', views.movie_register),
