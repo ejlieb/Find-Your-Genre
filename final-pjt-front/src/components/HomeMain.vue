@@ -3,7 +3,7 @@
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="home-main carousel-item active " v-for="movie, index in homeMainMovies.recommended_movies" :key="index" 
-        :style="`background-image: linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
+        :style="`background-image: linear-gradient(0deg, rgba(15,15,15,1), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
           <div class="for-nav"></div>
           <!-- <p>{{ movie}}</p> -->
           <div class="main-box">
