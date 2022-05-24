@@ -11,6 +11,17 @@ from .serializers import (SignupMovieSerializer,
                         MovieDetailSerializer)
 from django.db.models import Q
 
+
+genre_sorts =   [[12, 14, 16, 18, 27, 28, 35, 36, 37, 53, 80, 99, 878, 9648, 10402, 10749, 10751, 10752, 10770],
+                [80, 53, 9648, 27], 
+                [14, 878],
+                [16],
+                [28, 12, 37, 10752],
+                [18, 10751, 10749, 10402, 10770],
+                [99, 36],
+                [35]]
+
+
 # 로그인을 하면서 동시에 좋아하는 영활를 고를 수 있도록 영화 360개를 송출합니다.
 @api_view(['GET',])
 def signup_movies(request):
@@ -46,7 +57,6 @@ def main_page_recommend(request):
         random.shuffle(favor_movies)
         favor_movies = favor_movies[:3]
         serializer = MovieSerializerWithImages(favor_movies, many=True)
-            
     
         results = {
         'favorite_genre_id': favorite_genre.pk,
@@ -58,7 +68,6 @@ def main_page_recommend(request):
         movies = list(Movie.objects.filter(vote_count__gte=3000, vote_average__gte=7.5))
         movies = random.sample(movies, 3)
         random_movie = MovieSerializerWithImages([movie for movie in movies], many=True)
-    
     
         results = {
             'recommended_movies': random_movie.data,
@@ -74,34 +83,52 @@ def movie_detail(request, movie_id):
     
     serializer = MovieDetailSerializer(movie)
 
-
     return Response(serializer.data)
-
-
-
 
 
 # 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
 @api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
-def genre_page_recommend(request):
+def genre_page_recommend(request, genre_sort):
+    genres = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+    # 영화 추천시 만일 이미 본 영화에 속한다면 
+    # 만일 해당 장르에 속하는 좋아요 영화가 n개 이하일 경우 평점이 좋은 영화를 추천
+
     pass
 
 
 # 장르별 평점 순위 10 영화 추천 
 @api_view(['GET', 'POST',])
-def genre_top_ten(request):
-    pass
+def genre_top_ten(request, genre_sort):
+    genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+    movies = []
+    
+    for genre_id in genre_ids:
+        genre = Genre.objects.get(genre_id=genre_id)
+        movies.extend(list(genre.movies.filter(vote_average__gte=8.0)))
+    
+    movies = list(set(movies))  # 중복 제거
+    movies = movies[:10]
+    movies.sort(key=lambda x: x.vote_average, reverse=True)
+
+    serializer = MovieDetailSerializer(movies, many=True)
+        
+    results = {
+        'movies' : str(movies)
+    }
+
+    return Response(serializer.data)
+
 '''
 request로 해당 페이지의 장르 그룹을 받음. (1~7)
-해당 장르 그룹에 포함된 장르의 영화들을 모두 조회함. (Genre.objects.filter)
+해당 장르 그룹에 포함된 장르의 영화들을 모두 조회함. (genre.movies.filter)
 각 그룹당 10개씩 뽑아서 넣고 random.shuffle로 섞어준 다음에 10개를 뽑아서 보내줌
 '''
 
 
-
-# 좋아하는 배우가 나오는 영화들 무작위 추천
+# 좋아하는 영화에 가장 많이 나온 다섯 명을 송출해줌 
 @api_view(['GET', 'POST'])
-def actor_top_ten(request):
+def actor_top_five(request):
+    
     pass
 
 '''

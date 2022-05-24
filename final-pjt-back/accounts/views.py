@@ -11,6 +11,7 @@ from movies.models import Movie, Genre
 
 User = get_user_model()
 
+# 해당 함수는 최초 가입시와 영화에 대한 좋아요 버튼을 누를 떄 모두 사용됨
 @api_view(['POST',])
 def likes_movie(request):
     # 좋아요 누른 영화 목록과 username을 받아온다
@@ -20,27 +21,38 @@ def likes_movie(request):
     # username으로 해당 유저를 조회함 
     user = User.objects.get(username=username)
     
-
+    
     # 받은 영화 목록을 유저의 좋아요 영화 목록에 추가함 
     for movie_id in movie_ids:
         movie = Movie.objects.get(movie_id=movie_id)
         user.movie_likes.add(movie)
         genres = list(movie.genres.all())  # 장르 객체들의 리스트
+        actors = list(movie.actors.all())  # 배우 객체들의 리스트
         
-        # results = GenreCounts.objects.filter(genre=genre, user=user)
-        for genre in genres:
-            genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
-            if genre_cnt:
-                genre_cnt[0].genre_cnt += 1
-                genre_cnt[0].save()
-            else:
-                genre_cnt = GenreCounts(genre=genre, user=user)
-                genre_cnt.genre_cnt = 1
-                genre_cnt.save()
+        if user.movie_likes.filter(movie=movie).exists():
+            # results = GenreCounts.objects.filter(genre=genre, user=user)
+            for genre in genres:
+                genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
+                if genre_cnt:
+                    genre_cnt[0].genre_cnt += 1
+                    genre_cnt[0].save()
+                else:
+                    genre_cnt = GenreCounts(genre=genre, user=user)
+                    genre_cnt.genre_cnt = 1
+                    genre_cnt.save()
+            for actor in actors:
+                if not user.actor_likes.filter(actor_likes=actor).exists():
+                    user.actor_likes.add(actor)
+        else: # 만일 해당 영화가 좋아하는 영화에 이미 있었다면 
+            for genre in genres:
+                genre_cnt = list(GenreCounts.objects.filter(genre=genre, user=user))
+                if genre_cnt:
+                    genre_cnt[0].genre_cnt -= 1
+                    genre_cnt[0].save()
     
     beloved_genre = GenreCounts.objects.filter(user=user).order_by('-genre_cnt')[:1][0].genre
     
-    # 받은 영화의 장르를 장르 카운트에 반영해줌 
+    # 받은 영화의 장르를 장르 카운트에 반영해줌
     results = {
         'beloved_genre_id': beloved_genre.genre_id,
         'beloved_genre_name': beloved_genre.genre_name
@@ -49,10 +61,6 @@ def likes_movie(request):
     return Response(results)  
 
 
-@api_view(['POST',])
-def dislikes_movie(reuqest):
-    pass
-    
 
 '''
 이후 가장 좋아하는 장르를 추출해서 API로 정보를 쏴주어야 함.
@@ -72,8 +80,6 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
     serializer = UserProfileSerializer(profile_user)
 
     return Response(serializer.data)
-
-    
 
 
 
