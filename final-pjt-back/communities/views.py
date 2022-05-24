@@ -91,7 +91,7 @@ def review_good(request, movie_id, review_pk):
         review.user_good_eval.remove(user)
     
     # 이미 싫어요 한 유저는 좋아요도 누르지 못하게 해야 함
-    if user.user_bad_eval.filter(pk=review_pk).exists():
+    if user.good_reviews.filter(pk=review_pk).exists():
         return Response({'error': '이미 좋아요를 누르셨습니다'})
     
     return Response({ f'{review.user.username}의 리뷰에 좋아요를 누르셨습니다': 'success'}, status=status.HTTP_201_CREATED)
@@ -107,7 +107,7 @@ def review_bad(request, movie_id, review_pk):
         review.user_bad_eval.remove(user)
     
     # 이미 싫어요 한 유저는 좋아요도 누르지 못하게 해야 함
-    if user.user_good_eval.filter(pk=review_pk).exists():
+    if user.bad_reviews.filter(pk=review_pk).exists():
         return Response({'error': '이미 싫어요를 누르셨습니다'})
     
     return Response({ f'{review.user.username}의 리뷰에 싫어요를 누르셨습니다': 'success'}, status=status.HTTP_201_CREATED)
