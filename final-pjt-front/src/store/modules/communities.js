@@ -5,14 +5,19 @@ import router from '@/router'
 export default{
   state: {
     reviewDetail: {},
+    genreReviews : [],
   },
   getters: {
-    reviewDetail: state => state.reviewDetail
+    reviewDetail: state => state.reviewDetail,
+    genreReviews: state => state.genreReviews,
   },
   mutations: {
     setReviewDetail: function(state, review) {
       console.log(review)
       state.reviewDetail = review
+    },
+    setGenreReviews: function(state, reviews) {
+      state.genreReviews = reviews
     }
   },
   actions: {
@@ -56,6 +61,15 @@ export default{
       })
         .then( () =>
           dispatch('sendReviewRequest', idPack)
+        )
+    },
+    getReviews: function({commit}, genreId){
+      axios({
+        method: 'get',
+        url: drf.communities.genreReviews(genreId)
+      })
+        .then((res) =>
+          commit('setGenreReviews', res.data)
         )
     }
 

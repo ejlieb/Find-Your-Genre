@@ -3,6 +3,7 @@
     <div class="for-nav"></div>
     <div class="profile-box">
       <h1>{{ profile.username }}</h1>
+      <p>{{profile}}</p>
     <!-- <h1>{{ profile}}</h1> -->
     </div>
     
