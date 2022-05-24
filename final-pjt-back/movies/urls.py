@@ -13,7 +13,7 @@ urlpatterns = [
 
     # 영화 추천하는 url 모음
     path('genre_recommend/<int:sort_id>', views.genre_recommend),
-    
+
 
 
 
