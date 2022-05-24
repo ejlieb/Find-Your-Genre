@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div id="genreMovieTopTen" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="home-main carousel-item active " v-for="movie, index in homeMainMovies.recommended_movies" :key="index" 
-        :style="`background-image: linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
+        <div class="genre-movie-main carousel-item active " v-for="movie, index in genreMainMovies" :key="index" 
+        :style="`background-image: linear-gradient(0deg, rgba(15,15,15,1), rgba(100, 100, 100, 0.2)), url(${ movie.movieimage_set[0].image_URL }); background-size: cover; background-position: center;`" >
           <div class="for-nav"></div>
           <!-- <p>{{ movie}}</p> -->
           <div class="main-box">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <button class="carousel-control-next" type="button" data-bs-target="#genreMovieTopTen" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -45,7 +45,7 @@
 export default {
   name: "GenreMovieMain",
   mounted: function() {
-      this.$store.dispatch('getMovieForHome')
+      this.$store.dispatch('getMovieForGenreMain', this.$route.params.movieId)
     },
   data: function() {
     return {
@@ -53,8 +53,8 @@ export default {
     }
   },
   computed: {
-      homeMainMovies: function() {
-        return this.$store.getters.movieForHome
+      genreMainMovies: function() {
+        return this.$store.getters.movieForGenreMain.slice(0,3)
       }
     },
   methods: {
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style>
-.home-main {
+.genre-movie-main {
   height:60em;
   /* background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url('https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg'); */
   overflow: hidden;
@@ -112,5 +112,12 @@ export default {
   position: relative;
   top: 2em;
   color: rgba(240,240,240,1)
+}
+
+/* 여기서부터 장르별 CSS */
+
+/* 장르 버튼 보더 */
+.sf-genre-btn {
+  border-color: red;
 }
 </style>

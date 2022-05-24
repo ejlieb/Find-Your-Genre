@@ -1,20 +1,17 @@
 <template>
 <div class="home">
-  <home-main :key="componentKey"></home-main>
-  <genre-card></genre-card>
+  <genre-movie-main :key="componentKey"></genre-movie-main>
 </div>
 </template>
 
 <script>
-import GenreCard from '../components/GenreCard.vue'
-import HomeMain from '../components/HomeMain.vue'
+import GenreMovieMain from '../components/GenreMovieMain.vue'
 // @ is an alias to /src
 
 export default {
-  name: 'HomeView',
+  name: 'GenreMovie',
   components: {
-    GenreCard,
-    HomeMain
+    GenreMovieMain
   },
   data() { return { componentKey: 0, }; }, 
   methods: { forceRerender() { this.componentKey += 1; } } 

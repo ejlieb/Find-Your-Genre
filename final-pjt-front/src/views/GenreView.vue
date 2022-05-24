@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     goToGenreMovie: function() {
+      console.log('장르로간다')
       this.$router.push({name: 'genreMovie', params: {movieId: this.genreId}})
     }
   }
