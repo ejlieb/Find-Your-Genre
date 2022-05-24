@@ -11,6 +11,7 @@ import LogOut from '../views/LogoutView.vue'
 import MovieDetail from '../views/MovieDetail.vue'
 import WriteReview from '../views/WriteReview.vue'
 import ReviewView from '../views/ReviewView.vue'
+import GenreMovie from '../views/GenreMovie.vue'
 import store from '../store'
 Vue.use(VueRouter)
 const routes = [
@@ -74,6 +75,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: ReviewView,
+  },
+  {
+    path: '/:genreId/movies',
+    name: 'genreMovie',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: GenreMovie,
   },
 
 

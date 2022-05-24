@@ -18,12 +18,11 @@
           
           <div class="d-flex review-title aligh-self-start mt-5">
             <h1 class="text-start">{{review.title}}</h1>
-            <button type="button" class="btn btn-outline-light mx-2 like-btn" @click="likeReview">Like</button> 
           </div>
           <div class="d-flex">
             <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.rating}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.good_eval_count}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.bad_eval_count}}</button> 
+            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn" @click="likeReview">{{review.good_eval_count}}</button>
+            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn" @click="badReview">{{review.bad_eval_count}}</button> 
           </div>
           <div class="d-flex mt-5">
             <p>{{review.content}}</p>
@@ -80,6 +79,16 @@ export default {
       console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
+    badReview: function() {
+      this.$store.dispatch('sendReviewBadRequest', this.idPack)
+    }
+  },
+  watch: {
+    review(val){
+      console.log('hihi')
+      this.review.good_eval_count = val.good_eval_count
+      this.review.bad_eval_count = val.bad_eval_count
+    }
   }
 }
 </script>

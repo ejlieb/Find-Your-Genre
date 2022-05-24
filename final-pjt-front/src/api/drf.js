@@ -30,7 +30,9 @@ export default {
     reviewDetail: (reviewId, movieId) =>
       HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/`,
     reviewLike: (reviewId, movieId) =>
-      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/` +'good/'
+      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/` +'good/',
+    reviewBad: (reviewId, movieId) =>
+    HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/` +'bad/'
     
   },
   movies: {
