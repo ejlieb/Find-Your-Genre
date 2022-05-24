@@ -43,13 +43,13 @@ def signup_movies(request):
 def main_page_recommend(request):
     if request.user.is_authenticated:  
         now_user = User.objects.get(username=request.user)
-        genre_set = list(GenreCounts.objects.filter(user=now_user))
+        genre_set = list(GenreCounts.objects.filter(recorded_user=now_user))
         favorite_genre = genre_set[0]
         max_likes = 0
         for genre in genre_set:
             if genre.genre_cnt > max_likes:
                 max_likes = genre.genre_cnt
-                favorite_genre = genre.genre
+                favorite_genre = genre.counted_genre
         
         # 최애 장르의 영화들 추출
         favor_movies = list(favorite_genre.movies.all())
@@ -303,8 +303,6 @@ def genre_recommend(request, sort_id):
 #     }
 
 #     return render(request, 'movies/register.html', context)
-
-
 
 
 # def actor_register(request):

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import update_session_auth_hash
-
+from django.db.models import Q
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,8 +13,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404, get_list_or_404
 
 from .models import Review, Comment
-from movies.models import Movie
+from movies.models import Movie, GenreSort
 from.serializers import ReviewSerializer, ReviewCreateSerializer, CommentCreateSerializer
+
 
 # 리뷰는 어떻게 띄울 것?
 
@@ -25,15 +26,6 @@ def review_list(request):
     reviews = Review.objects.all().order_by('-pk')
     serializer = ReviewSerializer(reviews, many=True)
 
-    return Response(serializer.data)
-
-
-# 각 리뷰의 디테일 정보 요청
-@api_view(['GET'])
-def review_detail(request, movie_id, review_pk):
-    review = get_object_or_404(Review, pk=review_pk)
-    serializer = ReviewSerializer(review)
-    
     return Response(serializer.data)
 
 
@@ -52,6 +44,35 @@ def review_create(request, movie_id):
         'error': '리뷰 등록에 실패하였습니다',
     }
     return Response(results)
+
+
+# 각 리뷰의 디테일 정보 요청
+@api_view(['GET'])
+def review_detail(request, movie_id, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    serializer = ReviewSerializer(review)
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET', ])
+def genre_review_list(request, genre_sort_id):
+    genre_sort = GenreSort.objects.get(pk=genre_sort_id)  # 해당 분류에 속하는 장르소트객체 불러옴 
+    genres = list(genre_sort.genres.all())
+    
+    reviews = list()
+    for genre in genres:
+        temp_movies = list(genre.movies.all())
+        for temp_movie in temp_movies:
+            temp_reviews = list(temp_movie.review_set.all())
+            reviews.extend(temp_reviews)
+    reviews = list(set(reviews))  # 중복 리뷰 제거
+    reviews.sort(key=lambda x:x.created_at, reverse=True)
+
+    serializer = ReviewSerializer(reviews, many=True)
+
+    return Response(serializer.data)
+
 
 
 @api_view(['POST'])
