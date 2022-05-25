@@ -20,7 +20,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class MovieSerializer(serializers.ModelSerializer):
         class Meta:
             model = Movie
-            fields = '__all__'
+            fields = ('movie_id', 'title', 'poster_path',)
 
     class GenreCountSerializer(serializers.ModelSerializer):
         genre_name = serializers.ReadOnlyField(source='counted_genre.genre_name')
