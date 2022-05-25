@@ -24,8 +24,9 @@ class Movie(models.Model):
     movie_id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=100)
     overview = models.TextField(null=True)
-    # eng_overview = models.TextField(null=True)
+    en_overview = models.TextField(null=True)
     release_date = models.DateField()
+    runtime = models.IntegerField()
     poster_path = models.TextField()
     original_title = models.CharField(max_length=100)
     original_language = models.CharField(max_length=100)
@@ -33,9 +34,6 @@ class Movie(models.Model):
     vote_average = models.FloatField()
     genres = models.ManyToManyField(Genre, related_name='movies')
     imdb_id = models.CharField(max_length=10, null=True)
-    metacritic_average = models.FloatField(null=True)
-    rotten_average = models.FloatField(null=True)
-    imdb_average = models.FloatField(null=True)
 
 
 class Actor(models.Model):
@@ -45,6 +43,7 @@ class Actor(models.Model):
     biography = models.TextField(null=True)
     imdb_id = models.CharField(max_length=100, null=True)
     profile_path = models.CharField(max_length=500, null=True)
+    popularity = models.FloatField(default=0)
     filmographies = models.ManyToManyField(Movie, related_name='actors')
 
 class MovieImage(models.Model):
@@ -52,3 +51,19 @@ class MovieImage(models.Model):
     image_URL = models.CharField(max_length=500)
 
 
+class Director(models.Model):
+    actor_id = models.IntegerField(primary_key=True)
+    gender = models.IntegerField(null=True)
+    name = models.CharField(max_length=100)
+    biography = models.TextField(null=True)
+    imdb_id = models.CharField(max_length=100, null=True)
+    profile_path = models.CharField(max_length=500, null=True)
+    popularity = models.FloatField(default=0)
+    filmographies = models.ManyToManyField(Movie, related_name='directors')
+
+
+
+class Provider(models.Model):
+    provider_id = models.IntegerField(primary_key=True)
+    provider_name = models.CharField(max_length=30)
+    owned_movies = models.ManyToManyField(Movie, related_name='OTTs')
