@@ -52,7 +52,7 @@ class MovieImage(models.Model):
 
 
 class Director(models.Model):
-    actor_id = models.IntegerField(primary_key=True)
+    director_id = models.IntegerField(primary_key=True)
     gender = models.IntegerField(null=True)
     name = models.CharField(max_length=100)
     biography = models.TextField(null=True)
