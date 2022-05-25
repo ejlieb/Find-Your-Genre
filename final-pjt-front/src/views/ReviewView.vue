@@ -43,8 +43,8 @@
       <ol class="list-group comment-list">
         <li class="list-group-item d-flex flex-column" v-for="comment, idx in commentList" :key="idx">
           <div class=" d-flex justify-content-between align-items-start ">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold">
+            <div class="ms-2 me-auto d-flex flex-column align-items-start">
+              <div class="fw-bold comment-user-name" @click="goToProfile(comment.user)">
                 {{comment.user.username}}
               </div>
               {{comment.content}}
@@ -62,9 +62,9 @@
           <ol class="list-group cocomment-list">
             <li class="list-group-item d-flex flex-column" v-for="cocomment, idx in comment.replies" :key="idx">
               <div class=" d-flex justify-content-between align-items-start ">
-                <div class="ms-2 me-auto">
-                  <div class="fw-bold">
-                    {{cocomment.user.username}}
+                <div class="ms-2 me-auto d-flex flex-column align-items-start">
+                  <div class="fw-bold comment-user-name" @click="goToProfile(comment.user)">
+                    {{cocomment.username}}
                   </div>
                   {{cocomment.content}}
                 </div>
@@ -178,6 +178,9 @@ export default {
       console.log(this.commentPack)
       this.$store.dispatch('createCoComment', this.commentPack)
       this.content =''
+    },
+    goToProfile: function(user) {
+      this.$router.push({name: 'profile', params: {username: user.username}})
     }
 
     // 잘라내기 해서 리뷰 작성페이지로 보내기
@@ -223,5 +226,8 @@ export default {
   .cocomment-list li, input{
     background: rgba(50, 50, 50, 1);
     color: white;
+  }
+  .comment-user-name:hover{
+    cursor: pointer;
   }
 </style>

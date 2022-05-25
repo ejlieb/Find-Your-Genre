@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="for-nav"></div>
+    {{ profile }}
     <div class="profile-box">
       <div>
         <h1>{{ profile.username }}님의 프로필 페이지</h1>
