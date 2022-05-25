@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-from .models import Review, Comment
+from .models import Review, Comment, Cocomment
 from movies.models import Movie, GenreSort
 from.serializers import (CommentSerializer,
                           ReviewSerializer,
@@ -132,6 +132,20 @@ def comment_delete(request, review_pk, comment_id):
         return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
     comment.delete()
+    return Response({ 'complete': '댓글이 삭제되었습니다' }, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def cocomment_delete(request, review_pk, cocomment_id):
+    now_user = User.objects.get(username=request.user)
+    cocomment = get_object_or_404(Cocomment, pk=cocomment_id)
+    # comment = Comment.objects.get(pk=comment_id)
+
+    if not now_user.cocomment_set.filter(pk=cocomment_id).exists():
+        return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+
+    cocomment.delete()
     return Response({ 'complete': '댓글이 삭제되었습니다' }, status=status.HTTP_204_NO_CONTENT)
 
 
