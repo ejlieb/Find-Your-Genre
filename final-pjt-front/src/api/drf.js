@@ -43,6 +43,8 @@ export default {
       HOST + COMMUNITIES + 'review/' + `${reviewId}/` +'comments/',
     deleteComment: (reviewId, commentId) =>
       HOST + COMMUNITIES + 'review/' + `${reviewId}/` + 'comment_delete/' + `${commentId}/`,
+    coCommentCreate: (reviewId,commentId) =>
+      HOST + COMMUNITIES + 'review/' + `${reviewId}/` + 'comment_create/' + `${commentId}/`,
     
     
   },

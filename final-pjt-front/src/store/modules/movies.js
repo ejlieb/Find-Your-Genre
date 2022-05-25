@@ -63,7 +63,6 @@ export default {
 
       axios(axiosObject)
         .then(res => {
-          console.log('hi')
           commit('setMovieForHome', res.data)
         })
         .catch(err => {
@@ -126,12 +125,10 @@ export default {
         },
       })
         .then(res => {
-          console.log(res)
           commit('setSearchResult', res.data)
         })
     },
     sendDetailRequest: function({ commit }, id) {
-      console.log(id)
       axios({
         method: 'get',
         url: drf.movies.sendDetailRequest() + id

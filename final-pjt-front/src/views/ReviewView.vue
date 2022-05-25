@@ -34,20 +34,37 @@
 
       <div>
         <form @submit.prevent="commentCreate">
-        <label for="inputPassword5" class="form-label">Password</label>
-        <div class="d-flex">
-          <input type="text" id="inputPassword5" class="form-control" @input="changeKeyword">
-          <button type="submit">submit</button>
-        </div>
+          <div class="d-flex my-2 comment-input">
+            <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword">
+            <button type="submit" class=" btn btn-light comment-btn">submit</button>
+          </div>
         </form>  
       </div>
-      <ol class="list-group list-group-numbered">
-        <li class="list-group-item d-flex justify-content-between align-items-start" v-for="comment, idx in commentList" :key="idx">
-          <div class="ms-2 me-auto">
-            <div class="fw-bold">Username</div>
-            {{comment.content}}
+      <ol class="list-group comment-list">
+        <li class="list-group-item d-flex flex-column" v-for="comment, idx in commentList" :key="idx">
+          <div class=" d-flex justify-content-between align-items-start ">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">
+                {{comment.user.username}}
+              </div>
+              {{comment.content}}
+            </div>
+            <div>
+              <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)">
+                delete
+              </button>
+              <button class="btn btn-primary mx-1" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">
+                comment
+              </button>
+            </div>
           </div>
-          <span class="badge bg-primary rounded-pill" @click="deleteComment(comment)">delete</span>
+
+          <form @submit.prevent="coCommentCreate(comment)" class="collapse" :id="`collapseExample-${idx}`">
+            <div class="d-flex my-2 comment-input">
+              <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword">
+              <button type="submit" class=" btn btn-light comment-btn" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">submit</button>
+            </div>
+          </form>
         </li>
       </ol>
       <div>
@@ -86,6 +103,7 @@ export default {
       commentPack: {
         movieId: this.$route.params.movieId, 
         reviewId: this.$route.params.reviewPk,
+        commentId: '',
         content: ''
       }
     }
@@ -125,18 +143,21 @@ export default {
     },
     changeKeyword: function(event) {
       this.content = event.target.value
+      event.target.value= this.content
     },
     commentCreate: function() {
       this.commentPack.content = this.content
       this.$store.dispatch('createComment', this.commentPack)
-      this.comment =''
+      this.content =''
     },
     deleteComment: function(comment) {
-      const deletePack = {
-        reviewId: this.$route.params.reviewPk,
-        commentId: comment.id
-      }
-      this.$store.dispatch('deleteComment', deletePack, this.commentPack)
+      this.commentPack.commentId = comment.id
+      this.$store.dispatch('deleteComment', this.commentPack)
+    },
+    coComentCreate: function(comment) {
+      this.commentPack.commentId = comment.id
+      this.$store.dispatch('createCoComent', this.commentPack)
+
     }
 
     // 잘라내기 해서 리뷰 작성페이지로 보내기
@@ -165,5 +186,18 @@ export default {
   .like-btn{
     height: 80%;
   }
-
+  .comment-list li, input{
+    background: rgba(30, 30, 30, 1);
+    color: white;
+  }
+  .comment-input input, button{
+    background: rgba(30, 30, 30, 1);
+    color: white;
+  }
+  .comment-delete-btn:hover{
+    cursor: pointer;
+  }
+  .comment-list{
+    list-style: none;
+  }
 </style>

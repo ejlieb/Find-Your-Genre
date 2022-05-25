@@ -15,7 +15,6 @@ export default{
   },
   mutations: {
     setReviewDetail: function(state, review) {
-      console.log(review)
       state.reviewDetail = review
     },
     setGenreReviews: function(state, reviews) {
@@ -119,15 +118,26 @@ export default{
         dispatch('getCommentList', commentPack)
         )
     },
-    deleteComment: function({getters, dispatch}, deletePack, commentPack) {
-      console.log('테스트' + deletePack)
+    deleteComment: function({getters, dispatch},commentPack) {
+      console.log(commentPack)
       axios({
         method: 'delete',
-        url: drf.communities.deleteComment(deletePack.reviewId, deletePack.commentId),
+        url: drf.communities.deleteComment(commentPack.reviewId, commentPack.commentId),
         headers: getters.authHeader,
       })
       .then(() =>
-      dispatch('getCommentList'), commentPack)
+      dispatch('getCommentList',commentPack)
+      )
+    },
+    createCoComent: function({getters, dispatch}, commentPack) {
+      axios({
+        method: 'post',
+        url: drf.communities.coCommentCreate(commentPack.reviewId, commentPack.commentId),
+        data: commentPack,
+        headers: getters.authHeader
+      })
+        .then(() =>
+        dispatch('getCommentList', commentPack))
     }
 
   },
