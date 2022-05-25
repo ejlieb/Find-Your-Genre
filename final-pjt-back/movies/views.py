@@ -260,7 +260,7 @@ def movie_register(request):
         temp = 0
         all_movies = list(Movie.objects.all())
         params['with_genres'] = genre
-        for i in range(1, 20):
+        for i in range(1, 40):  # 모수복구
             params['page'] = i
             movies = requests.get(URL+path, params=params).json().get('results')
             
@@ -281,7 +281,7 @@ def movie_register(request):
 
                     for genre_id in movie['genre_ids']:
                         genre_instance = Genre.objects.get(genre_id=genre_id)
-                        instance.genres_id.add(genre_instance)
+                        instance.genres.add(genre_instance)
                     instance.save()
                     temp += 1
 
@@ -297,8 +297,8 @@ def movie_register(request):
 
 def movie_detail_register(request):
     all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
-    results = 0
-    provider_sort = ['flaterate', 'buy', 'rent']
+    temp = 0
+    provider_sort = ['flatrate', 'buy', 'rent','nothing']
     params = {
         'api_key': API_KEY,
         'language': 'en-US'
@@ -312,28 +312,34 @@ def movie_detail_register(request):
         movie.en_overview = res_1.get('overview')
         movie.runtime = res_1.get('runtime')
         path = f'/movie/{movie_id}/watch/providers'
-        res_2 = request.get(URL+path, params=params).json().get('results').get('KR')
-        for sort in provider_sort:
-            providers = res_2.get(sort)
-            for provider in providers:
-                provider_id = provider['provider_id']
-                provider_name = provider['provider_name']
-                provider_instance = Provider(
-                    provider_id = provider_id,
-                    provider_name = provider_name            
-                )
-                if not Provider.objects.filter(provider_id=provider_id).exists:
+        res_2 = requests.get(URL+path, params=params).json().get('results')
+        KR_data = res_2.get('KR')
+        
+        if KR_data:
+            for sort in provider_sort:
+                providers = KR_data.get(sort)
+                if providers:
+                    for provider in providers:
+                        provider_id = provider['provider_id']
+                        provider_name = provider['provider_name']
+                        provider_instance = Provider(
+                            provider_id = provider_id,
+                            provider_name = provider_name            
+                        )
+                        if not Provider.objects.filter(provider_id=provider_id).exists():
+                            provider_instance.save()
+                        else:
+                            provider_instance = Provider.objects.get(provider_id=provider_id)
+                    provider_instance.owned_movies.add(movie)
                     provider_instance.save()
-                else:
-                    provider_instance = Provider.objects.get(provider_id=provider_id)
-            provider_instance.owned_movies.add(movie)
-            provider_instance.save()
+                    temp += 1
                 
         movie.save()
-        results += 1
+        
     
     context = {
-        'results' : results,
+        'results' : KR_data,
+        'temp': temp,
     }
 
     return render(request, 'movies/register.html', context)
@@ -418,7 +424,7 @@ def actor_register(request):
         
         for director_id in movie_director_ids:
             path = f'/person/{director_id}'
-            director = request.get(URL+path, params=params).json()
+            director = requests.get(URL+path, params=params).json()
             director_instance = Director(
                 director_id= director['id'],
                 gender= director['gender'],
@@ -437,16 +443,9 @@ def actor_register(request):
 
         
         
-
-
     context = {
         'results' : results,
         'temp' : temp,
     }
     
     return render(request, 'movies/register.html', context)
-
-
-
-
-

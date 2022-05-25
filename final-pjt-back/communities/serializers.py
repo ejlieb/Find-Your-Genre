@@ -35,6 +35,12 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    class UserCommnetSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = ('pk', 'username')
+    
+    user = UserCommnetSerializer(read_only=True)
 
     class Meta:
         model = Comment
