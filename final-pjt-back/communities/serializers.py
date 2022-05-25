@@ -43,13 +43,20 @@ class UserCommnetSerializer(serializers.ModelSerializer):
     
 
 class CommentSerializer(serializers.ModelSerializer):
+    
+    class CommentCocommentSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Cocomment
+            fields = ('user', 'content', 'created_at')
 
     user = UserCommnetSerializer(read_only=True)
+    replies = CommentCocommentSerializer(many=True, read_only=True)
 
 
     class Meta:
         model = Comment
         fields = '__all__'
+
 
 
 class CocommentSerializer(serializers.ModelSerializer):
