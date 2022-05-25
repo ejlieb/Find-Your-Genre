@@ -23,4 +23,5 @@ urlpatterns = [
     # path('actor/', views.actor_register),
     # path('movie_imdb_register/', views.movie_imdb_register),
     # path('movie_images_register/', views.movie_images_register),
+    path('test/', views.test)
 ]
