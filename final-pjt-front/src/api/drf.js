@@ -14,7 +14,8 @@ export default {
     currentUserInfo: () => HOST + ACCOUNTS + 'user/',
     // username으로 프로필 제공
     profile: username => HOST + ACCOUNTS + 'profile/' + username,
-    saveLikes: () => HOST + ACCOUNTS + 'likes_movie/'
+    saveLikes: () => HOST + ACCOUNTS + 'likes_movie/',
+    follow: username => HOST + ACCOUNTS + 'profile/' + username +'/follow'
   },
   communities: {
     // /articles/
