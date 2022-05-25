@@ -88,8 +88,10 @@ export default {
         data: this.data
       })
       // 리스폰스 받아서 장르 페이지로 보내주기
-      .then(
+      .then( function(res) {
+        console.log(res)
         this.$router.push({ name: 'home' })
+      }   
       )
     }
   }
