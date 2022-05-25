@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 from .models import Review, Comment
 from movies.models import Movie, GenreSort
-from.serializers import ReviewSerializer, ReviewCreateSerializer, CommentCreateSerializer
+from.serializers import CommentSerializer, ReviewSerializer, ReviewCreateSerializer, CommentCreateSerializer
 
 
 # 리뷰는 어떻게 띄울 것?
@@ -94,27 +94,51 @@ def genre_review_list(request, genre_sort_id):
 @api_view(['POST'])
 def comment_create(request, review_pk):
     if not request.user.is_authenticated:
-        return redirect('http://127.0.0.1:8000/api/v1/accounts/login/')
+        return Response({'fail': '인증되지 않은 사용자입니다'})
 
     review = get_object_or_404(Review, pk=review_pk)
     serializer = CommentCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, review=review)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def cocomment_create(request, review_pk, comment_pk):
+    if not request.user.is_authenticated:
+        return Response({'fail': '인증되지 않은 사용자입니다'})
+
+    review = get_object_or_404(Review, pk=review_pk)
+    parent_comment = get_object_or_404(Comment, pk=comment_pk)
+
+    serializer = CommentCreateSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user, review=review, parent=parent_comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def comment_delete(request, review_id, comment_id):
+def comment_delete(request, review_pk, comment_id):
+    now_user = User.objects.get(username=request.user)
     comment = get_object_or_404(Comment, pk=comment_id)
     # comment = Comment.objects.get(pk=comment_id)
 
-    if not request.user.comment_set.filter(pk=comment_id).exists():
+    if not now_user.comment_set.filter(pk=comment_id).exists():
         return Response({'detail': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
     comment.delete()
-    return Response({ 'id': comment_id }, status=status.HTTP_204_NO_CONTENT)
+    return Response({ 'complete': '댓글이 삭제되었습니다' }, status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET', ])
+def comment_list(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    comments = list(Comment.objects.filter(review=review))
+
+    serializer = CommentSerializer(comments, many=True)
+
+    return Response(serializer.data)
 
 
 # 리뷰에 대한 good 평가를 추가함
