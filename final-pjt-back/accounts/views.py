@@ -68,6 +68,7 @@ def likes_movie(request):
     
     # 받은 영화의 장르를 장르 카운트에 반영해줌
     results = {
+        'beloved_genre_sort': beloved_genre.genre_sort_id,
         'beloved_genre_id': beloved_genre.genre_id,
         'beloved_genre_name': beloved_genre.genre_name
     }
