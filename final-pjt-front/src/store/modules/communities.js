@@ -6,10 +6,12 @@ export default{
   state: {
     reviewDetail: {},
     genreReviews : [],
+    commentList: [],
   },
   getters: {
     reviewDetail: state => state.reviewDetail,
     genreReviews: state => state.genreReviews,
+    commentList: state => state.commentList,
   },
   mutations: {
     setReviewDetail: function(state, review) {
@@ -18,6 +20,9 @@ export default{
     },
     setGenreReviews: function(state, reviews) {
       state.genreReviews = reviews
+    },
+    setCommentList: function(state, comments) {
+      state.commentList = comments
     }
   },
   actions: {
@@ -89,9 +94,40 @@ export default{
         url: drf.communities.updateReview(idPack.reviewId, idPack.movieId),
         headers: getters.authHeader,
       })
-      .then(() =>
+        .then(() =>
       router.push({name:'home'})
       )
+    },
+    getCommentList: function({commit}, commentPack) {
+      axios({
+        method: 'get',
+        url: drf.communities.getCommentList(commentPack.reviewId)
+      })
+        .then((res) =>
+        commit('setCommentList', res.data)
+        )
+    },
+
+    createComment: function({getters, dispatch}, commentPack) {
+      axios({
+        method: 'post',
+        url: drf.communities.commentCreate(commentPack.reviewId),
+        data: commentPack,  
+        headers: getters.authHeader,
+      })
+        .then(() =>
+        dispatch('getCommentList', commentPack)
+        )
+    },
+    deleteComment: function({getters, dispatch}, deletePack, commentPack) {
+      console.log('테스트' + deletePack)
+      axios({
+        method: 'delete',
+        url: drf.communities.deleteComment(deletePack.reviewId, deletePack.commentId),
+        headers: getters.authHeader,
+      })
+      .then(() =>
+      dispatch('getCommentList'), commentPack)
     }
 
   },

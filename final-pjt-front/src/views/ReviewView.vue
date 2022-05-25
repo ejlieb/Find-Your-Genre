@@ -31,6 +31,29 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <form @submit.prevent="commentCreate">
+        <label for="inputPassword5" class="form-label">Password</label>
+        <div class="d-flex">
+          <input type="text" id="inputPassword5" class="form-control" @input="changeKeyword">
+          <button type="submit">submit</button>
+        </div>
+        </form>  
+      </div>
+      <ol class="list-group list-group-numbered">
+        <li class="list-group-item d-flex justify-content-between align-items-start" v-for="comment, idx in commentList" :key="idx">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">Username</div>
+            {{comment.content}}
+          </div>
+          <span class="badge bg-primary rounded-pill" @click="deleteComment(comment)">delete</span>
+        </li>
+      </ol>
+      <div>
+        <p>{{ commentList }}</p>
+      </div>
+
     </div>
   </div>
 </template>
@@ -41,6 +64,7 @@ export default {
   created: function () {
     this.$store.dispatch('sendDetailRequest', this.movieId)
     this.$store.dispatch('sendReviewRequest', this.idPack)
+    this.$store.dispatch('getCommentList', this.commentPack)
   },
   // beforeRouteUpdate(to, from, next){
   //   console.log('next')
@@ -56,7 +80,14 @@ export default {
       reviewId: this.$route.params.reviewPk,
       idPack: {
         movieId: this.$route.params.movieId, 
-        reviewId: this.$route.params.reviewPk}
+        reviewId: this.$route.params.reviewPk
+        },
+      content: '',
+      commentPack: {
+        movieId: this.$route.params.movieId, 
+        reviewId: this.$route.params.reviewPk,
+        content: ''
+      }
     }
   },
   computed:  {
@@ -68,6 +99,9 @@ export default {
     },
     currentUser: function() {
       return this.$store.getters.currentUser
+    },
+    commentList: function() {
+      return this.$store.getters.commentList
     }
   },
   methods: {
@@ -81,7 +115,6 @@ export default {
       this.$store.dispatch('sendReviewLikeRequest', this.idPack)
     },
     goToDetail: function(movieData) {
-      console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
     badReview: function() {
@@ -89,6 +122,21 @@ export default {
     },
     deleteReview: function() {
       this.$store.dispatch('deleteReview', this.idPack)
+    },
+    changeKeyword: function(event) {
+      this.content = event.target.value
+    },
+    commentCreate: function() {
+      this.commentPack.content = this.content
+      this.$store.dispatch('createComment', this.commentPack)
+      this.comment =''
+    },
+    deleteComment: function(comment) {
+      const deletePack = {
+        reviewId: this.$route.params.reviewPk,
+        commentId: comment.id
+      }
+      this.$store.dispatch('deleteComment', deletePack, this.commentPack)
     }
 
     // 잘라내기 해서 리뷰 작성페이지로 보내기
@@ -96,7 +144,6 @@ export default {
   },
   watch: {
     review(val){
-      console.log('hihi')
       this.review.good_eval_count = val.good_eval_count
       this.review.bad_eval_count = val.bad_eval_count
     }
