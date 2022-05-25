@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
 from .models import GenreCounts, ActorCounts
 from movies.models import Movie, Genre
 
@@ -85,6 +86,8 @@ def likes_movie(request):
 2) 추출된 영화 목록을 순회 (-> 이건 n배 늘어남)
 3) 해당 영화가 속한 장르들 누적해서 세어 줌  (-> 이걸 따로 칼럼에 적어주는 게 나을까?)
    어차피 영화를 좋아할 때만 좋아하는 장르가 달라지니 기록해주는 게 나을 듯.  
+
+--> 결론: genre_counts와 actor_counts를 기록해준다
 '''
 
 
@@ -111,42 +114,39 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
         temp_obj['profile_path'] = favorite_actor.profile_path
         liked_actors.append(temp_obj)
 
-
     profile_infos = {
        'liked_movie_ids' : ids,
        'favorite_actors' : liked_actors
     }   
     
-
     serializer = UserProfileSerializer(profile_user)
     profile_infos.update(serializer.data)
     
-    
-
-    results = {
-        'result' : liked_actors
-    }
-
     return Response(profile_infos)
 
 
-
-# @api_view(['POST'])
-# def signup(request):
-#     password = request.data.get('password')
-#     password_confirm = request.data.get('password2')
-
-#     # if password != password_confirm:
-#     #     error_msg = {
-#     #         'error' : '비밀번호 불일치',
-#     #     }
-#     #     return Response(error_msg, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET', ])
+@permission_classes([IsAuthenticated])
+def user_follow(request, username):
+    profile_user = get_object_or_404(User, username=username)
     
-#     # serializer = UserSerializer(data=request.data)
+    # 자기 스스로는 follow할 수 없게 설정
+    follower = get_object_or_404(User, username=request.user)
 
-#     # if serializer.is_valid(raise_exception=True):
-#     #     user = serializer.save()
-        
+    if follower == profile_user:
+        return Response({'fail': '스스로를 팔로우할 수 없습니다'}, status=status.HTTP_403_FORBIDDEN)
+    
+    else:
+        if follower.followings.filter(pk=profile_user.pk).exists():
+            follower.followings.remove(profile_user)
+            return Response({'message': '언팔로우 하였습니다'}, status=status.HTTP_200_OK)
+        else:
+            follower.followings.add(profile_user)
+            return Response({'message': '팔로우 하였습니다'}, status=status.HTTP_200_OK)
+
+
+
+    pass
 
 
 '''

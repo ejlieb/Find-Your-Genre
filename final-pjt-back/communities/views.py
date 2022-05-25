@@ -14,7 +14,11 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 from .models import Review, Comment
 from movies.models import Movie, GenreSort
-from.serializers import CommentSerializer, ReviewSerializer, ReviewCreateSerializer, CommentCreateSerializer
+from.serializers import (CommentSerializer,
+                          ReviewSerializer,
+                          ReviewCreateSerializer,
+                          CommentCreateSerializer,
+                          CocommentCreateSerializer)
 
 
 # 리뷰는 어떻게 띄울 것?
@@ -108,12 +112,11 @@ def cocomment_create(request, review_pk, comment_pk):
     if not request.user.is_authenticated:
         return Response({'fail': '인증되지 않은 사용자입니다'})
 
-    review = get_object_or_404(Review, pk=review_pk)
-    parent_comment = get_object_or_404(Comment, pk=comment_pk)
+    parent = get_object_or_404(Comment, pk=comment_pk)
 
-    serializer = CommentCreateSerializer(data=request.data)
+    serializer = CocommentCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user, review=review, parent=parent_comment)
+        serializer.save(user=request.user, parent=parent)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
@@ -125,7 +128,7 @@ def comment_delete(request, review_pk, comment_id):
     # comment = Comment.objects.get(pk=comment_id)
 
     if not now_user.comment_set.filter(pk=comment_id).exists():
-        return Response({'detail': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
     comment.delete()
     return Response({ 'complete': '댓글이 삭제되었습니다' }, status=status.HTTP_204_NO_CONTENT)

@@ -4,9 +4,16 @@ from . import views
 app_name = 'movies'
 
 urlpatterns = [
+    # 회원가입시 영화 선택지 제공
     path('signup_movies/', views.signup_movies),
+
+    # 회원정보 토대로 메인 페이지에 영화 추천
     path('main_page_recommend/', views.main_page_recommend),
+
+    # 영화 검색 API 제공
     path('search/', views.search),
+
+    # 영화 세부 정보 제공
     path('detail/<int:movie_id>/', views.movie_detail),
 
 
