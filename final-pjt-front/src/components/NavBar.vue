@@ -36,6 +36,9 @@
         <li v-if="!isLoggedIn" class="nav-item nav-route mx-1">
           <router-link :to="{ name: 'signin' }" class="nav-route">Login</router-link>
         </li>
+        <!-- <li class="nav-item nav-route mx-1" @click="goBack">
+          Back
+        </li> -->
       </ul>
       
 
@@ -70,6 +73,9 @@ export default {
       console.log(word.target.value)
       this.searchData = word.target.value
       this.sendSearchRequest()
+    },
+    goBack: function() {
+      this.$router.go(-1)
     }
     },
   computed: {
