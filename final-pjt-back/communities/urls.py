@@ -18,7 +18,9 @@ urlpatterns = [
 
     # 커멘트 리뷰 작성 및 삭제
     path('review/<int:review_pk>/comment_create/', views.comment_create),
+    path('review/<int:review_pk>/comment_create/<int:comment_pk>/', views.cocomment_create),
     path('review/<int:review_pk>/comment_delete/<int:comment_id>/', views.comment_delete),
-    path('review/<int:review_pk>/comments/', views.comment_list),
+    # 커멘트 전체 조회
+    path('review/<int:review_pk>/comments/', views.comment_list),  
 
 ]

@@ -94,12 +94,26 @@ def genre_review_list(request, genre_sort_id):
 @api_view(['POST'])
 def comment_create(request, review_pk):
     if not request.user.is_authenticated:
-        return redirect('http://127.0.0.1:8000/api/v1/accounts/login/')
+        return Response({'fail': '인증되지 않은 사용자입니다'})
 
     review = get_object_or_404(Review, pk=review_pk)
     serializer = CommentCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, review=review)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def cocomment_create(request, review_pk, comment_pk):
+    if not request.user.is_authenticated:
+        return Response({'fail': '인증되지 않은 사용자입니다'})
+
+    review = get_object_or_404(Review, pk=review_pk)
+    parent_comment = get_object_or_404(Comment, pk=comment_pk)
+
+    serializer = CommentCreateSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user, review=review, parent=parent_comment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
