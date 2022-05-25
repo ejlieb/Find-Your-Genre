@@ -166,3 +166,10 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticated',  # => 기본적으로 인증받아야 사용
     ],
 }
+
+
+# ERD Generator
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models' : True,
+}

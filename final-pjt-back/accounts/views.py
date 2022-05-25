@@ -114,9 +114,18 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
         temp_obj['profile_path'] = favorite_actor.profile_path
         liked_actors.append(temp_obj)
 
+    followers = list(profile_user.followers.all())
+    
+    user_followers = []
+
+    for follower in followers:
+        user_followers.append(temp_follower['pk'])
+
+
     profile_infos = {
        'liked_movie_ids' : ids,
-       'favorite_actors' : liked_actors
+       'favorite_actors' : liked_actors,
+       'followers' : user_followers
     }   
     
     serializer = UserProfileSerializer(profile_user)
