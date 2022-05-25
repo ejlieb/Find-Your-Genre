@@ -14,12 +14,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'password', )
 
 
-
 class UserProfileSerializer(serializers.ModelSerializer):
-    class UserProfileActorSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Actor
-            fields = ('actor_id', 'name', 'profile_path', )
+
 
     class MovieSerializer(serializers.ModelSerializer):
         class Meta:
@@ -45,14 +41,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
             model = Review
             fields = '__all__'
     
-
+    
     movie_likes = MovieSerializer(many=True, read_only=True)
     genre_counts = GenreCountSerializer(source='genrecounts_set', read_only=True, many=True)
-    actor_counts = ActorCountSerializer(source='actorcounts_set', read_only=True, many=True)
     review_set = UserReviewSerializer(many=True, read_only=True)
     
     
     class Meta:
         model = get_user_model()
         exclude = ('counted_genres', )
-        
+    
+
+
+class UserProfileActorSerializer(serializers.ModelSerializer):
+    
+    
+    class Meta:
+        model = Actor
+        fields = ('actor_id', 'name', 'profile_path', )

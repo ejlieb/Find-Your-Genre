@@ -9,6 +9,7 @@ class User(AbstractUser):
     movie_likes = models.ManyToManyField(Movie, related_name = 'liking_users')  # 좋아요한 영화 등록
     actor_likes = models.ManyToManyField(Actor, related_name = 'liking_users')  # 좋아하는 영화에 나온 배우들 등록
     counted_genres = models.ManyToManyField(Genre, through='GenreCounts', related_name='recorded_user')
+    counted_actors = models.ManyToManyField(Actor, through='ActorCounts', related_name='recorded_user')
     
     # article_likes = models.ManyToManyField
     # comment_likes
