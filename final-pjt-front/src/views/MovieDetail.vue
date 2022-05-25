@@ -9,9 +9,14 @@
         </div>
         <div class="col detail d-flex flex-column">
           <!-- 영화 상세정보 -->
-          <div class="title align-self-start d-flex" >
+          <div class="title align-self-start d-flex align-items-center" >
             <h1>{{detail.title}}</h1>
             <button type="button" class="btn btn-outline-light mx-2" @click="writeReview(detail.movie_id  )">Write Review</button>
+            <div v-if="isLoggedIn">
+                <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
+                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(detail.movie_id)" v-if="!profile.liked_movie_ids.includes(detail.movie_id)">like</button>
+                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(detail.movie_id)" v-if="profile.liked_movie_ids.includes(detail.movie_id)">Dislike</button>
+              </div>
           </div>
           <div class="botton-box d-flex justify-contetn-start my-2">
             <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in detail.genres" :key="idx">{{ genre.genre_name }}</button> 
@@ -46,8 +51,8 @@
           </li>
         </ul>
       </div>
-      <h2>{{detail}}</h2>
     </div>
+    <div class="test"></div>
   </div>
 </template>
 
@@ -56,6 +61,9 @@ export default {
   name: "MovieDetail",
   created: function () {
     this.$store.dispatch('sendDetailRequest', this.movieId)
+    if (this.isLoggedIn){
+        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      }
   },
   // beforeRouteUpdate(to, from, next){
   //   console.log('next')
@@ -73,7 +81,16 @@ export default {
   computed:  {
     detail: function() {
       return this.$store.getters.movieDetail
-    }
+    },
+    profile: function() {
+        return this.$store.getters.profile
+      },
+      currentUser: function() {
+        return this.$store.getters.currentUser
+      },
+      isLoggedIn: function() {
+        return this.$store.getters.isLoggedIn
+      }
   },
   methods: {
     writeReview: function(id) {
@@ -81,6 +98,13 @@ export default {
     },
     goToReview: function(movieId, reviewId){
       this.$router.push({name: 'reviewView', params: {movieId: movieId,reviewPk: reviewId }})
+    },
+    saveLike: function(movie) {
+      const credentials = {
+        username: this.currentUser.username,
+        likeMovieIds: [movie],
+      }
+      this.$store.dispatch('saveLike', credentials)
     }
   }
 }
@@ -100,5 +124,8 @@ export default {
   .review-lst-item {
     background: rgb(15,15,15);
     color:rgba(240, 240, 240, 1)
+  }
+  .review-lst-item:hover{
+    cursor: pointer;
   }
 </style>
