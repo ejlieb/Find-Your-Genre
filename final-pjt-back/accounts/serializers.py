@@ -28,13 +28,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
             model = GenreCounts
             fields = ('genre_name', 'genre_cnt',)
 
-    class ActorCountSerializer(serializers.ModelSerializer):
-        actor_id = serializers.ReadOnlyField(source='counted_actor.actor_id')
-        actor_name = serializers.ReadOnlyField(source='counted_actor.name')
+    # class ActorCountSerializer(serializers.ModelSerializer):
+    #     actor_id = serializers.ReadOnlyField(source='counted_actor.actor_id')
+    #     actor_name = serializers.ReadOnlyField(source='counted_actor.name')
 
-        class Meta:
-            model = ActorCounts
-            fields = ('actor_id', 'actor_name', 'actor_cnt',)
+    #     class Meta:
+    #         model = ActorCounts
+    #         fields = ('actor_id', 'actor_name', 'actor_cnt',)
 
     class UserReviewSerializer(serializers.ModelSerializer):
         class Meta:

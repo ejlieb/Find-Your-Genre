@@ -43,9 +43,9 @@ def review_create(request, movie_id):
     results = {
         'error': '리뷰 등록에 실패하였습니다',
     }
+
     return Response(results)
-
-
+    
 # 각 리뷰의 디테일 정보 요청
 @api_view(['GET'])
 def review_detail(request, movie_id, review_pk):
@@ -53,6 +53,22 @@ def review_detail(request, movie_id, review_pk):
     serializer = ReviewSerializer(review)
     
     return Response(serializer.data)
+
+
+@api_view(['PUT', 'DELETE'])
+def review_update(request, movie_id, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+
+    if request.method == 'PUT':
+        serializer = ReviewSerializer(review, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+    elif request.method == 'DELETE':
+        review.delete()
+        return Response({'complete': f'{review.review_pk}의 삭제가 완료되었습니다'}, status=status.HTTP_204_NO_CONTENT)
+
 
 
 @api_view(['GET', ])
