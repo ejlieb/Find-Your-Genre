@@ -24,8 +24,11 @@ class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
-    # 대댓글 구현
+
+
+# 대댓글 구현
+class Cocomment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='replies')
-
-
-
+    content = models.CharField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)

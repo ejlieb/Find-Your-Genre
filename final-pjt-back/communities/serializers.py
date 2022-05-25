@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Review, Comment
+from .models import Review, Comment, Cocomment
 from movies.models import Movie
 
 
@@ -34,17 +34,33 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         fields = ('title', 'content', 'rating', )
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    class UserCommnetSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = get_user_model()
-            fields = ('pk', 'username')
+
+
+class UserCommnetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('pk', 'username')
     
+
+class CommentSerializer(serializers.ModelSerializer):
+
     user = UserCommnetSerializer(read_only=True)
+
 
     class Meta:
         model = Comment
         fields = '__all__'
+
+
+class CocommentSerializer(serializers.ModelSerializer):
+    
+    user = UserCommnetSerializer(read_only=True)
+
+
+    class Meta:
+        model = Cocomment
+        fields = '__all__'
+
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
@@ -54,5 +70,10 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ('content',)
 
 
+class CocommentCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Cocomment
+        fields = ('content',)
 
 
