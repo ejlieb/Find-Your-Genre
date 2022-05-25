@@ -18,6 +18,8 @@
           
           <div class="d-flex review-title aligh-self-start mt-5">
             <h1 class="text-start">{{review.title}}</h1>
+            <button type="button" class="btn btn-danger mx-2" @click="updateReview" v-if="currentUser.pk === review.user.pk">Update</button>
+            <button type="button" class="btn btn-danger mx-2" @click="deleteReview" v-if="currentUser.pk === review.user.pk">Delete</button>
           </div>
           <div class="d-flex">
             <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.rating}}</button>
@@ -63,11 +65,14 @@ export default {
     },
     review: function() {
       return this.$store.getters.reviewDetail
+    },
+    currentUser: function() {
+      return this.$store.getters.currentUser
     }
   },
   methods: {
-    writeReview: function(id) {
-      this.$router.push({name: 'writeReview', params: {movieId: id}})
+    updateReview: function() {
+      this.$router.push({name: 'updateReview', params: {movieId: this.idPack.movieId, reviewId : this.idPack.reviewId, title: this.review.title, content: this.review.content, rating: this.review.rating}})
     },
     gotoReview: function(movieId, reviewId){
       this.$router.push({name: 'reviewView', params: {movieId: movieId,reviewPk: reviewId }})
@@ -81,7 +86,13 @@ export default {
     },
     badReview: function() {
       this.$store.dispatch('sendReviewBadRequest', this.idPack)
+    },
+    deleteReview: function() {
+      this.$store.dispatch('deleteReview', this.idPack)
     }
+
+    // 잘라내기 해서 리뷰 작성페이지로 보내기
+
   },
   watch: {
     review(val){

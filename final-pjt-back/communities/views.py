@@ -67,7 +67,7 @@ def review_update(request, movie_id, review_pk):
 
     elif request.method == 'DELETE':
         review.delete()
-        return Response({'complete': f'{review.review_pk}의 삭제가 완료되었습니다'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'complete': '삭제가 완료되었습니다'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
