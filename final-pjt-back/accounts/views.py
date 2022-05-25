@@ -50,6 +50,7 @@ def likes_movie(request):
                     actor_cnt = ActorCounts(counted_actor=actor, recorded_user=user)
                     actor_cnt.actor_cnt = 1
                     actor_cnt.save()
+
         else: # 만일 해당 영화가 좋아하는 영화에 이미 있었다면 좋아요 취소 
             user.movie_likes.remove(movie)
 
@@ -91,10 +92,26 @@ def likes_movie(request):
 @api_view(['GET'])
 def profile(request, username):  # 해당 request에 username이 함께 옴
     profile_user = get_object_or_404(User, username=username)
-    
-    serializer = UserProfileSerializer(profile_user)
+    movies = profile_user.movie_likes.all()
+    ids = []
+    for movie in movies:
+        ids.append(movie.movie_id)
 
-    return Response(serializer.data)
+    include_movie_ids = {
+       'liked_movie_ids' : ids,
+    }   
+    
+
+    serializer = UserProfileSerializer(profile_user)
+    include_movie_ids.update(serializer.data)
+    
+    
+
+    # results = {
+    #     'result' : str(serializer.data.liked_movie_ids)
+    # }
+
+    return Response(include_movie_ids)
 
 
 
@@ -114,3 +131,9 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
 #     # if serializer.is_valid(raise_exception=True):
 #     #     user = serializer.save()
         
+
+
+'''
+data를 새로 받을 것인가?
+data set을 늘릴 게 아니라면 굳이?
+'''
