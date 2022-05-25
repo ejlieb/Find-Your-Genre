@@ -45,9 +45,11 @@ class UserCommnetSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     
     class CommentCocommentSerializer(serializers.ModelSerializer):
+        username = serializers.ReadOnlyField(source='user.username')
+
         class Meta:
             model = Cocomment
-            fields = ('user', 'content', 'created_at')
+            fields = ('user', 'username', 'content', 'created_at')
 
     user = UserCommnetSerializer(read_only=True)
     replies = CommentCocommentSerializer(many=True, read_only=True)
