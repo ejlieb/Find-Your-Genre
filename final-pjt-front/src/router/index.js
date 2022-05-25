@@ -71,14 +71,6 @@ const routes = [
     component: MovieDetail,
   },
   {
-    path: '/:movieId/:reviewPk',
-    name: 'reviewView',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: ReviewView,
-  },
-  {
     path: '/:genreId/movies',
     name: 'genreMovie',
     // route level code-splitting
@@ -104,6 +96,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: LogOut,
+  },
+  {
+    path: '/:movieId/:reviewPk',
+    name: 'reviewView',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: ReviewView,
   },
   
   {
@@ -144,7 +144,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { isLoggedIn } = store.getters
-  const authPages = ['logout', 'writeReview', 'profile']
+  const authPages = ['logout', 'writeReview', 'profile', 'reviewView', 'updateReview']
   const isAuthRequired = authPages.includes(to.name)
   if (isAuthRequired && !isLoggedIn) {
     next({name: 'signin'})

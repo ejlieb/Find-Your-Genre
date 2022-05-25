@@ -19,8 +19,8 @@
                 <div class="movie-add" v-if="isLoggedIn">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)">like</button>
-                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)">Dislike</button>
+                <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>
                 </div>
               </div>
             </div>
@@ -132,5 +132,8 @@ export default {
   position: relative;
   top: 2em;
   color: rgba(240,240,240,1)
+}
+.fa-heart:hover{
+  cursor: pointer;
 }
 </style>

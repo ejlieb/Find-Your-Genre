@@ -6,8 +6,10 @@
     <div class="profile-box">
       <div>
         <h1>{{ profile.username }}님의 프로필 페이지</h1>
-        <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" >like</button>
-        <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)">Unlike</button>
+        <div v-if="profile.username !== currentUser.username">
+          <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="!profile.followers.includes(currentUser.pk)">Follow</button>
+          <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="profile.followers.includes(currentUser.pk)">Unfollow</button>
+        </div>
         <div class="test"></div>
         <div class="test"></div>
         <div class="row">
