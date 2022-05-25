@@ -16,10 +16,10 @@
               <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
               <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
               <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
-                <div class="movie-add">
+                <div class="movie-add" v-if="isLoggedIn">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(movie.movie_id)">{{profile.movie_likes.length}}</button>
                 </div>
               </div>
             </div>
@@ -46,6 +46,11 @@ export default {
   name: "HomeMain",
   mounted: function() {
       this.$store.dispatch('getMovieForHome')
+      if (this.isLoggedIn){
+        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      }
+      console.log(this.profile.movie_likes)
+      console.log(this.homeMainMovies.recommended_movies[0])
     },
   data: function() {
     return {
@@ -55,6 +60,15 @@ export default {
   computed: {
       homeMainMovies: function() {
         return this.$store.getters.movieForHome
+      },
+      profile: function() {
+        return this.$store.getters.profile
+      },
+      currentUser: function() {
+        return this.$store.getters.currentUser
+      },
+      isLoggedIn: function() {
+        return this.$store.getters.isLoggedIn
       }
     },
   methods: {
@@ -62,6 +76,13 @@ export default {
       console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
+    saveLike: function(movie) {
+      const credentials = {
+        username: this.currentUser.username,
+        likeMovieIds: [movie],
+      }
+      this.$store.dispatch('saveLike', credentials)
+    }
   }
 }
 </script>

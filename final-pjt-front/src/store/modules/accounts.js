@@ -172,5 +172,18 @@ export default {
           commit('SET_PROFILE', res.data)
         })
     },
+    saveLike: function({dispatch, getters}, movie) {
+      axios({
+        method: 'post',
+        url: drf.accounts.saveLikes(),
+        data: movie
+      })
+      // 리스폰스 받아서 장르 페이지로 보내주기
+      .then(function() {
+          alert('좋아요했습니다/')
+          dispatch('fetchProfile', { username: getters.currentUser.username })
+          } 
+        )
+    }
   },
 }
