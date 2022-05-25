@@ -112,11 +112,12 @@ def cocomment_create(request, review_pk, comment_pk):
     if not request.user.is_authenticated:
         return Response({'fail': '인증되지 않은 사용자입니다'})
 
+    now_user = User.objects.get(username=request.user)
     parent = get_object_or_404(Comment, pk=comment_pk)
 
     serializer = CocommentCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user, parent=parent)
+        serializer.save(user=now_user, parent=parent)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 

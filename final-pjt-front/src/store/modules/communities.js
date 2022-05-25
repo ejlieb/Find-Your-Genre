@@ -129,7 +129,7 @@ export default{
       dispatch('getCommentList',commentPack)
       )
     },
-    createCoComent: function({getters, dispatch}, commentPack) {
+    createCoComment: function({getters, dispatch}, commentPack) {
       axios({
         method: 'post',
         url: drf.communities.coCommentCreate(commentPack.reviewId, commentPack.commentId),
@@ -138,7 +138,7 @@ export default{
       })
         .then(() =>
         dispatch('getCommentList', commentPack))
-    }
+    },
 
   },
 }
