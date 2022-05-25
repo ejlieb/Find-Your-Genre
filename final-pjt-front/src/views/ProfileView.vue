@@ -2,9 +2,12 @@
   <div class="container">
     <div class="for-nav"></div>
     {{ profile }}
+    {{currentUser}}
     <div class="profile-box">
       <div>
         <h1>{{ profile.username }}님의 프로필 페이지</h1>
+        <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" >like</button>
+        <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)">Unlike</button>
         <div class="test"></div>
         <div class="test"></div>
         <div class="row">
@@ -111,7 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profile']),
+    ...mapGetters(['profile', 'currentUser']),
     slicedMovieList: function() {
       const reversedList = [...this.profile.movie_likes].reverse()
       return reversedList.slice(0,8)
@@ -126,12 +129,14 @@ export default {
   methods: {
     ...mapActions(['fetchProfile']),
     goToDetail: function(movieData) {
-      console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
     goToReview: function(movieId, reviewId){
       this.$router.push({name: 'reviewView', params: {movieId: movieId,reviewPk: reviewId }})
     },
+    follow: function(username) {
+      this.$store.dispatch('follow', username)
+    }
   },
   created() {
     const payload = { username: this.$route.params.username }

@@ -184,6 +184,15 @@ export default {
           dispatch('fetchProfile', { username: getters.currentUser.username })
           } 
         )
+    },
+    follow: function({dispatch, getters},username) {
+      axios({
+        method: 'get',
+        url: drf.accounts.follow(username),
+        headers: getters.authHeader,
+      })
+        .then(() =>
+        dispatch('fetchProfile', {username: username}))
     }
   },
 }
