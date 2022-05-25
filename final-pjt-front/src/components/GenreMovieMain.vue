@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <button class="carousel-control-next" type="button" data-bs-target="#genreMovieTopTen" data-bs-slide="next">
+      <button class="carousel-control-next" type="button" data-bs-slide="next" @click="goToGenreCommunity">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -62,6 +62,9 @@ export default {
       console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
+    goToGenreCommunity: function() {
+      this.$router.push({name: 'genreCommunity', params: {genreId: this.$route.params.genreId}})
+    }
   }
 }
 </script>
