@@ -40,7 +40,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         class Meta:
             model = ActorCounts
             fields = ('actor_id', 'actor_name', 'actor_cnt',)
-            
+    
 
     movie_likes = MovieSerializer(many=True, read_only=True)
     genre_counts = GenreCountSerializer(source='genrecounts_set', read_only=True, many=True)

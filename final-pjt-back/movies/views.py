@@ -86,24 +86,38 @@ def movie_detail(request, movie_id):
 
     return Response(serializer.data)
 
+'''
+1. 내가 받은 영화 중 현재 OTT에서 상영하는 영화 (-> 메인페이지)
+2. 평점 순으로 Top 10
+3. 줄거리와 장르유사도를 고려해서 선정한 좋아요영화와 유사 영화들  (-> 만일 좋아요한 영화가 해당 장르에 없으면 장르 랜덤 추천)
+4. 기획전(e.g. 애니메이션은 미야자키 하야오 등)
+5. 현재 OTT에서 상영하는 영화들 ("지금 심심한 당신을 위해")
 
-# 장르페이지 메인 화면에 트렌디한 영화를 장르를 섞어서 추천해줌
-@api_view(['GET', 'POST',])  # api_view 무엇무엇을 허용?
+
+'''
+@api_view(['GET',])  # api_view 무엇무엇을 허용?
 def genre_main_page(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
     movies = []
 
     for genre_id in genre_ids:
         genre = Genre.objects.get(genre_id=genre_id)
+        movies.extend(list(genre.movies.filter(vote_average__gte=8.3)))
+    
+    movies = list(set(movies))
+    movies = movies[:3]
+    
+    serializer = MovieDetailSerializer(movies, many=True)
+
+    return Response(serializer.data)
         
     # 영화 추천시 만일 이미 본 영화에 속한다면 
     # 만일 해당 장르에 속하는 좋아요 영화가 n개 이하일 경우 평점이 좋은 영화를 추천
 
-    pass
 
+# 이하는 genre_recommend에서 사용할 함수들 모음
 
 # 장르별 평점 순위 10 영화 추천 
-@api_view(['GET', 'POST',])
 def genre_top_ten(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
     movies = []
@@ -117,12 +131,16 @@ def genre_top_ten(request, genre_sort):
     movies.sort(key=lambda x: x.vote_average, reverse=True)
 
     serializer = MovieDetailSerializer(movies, many=True)
-        
-    # results = {
-    #     'movies' : str(movies)
-    # }
 
     return Response(serializer.data)
+
+
+ 
+@api_view(['GET', ])
+def genre_recommend(request, genre_sort):
+    genre_recommend_list = []
+
+
 
 '''
 request로 해당 페이지의 장르 그룹을 받음. (1~7)
