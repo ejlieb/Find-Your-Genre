@@ -143,6 +143,12 @@ def actor_top_five(request):
 '''
 
 
+@api_view(['GET', ])
+def genre_page_recommend(reqeust):
+    pass
+
+
+
 
 # 각 세부 장르별 추천
 @api_view(['GET', 'POST'])
