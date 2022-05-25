@@ -59,7 +59,7 @@ def likes_movie(request):
                     genre_cnt[0].genre_cnt -= 1
                     genre_cnt[0].save()
             for actor in actors:
-                actor_cnt = list(ActorCounts.objects.filter(counted_actor=genre, recorded_user=user))
+                actor_cnt = list(ActorCounts.objects.filter(counted_actor=actor, recorded_user=user))
                 if actor_cnt:
                     actor_cnt[0].actor_cnt -= 1
                     actor_cnt[0].save()
