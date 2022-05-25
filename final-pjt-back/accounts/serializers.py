@@ -40,11 +40,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         class Meta:
             model = Review
             fields = '__all__'
+        
+    class UserFollowSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = ('pk', 'username', )
     
     
     movie_likes = MovieSerializer(many=True, read_only=True)
     genre_counts = GenreCountSerializer(source='genrecounts_set', read_only=True, many=True)
     review_set = UserReviewSerializer(many=True, read_only=True)
+    followings = UserFollowSerializer(many=True, read_only=True)
+    followers = UserFollowSerializer(many=True, read_only=True)
     
     
     class Meta:
