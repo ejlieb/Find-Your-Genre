@@ -8,7 +8,8 @@ from accounts.models import User, GenreCounts
 from .serializers import (SignupMovieSerializer,
                         MovieSerializerWithImages,
                         MovieSearchSerializer,
-                        MovieDetailSerializer)
+                        MovieDetailSerializer,
+                        MovieTestSerializer)
 from django.db.models import Q
 
 
@@ -173,6 +174,13 @@ def genre_recommend(request, sort_id):
 
 
 
+@api_view(['GET', ])
+def test(request):
+    movies = list(Movie.objects.all())
+    serializer = MovieTestSerializer(movies, many=True)
+
+    return Response(serializer.data)
+    
 # 트렌딩 카루셀 따로 만들기
 
 

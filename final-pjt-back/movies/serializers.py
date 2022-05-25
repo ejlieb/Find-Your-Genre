@@ -8,7 +8,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Genre
-        fiels = '__all__'
+        fields = ('genre_id', 'genre_name',)
 
 
 class SignupMovieSerializer(serializers.ModelSerializer):
@@ -96,3 +96,13 @@ class MovieDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = '__all__'    
+
+
+    
+class MovieTestSerializer(serializers.ModelSerializer):
+    genres = GenreSerializer(many=True, read_only=True)
+
+    
+    class Meta:
+        model = Movie
+        fields = ('movie_id', 'title', 'overview', 'genres', )
