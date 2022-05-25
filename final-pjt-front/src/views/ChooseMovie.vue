@@ -25,6 +25,7 @@
 <script>
 import axios from 'axios'
 import drf from '@/api/drf'
+import router from '@/router'
 export default {
   name: 'ChooseMovie',
   data: function() {
@@ -88,11 +89,9 @@ export default {
         data: this.data
       })
       // 리스폰스 받아서 장르 페이지로 보내주기
-      .then( function(res) {
-        console.log(res)
-        this.$router.push({ name: 'home' })
-      }   
-      )
+      .then((res) =>
+          router.push({name:'genre', params: {genreId: res.data.beloved_genre_sort}})
+        )
     }
   }
 }
