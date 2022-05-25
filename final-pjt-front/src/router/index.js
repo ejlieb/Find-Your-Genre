@@ -13,6 +13,7 @@ import WriteReview from '../views/WriteReview.vue'
 import ReviewView from '../views/ReviewView.vue'
 import GenreMovie from '../views/GenreMovie.vue'
 import CommunityView from '../views/CommunityView.vue'
+import UpdateReView from '../views/UpdateReview.vue'
 import store from '../store'
 Vue.use(VueRouter)
 const routes = [
@@ -121,6 +122,15 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: ProfileView,
   },
+  {
+    path: '/review/:movieId/reviewId/update',
+    name: 'updateReview',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: UpdateReView,
+  },
+
   
 ]
 

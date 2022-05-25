@@ -71,6 +71,27 @@ export default{
         .then((res) =>
           commit('setGenreReviews', res.data)
         )
+    },
+    updateReview: function({getters}, credentials) {
+      axios({
+        method:'put',
+        url: drf.communities.updateReview(credentials.review_id, credentials.movie_id),
+        data: credentials,
+        headers: getters.authHeader
+      })
+        .then(() =>
+          router.push({name: 'reviewView', params: { movieId: credentials.movie_id, reviewPk: credentials.review_id}})
+        )
+    },
+    deleteReview: function({getters}, idPack) {
+      axios({
+        method: 'delete',
+        url: drf.communities.updateReview(idPack.reviewId, idPack.movieId),
+        headers: getters.authHeader,
+      })
+      .then(() =>
+      router.push({name:'home'})
+      )
     }
 
   },
