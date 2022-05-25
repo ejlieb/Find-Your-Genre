@@ -60,19 +60,25 @@ def review_detail(request, movie_id, review_pk):
 
 
 @api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def review_update(request, movie_id, review_pk):
+    this_user = User.objects.get(username=request.user)
     review = get_object_or_404(Review, pk=review_pk)
+    
+    if not this_user.review_set.filter(pk=review_pk).exists():
+        return Response({'fail': '작성자가 아닙니다'})
+    
+    else:
+        if request.method == 'PUT':
+            serializer = ReviewSerializer(review, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data)
 
-    if request.method == 'PUT':
-        serializer = ReviewSerializer(review, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        review.delete()
-        return Response({'complete': '삭제가 완료되었습니다'}, status=status.HTTP_204_NO_CONTENT)
-
+        elif request.method == 'DELETE':
+            review.delete()
+            return Response({'complete': '삭제가 완료되었습니다'}, status=status.HTTP_204_NO_CONTENT)
+    
 
 
 @api_view(['GET', ])
