@@ -70,7 +70,6 @@ export default {
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
     },
     changeKeyword: function(word) {
-      console.log(word.target.value)
       this.searchData = word.target.value
       this.sendSearchRequest()
     },

@@ -36,7 +36,13 @@ export default {
     genreReviews: (genreId) =>
       HOST + COMMUNITIES +'genre-reviews/' + `${genreId}/`,
     updateReview: (reviewId, movieId) =>
-      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/`+ 'update/'
+      HOST + COMMUNITIES + `${movieId}/` + `${reviewId}/`+ 'update/',
+    commentCreate: (reviewId) =>
+      HOST + COMMUNITIES + 'review/' + `${reviewId}/` + 'comment_create/',
+    getCommentList: (reviewId) =>
+      HOST + COMMUNITIES + 'review/' + `${reviewId}/` +'comments/',
+    deleteComment: (reviewId, commentId) =>
+      HOST + COMMUNITIES + 'review/' + `${reviewId}/` + 'comment_delete/' + `${commentId}/`,
     
     
   },
