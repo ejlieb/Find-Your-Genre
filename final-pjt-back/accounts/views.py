@@ -97,21 +97,37 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
     for movie in movies:
         ids.append(movie.movie_id)
 
-    include_movie_ids = {
+
+    favorite_actors = list(profile_user.counted_actors.all())
+    favorite_actors.sort(key=lambda x: ActorCounts.objects.get(recorded_user=profile_user, counted_actor=x).actor_cnt)
+    favorite_actors = favorite_actors[:5]
+    
+    liked_actors = []
+
+    for favorite_actor in favorite_actors:
+        temp_obj = {}
+        temp_obj['actor_id'] = favorite_actor.actor_id
+        temp_obj['actor_name'] = favorite_actor.name
+        temp_obj['profile_path'] = favorite_actor.profile_path
+        liked_actors.append(temp_obj)
+
+
+    profile_infos = {
        'liked_movie_ids' : ids,
+       'favorite_actors' : liked_actors
     }   
     
 
     serializer = UserProfileSerializer(profile_user)
-    include_movie_ids.update(serializer.data)
+    profile_infos.update(serializer.data)
     
     
 
-    # results = {
-    #     'result' : str(serializer.data.liked_movie_ids)
-    # }
+    results = {
+        'result' : liked_actors
+    }
 
-    return Response(include_movie_ids)
+    return Response(profile_infos)
 
 
 
