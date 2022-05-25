@@ -33,7 +33,7 @@
       </div>
 
       <div>
-        <form @submit.prevent="commentCreate">
+        <form @submit.prevent="commentCreate" id="comment-form">
           <div class="d-flex my-2 comment-input">
             <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword">
             <button type="submit" class=" btn btn-light comment-btn">submit</button>
@@ -50,7 +50,7 @@
               {{comment.content}}
             </div>
             <div>
-              <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)">
+              <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === comment.user.pk">
                 delete
               </button>
               <button class="btn btn-primary mx-1" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">
@@ -58,6 +58,24 @@
               </button>
             </div>
           </div>
+          
+          <ol class="list-group cocomment-list">
+            <li class="list-group-item d-flex flex-column" v-for="cocomment, idx in comment.replies" :key="idx">
+              <div class=" d-flex justify-content-between align-items-start ">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">
+                    {{cocomment.user.username}}
+                  </div>
+                  {{cocomment.content}}
+                </div>
+                <div>
+                  <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === cocomment.user">
+                    delete
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ol>
 
           <form @submit.prevent="coCommentCreate(comment)" class="collapse" :id="`collapseExample-${idx}`">
             <div class="d-flex my-2 comment-input">
@@ -105,7 +123,7 @@ export default {
         reviewId: this.$route.params.reviewPk,
         commentId: '',
         content: ''
-      }
+      },
     }
   },
   computed:  {
@@ -154,10 +172,12 @@ export default {
       this.commentPack.commentId = comment.id
       this.$store.dispatch('deleteComment', this.commentPack)
     },
-    coComentCreate: function(comment) {
+    coCommentCreate: function(comment) {
+      this.commentPack.content = this.content
       this.commentPack.commentId = comment.id
-      this.$store.dispatch('createCoComent', this.commentPack)
-
+      console.log(this.commentPack)
+      this.$store.dispatch('createCoComment', this.commentPack)
+      this.content =''
     }
 
     // 잘라내기 해서 리뷰 작성페이지로 보내기
@@ -199,5 +219,9 @@ export default {
   }
   .comment-list{
     list-style: none;
+  }
+  .cocomment-list li, input{
+    background: rgba(50, 50, 50, 1);
+    color: white;
   }
 </style>
