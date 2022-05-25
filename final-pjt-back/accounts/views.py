@@ -119,7 +119,7 @@ def profile(request, username):  # 해당 request에 username이 함께 옴
     user_followers = []
 
     for follower in followers:
-        user_followers.append(follower['pk'])
+        user_followers.append(follower.pk)
 
 
     profile_infos = {
