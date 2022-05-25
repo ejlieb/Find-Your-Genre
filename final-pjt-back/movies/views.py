@@ -118,6 +118,7 @@ def genre_main_page(request, genre_sort):
 # 이하는 genre_recommend에서 사용할 함수들 모음
 
 # 장르별 평점 순위 10 영화 추천 
+@api_view(['GET',])
 def genre_top_ten(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
     movies = []
