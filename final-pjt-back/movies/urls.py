@@ -21,7 +21,7 @@ urlpatterns = [
     # path('genre/', views.genre_register),
     # path('movie/', views.movie_register),
     # path('actor/', views.actor_register),
-    # path('movie_imdb_register/', views.movie_imdb_register),
+    # path('movie_detail_register/', views.movie_imdb_register),
     # path('movie_images_register/', views.movie_images_register),
-    path('test/', views.test)
+    # path('test/', views.test)
 ]
