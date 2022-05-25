@@ -12,9 +12,13 @@ urlpatterns = [
     path('<int:movie_id>/<int:review_pk>/good/', views.review_good),
     path('<int:movie_id>/<int:review_pk>/bad/', views.review_bad),
     path('<int:movie_id>/<int:review_pk>/update/', views.review_update),
+
     # 장르별 리뷰 모음 신청
     path('genre-reviews/<int:genre_sort_id>/', views.genre_review_list),
-    
 
+    # 커멘트 리뷰 작성 및 삭제
+    path('review/<int:review_pk>/comment_create/', views.comment_create),
+    path('review/<int:review_pk>/comment_delete/<int:comment_id>/', views.comment_delete),
+    path('review/<int:review_pk>/comments/', views.comment_list),
 
 ]
