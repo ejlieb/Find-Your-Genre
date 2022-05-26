@@ -5,7 +5,7 @@ app_name = 'movies'
 
 urlpatterns = [
     # 회원가입시 영화 선택지 제공
-    path('signup_movies/<int:genre_sort>', views.signup_movies),
+    path('signup_movies/', views.signup_movies),
 
     # 회원정보 토대로 메인 페이지에 영화 추천
     path('main_page_recommend/', views.main_page_recommend),

@@ -1,6 +1,12 @@
 <template>
   <div>
     <div class="for-nav"></div>
+      <div class="sidebar col-1 d-flex flex-column align-items-end">
+          <div class="d-flex flex-column align-items-center justify-content-center sidebar-box">
+            <p v-if="choosedMovie.length < 10">아직 {{ 10 - choosedMovie.length }}개의 영화를 더 고르셔야 합니다.</p>
+            <button type="button" class="btn btn-primary" @click="saveLikes" v-else>회원 가입 완료하기</button>
+          </div>
+      </div>
     <div class="choose-movie-container container">
       <p id="instruction" >{{ this.$route.params.username }}님 재미있게 봤던, 혹은 보고싶은 영화를 10개 이상 골라주세요!</p>
       <p>{{ choosedMovieList }} </p>
@@ -124,5 +130,23 @@ export default {
   }
   .hide {
     visibility: hidden;
+  }
+  .sidebar{
+    position: sticky;
+    width:100%;
+  }
+  .sidebar-box{
+    position: fixed;
+    height: 40%;
+    top: 25vh;
+    width: 7%;
+    background:linear-gradient(0deg, rgba(15,15,15,1) 7%,rgba(50,50,50,1) 40%,rgba(50,50,50,1) 60%, rgba(15, 15, 15, 1)93%);
+    margin-right: 2.5%;
+    border-radius: 2em;
+    padding: 0.5em;
+  }
+  .sidebar-item{
+    width: 75%;
+    border-radius: 0.5em;;
   }
 </style>
