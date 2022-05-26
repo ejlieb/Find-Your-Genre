@@ -127,7 +127,7 @@ def genre_main_page(request, genre_sort):
 
     for genre_id in genre_ids:
         genre = Genre.objects.get(genre_id=genre_id)
-        movies.extend(list(genre.movies.filter(vote_average__gte=8.3)))
+        movies.extend(list(genre.movies.filter(vote_average__gte=8.0, vote_count__gte=3000)))
     
     movies = list(set(movies))
     movies = movies[:3]
@@ -149,7 +149,7 @@ def genre_top_ten(request, genre_sort):
     
     for genre_id in genre_ids:
         genre = Genre.objects.get(genre_id=genre_id)
-        movies.extend(list(genre.movies.filter(vote_average__gte=8.0)))
+        movies.extend(list(genre.movies.filter(vote_average__gte=7.5, vote_count___gte=2000)))
     
     movies = list(set(movies))  # 중복 제거
     movies = movies[3:13]
