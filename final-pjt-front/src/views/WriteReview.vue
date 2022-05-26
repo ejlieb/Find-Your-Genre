@@ -2,7 +2,7 @@
   <div>
     <div class="for-nav"></div>
     <div class="sign-up-form">
-      <h1 style="color: rgba(240,240,240,1);" class="mb-5">Review {{ $route.params.movieId }}</h1>
+      <h1 style="color: rgba(240,240,240,1);" class="mb-5">Review</h1>
 
       <div class="form-box d-flex justify-content-center">
         <div class="form-content">
