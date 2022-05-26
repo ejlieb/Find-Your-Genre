@@ -95,7 +95,7 @@ def movie_detail(request, movie_id):
 
     for temp_id in recomm[movie_id]:
         temp_results.append(Movie.objects.get(movie_id=temp_id))
-
+    temp_results = temp_results[1:4]
     temp_serializer = MovieRecommendSerializer(temp_results, many=True)
     serializer = MovieDetailSerializer(movie)
 
@@ -149,7 +149,7 @@ def genre_top_ten(request, genre_sort):
     
     for genre_id in genre_ids:
         genre = Genre.objects.get(genre_id=genre_id)
-        movies.extend(list(genre.movies.filter(vote_average__gte=7.5, vote_count___gte=2000)))
+        movies.extend(list(genre.movies.filter(vote_average__gte=7.5, vote_count__gte=2000)))
     
     movies = list(set(movies))  # 중복 제거
     movies = movies[3:13]

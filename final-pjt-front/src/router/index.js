@@ -14,6 +14,7 @@ import ReviewView from '../views/ReviewView.vue'
 import GenreMovie from '../views/GenreMovie.vue'
 import CommunityView from '../views/CommunityView.vue'
 import UpdateReView from '../views/UpdateReview.vue'
+import SearchView from '../views/SearchView.vue'
 import store from '../store'
 Vue.use(VueRouter)
 const routes = [
@@ -86,6 +87,15 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: CommunityView,
   },
+  {
+    path: '/search',
+    name: 'searchView',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: SearchView,
+  },
+
 
 
   // 로그인이 필요한 라우팅
