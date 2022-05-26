@@ -9,7 +9,6 @@
       </div>
     <div class="choose-movie-container container">
       <p id="instruction" >{{ this.$route.params.username }}님 재미있게 봤던, 혹은 보고싶은 영화를 10개 이상 골라주세요!</p>
-      <p>{{ choosedMovieList }} </p>
       <p v-if="choosedMovie.length < 10">아직 {{ 10 - choosedMovie.length }}개의 영화를 더 고르셔야 합니다.</p>
       <div v-else>
         <p>다음 단계로 넘어가세요! {{choosedMovieList.length }}개의 영화를 고르셨습니다!</p>
