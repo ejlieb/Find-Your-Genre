@@ -14,8 +14,8 @@
             <button type="button" class="btn btn-outline-light mx-2" @click="writeReview(detail.movie_id  )">Write Review</button>
             <div v-if="isLoggedIn">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
-                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(detail.movie_id)" v-if="!profile.liked_movie_ids.includes(detail.movie_id)">like</button>
-                <button type="button" class="btn btn-outline-light mx-2" @click="saveLike(detail.movie_id)" v-if="profile.liked_movie_ids.includes(detail.movie_id)">Dislike</button>
+                <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(detail.movie_id)" v-if="!profile.liked_movie_ids.includes(detail.movie_id)"></i>
+                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(detail.movie_id)" v-if="profile.liked_movie_ids.includes(detail.movie_id)"></i>
               </div>
           </div>
           <div class="botton-box d-flex justify-contetn-start my-2">

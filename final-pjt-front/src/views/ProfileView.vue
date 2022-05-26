@@ -1,8 +1,6 @@
 <template>
   <div class="container">
     <div class="for-nav"></div>
-    {{ profile }}
-    {{currentUser}}
     <div class="profile-box">
       <div>
         <h1>{{ profile.username }}님의 프로필 페이지</h1>
@@ -43,7 +41,7 @@
       <div class="liked-movie-box d-flex flex-column col-12">
         <div class="d-flex">
           <p class="liked-movie-p align-self-start mx-3">Liked Movies</p>
-          <button type="button" class="btn btn-primary mx-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          <button type="button" class="btn btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             See all
           </button>
         </div>
@@ -90,8 +88,9 @@
           @click='goToReview(review.movie, review.id)'>
             <span class="d-flex align-items-center"> {{ review.title}} </span>
             <span> 
-              <span class="mx-1">username: {{review.user.username}}</span>
-              <span class="mx-1">rating: {{review.rating}}</span>
+              <i class="fa-solid fa-star ms-2"></i>
+              <span class="mx-2">{{review.rating}}</span>
+              <i class="fa-solid fa-thumbs-up ms-2"></i>
               <span class="badge badge-primary badge-pill mx-1">{{review.user_good_eval.length}}</span>
             </span>
           </li>
