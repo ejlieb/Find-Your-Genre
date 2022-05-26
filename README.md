@@ -3,6 +3,22 @@
 ​																																						      작성자: 신희재, 원민석
 ​																																								작성일: 2022. 5. 22
 
+
+
+## 0. 프로젝트 구조
+
+- /final-pjt-back : Django 프레임워크를 사용한 백엔드 서버
+  - accounts : user관련 어플리케이션
+  - communities : review기능 백엔드 어플리케이션
+  - movies : movie 관련 어플리케이션
+  - movie-whoe-data.json : 모든 데이터를 덤프한 json 파일 (4000여개 영화, 12000여명의 배우, 2000여명의 감독)
+
+- /final-pjt-front : Vue.js 프레임워크를 사용한 프론트엔드 어플리케이션
+- /recommendations : 자연어처리를 이용한 내용 분석 알고리즘을 포함하는 주피터노트북 전용 파일
+- /etc : 기타 문서
+
+
+
 ## 1. 서비스 기획
 
 - 이번 관통프로젝트의 목표를 크게 두 가지로 잡았습니다.
