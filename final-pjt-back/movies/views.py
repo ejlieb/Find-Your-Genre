@@ -95,7 +95,12 @@ def movie_detail(request, movie_id):
 
 
 '''
-@api_view(['GET',])  # api_view 무엇무엇을 허용?
+
+
+
+
+# 장르에서 가장 평점이 높은 영화 3개
+@api_view(['GET',])  
 def genre_main_page(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
     movies = []
@@ -117,8 +122,8 @@ def genre_main_page(request, genre_sort):
 
 # 이하는 genre_recommend에서 사용할 함수들 모음
 
+
 # 장르별 평점 순위 10 영화 추천 
-@api_view(['GET',])
 def genre_top_ten(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
     movies = []
@@ -128,59 +133,62 @@ def genre_top_ten(request, genre_sort):
         movies.extend(list(genre.movies.filter(vote_average__gte=8.0)))
     
     movies = list(set(movies))  # 중복 제거
-    movies = movies[:10]
+    movies = movies[3:13]
     movies.sort(key=lambda x: x.vote_average, reverse=True)
 
-    serializer = MovieDetailSerializer(movies, many=True)
+    # serializer = MovieDetailSerializer(movies, many=True)
 
-    return Response(serializer.data)
+    # return Response(serializer.data)
+    return movies
 
 
- 
+# 팔로잉하는 유저가 좋아하는 영화
+def following_top_ten(request, genre_sort):
+    now_user = User.objects.get(username=request.user)
+    followings = list(now_user.followings.all())
+    genre_set = set()
+    
+    for genre_id in list(genre_sorts[genre_sort]):
+        genre_set.add(Genre.objects.get(genre_id=genre_id))
+
+    followings_movies = []
+
+    for following in followings:
+        temp_movies = list(following.movie_likes.all())
+        for movie in temp_movies:
+            if set(list(movie.genres.all())) & genre_set:
+                followings_movies.append(movie)
+    
+    if len(followings_movies) >= 10:
+        random.shuffle(followings_movies)
+        followings_movies = followings_movies[:10]
+    
+    else:
+        for genre_id in genre_sorts[genre_sort]:
+            genre = Genre.objects.get(genre_id=genre_id)
+            movies.extend(list(genre.movies.filter(vote_average__gte=7.0)))
+        
+        movies = list(set(movies))  # 중복 제거
+        movies = movies[13:23]
+        i = 0
+        while len(followings_movies) < 10:
+            followings_movies.append(movies[i])
+            i += 1
+
+    return followings_movies
+
+
 @api_view(['GET', ])
 def genre_recommend(request, genre_sort):
-    genre_recommend_list = []
+    genre_recommend_lists = []
 
+    top_ten_movies = genre_top_ten(request, genre_sort)
+    followings_movies = following_top_ten(request, genre_sort)
+    # 좋아하는 감독, 배우 순회해서 영화 추천 (이 장르는 아니지만...)
+    # 장르별 특화 캐루셀 
 
-
-'''
-request로 해당 페이지의 장르 그룹을 받음. (1~7)
-해당 장르 그룹에 포함된 장르의 영화들을 모두 조회함. (genre.movies.filter)
-각 그룹당 10개씩 뽑아서 넣고 random.shuffle로 섞어준 다음에 10개를 뽑아서 보내줌
-'''
-
-
-# 좋아하는 영화에 가장 많이 나온 다섯 명을 송출해줌 
-@api_view(['GET', 'POST'])
-def actor_top_five(request):
-    
     pass
 
-'''
-좋아하는 배우가 나오는 영화를 추천함
-만일 좋아하는 배우가 3명 미만인 경우 ==> 자신이 좋아하는 영화 중 가장 많이 등장한 배우의 필모그래피들을 섞어줌
-'''
-
-
-@api_view(['GET', ])
-def genre_page_recommend(reqeust):
-    pass
-
-
-
-
-# 각 세부 장르별 추천
-@api_view(['GET', 'POST'])
-def each_genre_recommend(request):
-    '''
-    각 세부 장르에서 추천되는 영화는 겹치면 안 됨
-
-    '''
-    pass
-
-'''
-요청이 온 장르 그룹에 속하는 영화들 중에서 평점 높은 순으로 50개를 뽑고 랜덤 10개씩 추출
-'''
 
 @api_view(['GET', ])
 def search(request):
@@ -192,21 +200,6 @@ def search(request):
     return Response(serializer.data)
 
 
-@api_view(['GET', ])
-def genre_recommend(request, sort_id):
-    pass
-
-
-
-
-@api_view(['GET', ])
-def test(request):
-    movies = list(Movie.objects.all())
-    serializer = MovieTestSerializer(movies, many=True)
-
-    return Response(serializer.data)
-    
-# 트렌딩 카루셀 따로 만들기
 
 
 # #  이하는 Data 받아오는 함수
