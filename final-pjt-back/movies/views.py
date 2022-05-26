@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-import requests, random
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+
 from pprint import pprint
 from .models import Genre, Movie, Actor, MovieImage, Director, Provider
 from accounts.models import User, GenreCounts
@@ -14,6 +15,12 @@ from .serializers import (SignupMovieSerializer,
                         )
 from django.db.models import Q
 
+from movies import serializers
+import requests, random
+import pickle
+
+with open('movies/recommendations.p', 'rb') as file:
+    recomm = pickle.load(file)
 
 genre_sorts =   [[12, 14, 16, 18, 27, 28, 35, 36, 37, 53, 80, 99, 878, 9648, 10402, 10749, 10751, 10752, 10770],
                 [80, 53, 9648, 27], 
@@ -148,8 +155,8 @@ def genre_top_ten(request, genre_sort):
 def following_top_ten(request, genre_sort):
     now_user = User.objects.get(username=request.user)
     followings = list(now_user.followings.all())
-    genre_set = set()
     
+    genre_set = set()
     for genre_id in list(genre_sorts[genre_sort]):
         genre_set.add(Genre.objects.get(genre_id=genre_id))
 
@@ -181,23 +188,152 @@ def following_top_ten(request, genre_sort):
     return followings_movies
 
 
+def user_info_movies(request, genre_sort):
+    genre_set = set()
+    for genre_id in list(genre_sorts[genre_sort]):
+        genre_set.add(Genre.objects.get(genre_id=genre_id))
+
+    genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+    now_user = User.objects.get(username=request.user)
+    user_movies = list(now_user.movie_likes.all())
+    random.shuffle(user_movies)
+    
+    r_movies = []
+    for movie in user_movies:
+        r_movies.extend(recomm[movie.movie_id][:3])
+    
+    random.shuffle(r_movies)
+
+    results = []
+    for r_movie_id in r_movies:
+        r_movie = Movie.objects.get(movie_id=r_movie_id)
+        if set(r_movie.genres.all()) & genre_set:
+            results.append(r_movie)
+        
+        if len(results) >= 10:
+            break
+
+    if len(results) <= 10:
+        less_movies = []
+        for genre_id in genre_sorts[genre_sort]:
+            genre = Genre.objects.get(genre_id=genre_id)
+            less_movies.extend(list(genre.movies.filter(vote_average__gte=7.0)))
+        
+        less_movies = list(set(less_movies))  # 중복 제거
+        random.shuffle(less_movies)
+        less_movies = less_movies[13:23]
+        i = 0
+        while len(results) < 10:
+            if less_movies[i] not in results:
+                results.append(less_movies[i])
+            i += 1
+    
+    return results
+
+
+
+
+
 @api_view(['GET', ])
+@permission_classes([IsAuthenticated])
 def genre_recommend(request, genre_sort):
     
     top_ten_movies = MovieRecommendSerializer(genre_top_ten(request, genre_sort), many=True)
     followings_movies = MovieRecommendSerializer(following_top_ten(request, genre_sort), many=True)
+    info_movies = MovieRecommendSerializer(user_info_movies(request, genre_sort), many=True)
 
-    
     # 좋아하는 감독, 배우 순회해서 영화 추천 (이 장르는 아니지만...)
     # 장르별 특화 캐루셀 
 
     results = {
-        'top_ten' : top_ten_movies.data,
-        'followings' : followings_movies.data,
+        '이 장르의 Top 10' : top_ten_movies.data,
+        '팔로잉하는 사람이 좋아하는 영화' : followings_movies.data,
+        '어쩌면, 좋아하실 거예요' : info_movies.data,
     }
-    
 
+    if genre_sort == 1:
+        director = Director.objects.get(director_id=2636)
+        director_movies = list(director.filmographies.all())
+        director_movies.sort(key=lambda x: x.vote_average, reverse=True)
+        director_movies = MovieRecommendSerializer(director_movies, many=True)
+
+        results['스릴러 좋아하면 히치콕은 알아야지'] = director_movies.data        
+
+    elif genre_sort == 2:
+        temp_movies = recomm[438631]  # 듄 설정
+        recom = []
+        for movie_id in temp_movies:
+            recom.append(Movie.objects.get(movie_id=movie_id))
+        
+        recom.sort(key=lambda x: (x.vote_average, x.vote_count))
+        
+        recom_movies = MovieRecommendSerializer(recom, many=True)
+
+        results['듄을 좋아하신다면!?'] = recom_movies.data        
+
+    elif genre_sort == 3:
+        director = Director.objects.get(director_id=608)
+        director_movies = list(director.filmographies.all())
+        director_movies.sort(key=lambda x: x.vote_average, reverse=True)
+        director_movies = MovieRecommendSerializer(director_movies, many=True)
+
+        results['한 여름 수채화 같은, 미야자키 하야오'] = director_movies.data
+
+    elif genre_sort == 4:
+        director = Director.objects.get(director_id=608)
+        director_movies = list(director.filmographies.all())
+        director_movies.sort(key=lambda x: x.vote_average, reverse=True)
+        director_movies = MovieRecommendSerializer(director_movies, many=True)
+
+        results['한 여름 수채화 같은, 미야자키 하야오'] = director_movies.data
+
+
+    elif genre_sort == 5:
+        director = Director.objects.get(director_id=564)
+        director_movies = list(director.filmographies.all())
+        director_movies.sort(key=lambda x: x.vote_average, reverse=True)
+        director_movies = director_movies[:5]
+        director_movies = MovieRecommendSerializer(director_movies, many=True)
+
+        results['실제 시간이 흐르는 영화가 보고 싶다면'] = director_movies.data        
+
+
+    elif genre_sort == 6:
+        temp_movies = recomm[954]  # 미션임파서블 설정
+        recom = []
+        for movie_id in temp_movies:
+            recom.append(Movie.objects.get(movie_id=movie_id))
+        
+        recom.sort(key=lambda x: (x.vote_average, x.vote_count))
+        
+        recom_movies = MovieRecommendSerializer(recom, many=True)
+
+        results['Mission Impossible'] = recom_movies.data               
+
+    elif genre_sort == 7:
+        genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
+        movies = []
+        
+        for genre_id in genre_ids:
+            genre = Genre.objects.get(genre_id=genre_id)
+            movies.extend(list(genre.movies.filter(vote_average__gte=7.0)))
+        
+        movies = list(set(movies))  # 중복 제거
+        N = len(movies)
+        for i in range(N-1, -1, -1):
+            if len(movies[i].genres.all()) > 1:
+                movies.pop(i)
+
+        movies.sort(key=lambda x: x.runtime)
+        movies = movies[:10]
+        random.shuffle(movies)
+        
+        movies = MovieRecommendSerializer(movies, many=True)
+        
+        results['후딱 보기 좋은 짧은 코미디 영화들!'] = movies.data
+    
     return Response(results)
+
 
 
 @api_view(['GET', ])
@@ -452,3 +588,14 @@ def search(request):
 #     }
     
 #     return render(request, 'movies/register.html', context)
+
+@api_view(['GET',])
+def test(request, movie_id):
+    result = []
+    for i in range(10):
+        movie = Movie.objects.get(movie_id=recomm[movie_id][i])
+        result.append(movie)
+
+    serializers = MovieTestSerializer(result, many=True)
+
+    return Response(serializers.data)

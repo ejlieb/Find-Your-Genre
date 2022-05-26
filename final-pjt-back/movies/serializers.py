@@ -34,7 +34,7 @@ class ActorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# 영화 이미지(배경)까지 합친 시리얼라이즈 (메인화면용도) 
+# 영화 이미지(배경)까지 합친 시리얼라이저 (메인화면용도) 
 class MovieSerializerWithImages(serializers.ModelSerializer):
     
     class GenreNestedSerializer(serializers.ModelSerializer):
@@ -105,7 +105,7 @@ class MovieTestSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Movie
-        fields = ('movie_id', 'title', 'overview', 'genres', )
+        fields = ('title', 'genres',)
 
 
 
