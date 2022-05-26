@@ -1,7 +1,8 @@
 <template>
 <div class="home">
   <home-main :key="componentKey"></home-main>
-  <genre-card></genre-card>
+  <div class="test"></div>
+  <genre-card v-if="isLoggedIn"></genre-card>
 </div>
 </template>
 
@@ -17,6 +18,11 @@ export default {
     HomeMain
   },
   data() { return { componentKey: 0, }; }, 
+  computed: {
+    isLoggedIn : function() {
+      return this.$store.getters.isLoggedIn
+    }
+  },
   methods: { forceRerender() { this.componentKey += 1; } } 
 
   
