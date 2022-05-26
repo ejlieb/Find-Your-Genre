@@ -5,31 +5,31 @@
       <div class="col" @click= "gotoGenre(1)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-          <p> Thriller </p>
+          <p class="horror-title"> Thriller </p>
         </div>
       </div>
       <div class="col even" @click= "gotoGenre(2)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-            <p> SF / Fantasy </p>
+            <p class="sf-title"> SF / Fantasy </p>
         </div>
       </div>
       <div class="col" @click= "gotoGenre(3)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-            <p> Anime </p>
+            <p class="anime-title"> Anime </p>
         </div>
       </div>
       <div class="col even" @click= "gotoGenre(4)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-            <p> Action </p>
+            <p class="action-title"> Action </p>
         </div>
       </div>
       <div class="col" @click= "gotoGenre(5)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-            <p> Drama </p>
+            <p class="drama-title"> Drama </p>
         </div>
       </div>
       <div class="col even" @click= "gotoGenre(6)">
@@ -41,7 +41,7 @@
       <div class="col" @click= "gotoGenre(7)">
         <div class="col-in"></div>
         <div class="genre-name d-flex flex-column justify-content-center ">
-            <p> Comedy</p>
+            <p class="comedy-title"> Comedy</p>
         </div>
       </div>
     </div>

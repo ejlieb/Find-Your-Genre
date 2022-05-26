@@ -17,14 +17,18 @@
           <!-- 영화 상세정보 -->
           
           <div class="d-flex review-title aligh-self-start mt-5">
-            <h1 class="text-start">{{review.title}}</h1>
-            <button type="button" class="btn btn-danger mx-2" @click="updateReview" v-if="currentUser.pk === review.user.pk">Update</button>
-            <button type="button" class="btn btn-danger mx-2" @click="deleteReview" v-if="currentUser.pk === review.user.pk">Delete</button>
+            <h1 class="text-start me-2">{{review.title}}</h1>
+            <button type="button" class="btn mx-2 red-btn" @click="updateReview" v-if="currentUser.pk === review.user.pk">Update</button>
+            <button type="button" class="btn mx-2 red-btn" @click="deleteReview" v-if="currentUser.pk === review.user.pk">Delete</button>
           </div>
-          <div class="d-flex">
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn">{{review.rating}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn" @click="likeReview">{{review.good_eval_count}}</button>
-            <button type="button" class="mt-1 mx-1 btn btn-outline-light rating-btn" @click="badReview">{{review.bad_eval_count}}</button> 
+          <div class="d-flex align-items-center mt-3">
+            <p class="mt-1 mx-1 user-name" @click="goToProfile(review.user.username)"> posted by {{review.user.username}}</p>
+            <i class="fa-solid fa-star fa-xl mx-1"></i>
+            <button type="button" class="mt-1 me-2 btn btn-outline-light rating-btn">{{review.rating}}</button>
+            <i class="fa-solid fa-thumbs-up fa-xl mx-1"></i>
+            <button type="button" class="mt-1 me-2 btn btn-outline-light rating-btn" @click="likeReview">{{review.good_eval_count}}</button>
+            <i class="fa-solid fa-thumbs-down mx-1 fa-xl"></i>
+            <button type="button" class="mt-1 me-2 btn btn-outline-light rating-btn" @click="badReview">{{review.bad_eval_count}}</button> 
           </div>
           <div class="d-flex mt-5">
             <p>{{review.content}}</p>
@@ -50,10 +54,10 @@
               {{comment.content}}
             </div>
             <div>
-              <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === comment.user.pk">
+              <button class="btn btn-secondary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === comment.user.pk">
                 delete
               </button>
-              <button class="btn btn-primary mx-1" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">
+              <button class="btn btn-secondary mx-1" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">
                 comment
               </button>
             </div>
@@ -69,7 +73,7 @@
                   {{cocomment.content}}
                 </div>
                 <div>
-                  <button class="btn btn-primary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === cocomment.user">
+                  <button class="btn red-btn mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === cocomment.user">
                     delete
                   </button>
                 </div>
@@ -86,7 +90,6 @@
         </li>
       </ol>
       <div>
-        <p>{{ commentList }}</p>
       </div>
 
     </div>
@@ -229,5 +232,16 @@ export default {
   }
   .comment-user-name:hover{
     cursor: pointer;
+  }
+  .user-name:hover{
+    cursor: pointer;
+  }
+
+  .review-title button{
+    height: 80%;
+  }
+  .red-btn {
+    border-color: rgba(219, 0, 0, 1);
+    color: rgba(219, 0, 0, 1);
   }
 </style>

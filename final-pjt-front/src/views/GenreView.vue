@@ -99,27 +99,5 @@ export default {
     background:linear-gradient(0deg, rgba(0,0,0,1), rgba(0, 0, 0, 0.2)), url('@/assets/Comedy.jpg');
     background-size: cover;
   }
-  /* 장르별 폰트 클래스 */
-  .horror-title{
-    font-family: 'Fredericka the Great', cursive;
-  }
-  .sf-title{
-    font-family: 'Odibee Sans', cursive;
-  }
-  .anime-title {
-    font-family: 'Audiowide', cursive;
-  }
-  .action-title{
-    font-family: 'skyfall';
-  }
-  .drama-title {
-    font-family: 'Ruthie', cursive;
-  }
-  .comedy-title{
-    font-family:'궁서';
-  }
-  @font-face{
-    font-family: 'skyfall';
-    src: url('@/assets/fonts/SkyFall Done.ttf')
-  }
+  
 </style>
