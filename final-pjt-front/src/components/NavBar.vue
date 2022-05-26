@@ -8,7 +8,7 @@
       <img src="@/assets/My_project.png" alt="" @click= "gotoHome" class="ms-3 me-auto logo">
 
       <div class="dropdown me-2 ">
-        <input class="form-control dropdown-toggle" type="search" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" :value="searchData" @input="changeKeyword"> 
+        <input class="form-control dropdown-toggle" type="search" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" :value="searchData" @input="changeKeyword" @keyup.enter="goToSearch(searchData)"> 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" v-show="searchData !== ''" >
           <li class="d-flex align-items-center search-item dropdown-item list-gr" > Movie </li>
 
@@ -89,6 +89,9 @@ export default {
     },
     goToProfile: function(username) {
       this.$router.push({name: 'profile', params: {username}})
+    },
+    goToSearch: function(keyword) {
+      this.$router.push({name: 'searchView', query:{keyword}, params:{searchList: this.searchList}})
     }
     },
   computed: {

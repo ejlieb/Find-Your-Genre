@@ -5,8 +5,7 @@
       <div class="sidebar col-1 d-flex flex-column align-items-end">
           <div class="d-flex flex-column align-items-center sidebar-box">
             <p class="mt-4">For you</p>
-            <img :src="path + movie.poster_path" class="sidebar-item my-3" alt="" v-for="movie, idx in detail.similar_movies.slice(1,4)" :key="idx" @click="goToDetail(movie)">
-            
+            <img :src="path + movie.poster_path" class="sidebar-item my-3" alt="" v-for="movie, idx in detail.similar_movies" :key="idx" @click="goToDetail(movie)">
           </div>
       </div>
     <div class="container">
@@ -38,7 +37,7 @@
       <!-- 캐스팅정보 -->
       <h1>Casting</h1>
       <div class="row p-3 g-3">
-        <div class="card border-secondary col mx-2" style="width: 18rem; background:rgb(15,15,15);" v-for="actor in detail.actors" :key="actor.actor_id">
+        <div class="card border-secondary cast-card col mx-2" style="width: 18rem; background:rgb(15,15,15);" v-for="actor in detail.actors" :key="actor.actor_id">
           <img class="card-img-top mt-2" :src="path + actor.profile_path" alt="Card image cap">
           <div class="card-body">
             <p class="card-text">{{ actor.name }}</p>
@@ -48,7 +47,7 @@
       <!-- 리뷰 -->
       <div class="row mt-5">
         <ul class="list-group col-12">
-          <li class="list-group-item review-lst-item border-secondary d-flex justify-content-between align-items-center" v-for="review, idx in detail.review_set.slice(0,5)" :key="idx"
+          <li class="list-group-item review-lst-item border-secondary d-flex justify-content-between align-items-center" v-for="review, idx in detail.review_set" :key="idx"
           @click='goToReview(detail.movie_id, review.id)'>
             <span class="d-flex align-items-center"> {{ review.title}} </span>
             <span> 
@@ -156,5 +155,8 @@ export default {
   .sidebar-item{
     width: 75%;
     border-radius: 0.5em;;
+  }
+  .cast-card {
+    height: 28em;
   }
 </style>

@@ -39,7 +39,7 @@
       <div>
         <form @submit.prevent="commentCreate" id="comment-form">
           <div class="d-flex my-2 comment-input">
-            <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword">
+            <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword" :value="content">
             <button type="submit" class=" btn btn-light comment-btn">submit</button>
           </div>
         </form>  
@@ -83,7 +83,7 @@
 
           <form @submit.prevent="coCommentCreate(comment)" class="collapse" :id="`collapseExample-${idx}`">
             <div class="d-flex my-2 comment-input">
-              <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword">
+              <input type="text" id="inputPassword5" class="form-control mx-2" @input="changeKeyword" :value="content">
               <button type="submit" class=" btn btn-light comment-btn" data-bs-toggle="collapse" :data-bs-target="`#collapseExample-${idx}`" aria-expanded="false" aria-controls="collapseExample">submit</button>
             </div>
           </form>

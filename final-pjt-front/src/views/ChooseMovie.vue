@@ -4,7 +4,7 @@
       <div class="sidebar col-1 d-flex flex-column align-items-end">
           <div class="d-flex flex-column align-items-center justify-content-center sidebar-box">
             <p v-if="choosedMovie.length < 10">아직 {{ 10 - choosedMovie.length }}개의 영화를 더 고르셔야 합니다.</p>
-            <button type="button" class="btn btn-primary" @click="saveLikes" v-else>회원 가입 완료하기</button>
+            <button type="button" class="btn btn-danger" @click="saveLikes" v-else>회원 가입 완료하기</button>
           </div>
       </div>
     <div class="choose-movie-container container">
@@ -13,7 +13,7 @@
       <p v-if="choosedMovie.length < 10">아직 {{ 10 - choosedMovie.length }}개의 영화를 더 고르셔야 합니다.</p>
       <div v-else>
         <p>다음 단계로 넘어가세요! {{choosedMovieList.length }}개의 영화를 고르셨습니다!</p>
-        <button type="button" class="btn btn-primary" @click="saveLikes" >회원 가입 완료하기</button>
+        <button type="button" class="btn btn-danger" @click="saveLikes" >회원 가입 완료하기</button>
       </div>
       <div class="row mt-5">
         <!-- div에 v-for 돌리기 키값으로 title div에 id 줘서 숨겼다 보였다-->

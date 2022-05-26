@@ -15,8 +15,15 @@
           <div class="row">
             <div class="col-4 d-flex flex-column align-items-start">
               <p class="mb-2">Favorite Genres</p>
-              <div class="d-flex">
+              <div class="d-flex mb-2">
                 <button type="button" class="btn btn-outline-secondary mx-1 profile-genre-btn" v-for="genre, idx in slicedGenreList" :key="idx">{{genre.genre_name}}</button>
+              </div>
+              <div class="test"></div>
+              <div class="d-flex align-items-center">
+                <span>Followers:</span>
+                <button type="button" class="btn btn-outline-secondary mx-2 profile-genre-btn" >{{profile.followers.length}}</button>
+                <span>Followings:</span>
+                <button type="button" class="btn btn-outline-secondary mx-2 profile-genre-btn" >{{profile.followings.length}}</button>
               </div>
             </div>
             <div class="liked-movie-box d-flex flex-column col-8">
@@ -27,7 +34,7 @@
                 <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
                   <div v-for=" (actor,index) in slicedActorList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
                     <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
-                    <img :src="poster_path + actor.profile_path" alt="" class="movie-img" @click="goToDetail(movie)">
+                    <img :src="poster_path + actor.profile_path" alt="" class="movie-img">
                     <h5>{{actor.actor_name}}</h5>
                   </div>
                 </div>

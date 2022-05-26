@@ -16,11 +16,13 @@
               <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
               <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
               <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
-                <div class="movie-add">
+                <div class="movie-add d-flex align-items-center">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <!-- <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
-                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>  -->
+                  <div v-if="profile.liked_movie_ids">
+                    <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                    <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                  </div>
                 </div>
               </div>
             </div>

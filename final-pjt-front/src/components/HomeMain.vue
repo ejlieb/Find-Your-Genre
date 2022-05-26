@@ -11,16 +11,18 @@
               <span style="font-size: 5em;">{{ movie.title }}</span>
             </div>
             <div class="movie-overview">
-              <span>{{ currentUser }} {{isLoggedIn}}</span>
+              <span>{{movie.overview}}</span>
               <div class="movie-info">
               <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
               <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
               <button type="button" class="btn btn-outline-light mx-2">{{movie.vote_average}}</button> 
-                <div class="movie-add" v-if="isLoggedIn">
-                <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
-                <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <!-- <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
-                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i> -->
+                <div class="movie-add d-flex align-items-center" v-if="isLoggedIn">
+                  <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
+                  <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
+                  <div v-if="profile.liked_movie_ids">
+                    <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                    <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -45,15 +47,16 @@
 <script>
 export default {
   name: "HomeMain",
-  mounted: function() {
+  created: function() {
       this.$store.dispatch('getMovieForHome')
-      // if (this.isLoggedIn){
-      //   this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
-      // }
+      if (this.isLoggedIn){
+        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      }
     },
   data: function() {
     return {
-      url: 'https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg'
+      url: 'https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg',
+      a: [1,2,3]
     }
   },
   computed: {
@@ -69,6 +72,7 @@ export default {
       isLoggedIn: function() {
         return this.$store.getters.isLoggedIn
       },
+      
     },
   methods: {
     goToDetail: function(movieData) {
@@ -89,7 +93,6 @@ export default {
 <style>
 .home-main {
   height:60em;
-  /* background:linear-gradient(0deg, rgba(0,0,0,0.8), rgba(100, 100, 100, 0.2)), url('https://www.themoviedb.org/t/p/original/6RuU7NumrO08Bcml5sIgj9zNWFm.jpg'); */
   overflow: hidden;
   background-repeat: no-repeat;
   

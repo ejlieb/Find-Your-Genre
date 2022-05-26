@@ -28,6 +28,7 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
+      <div class="em-blank"></div>
     </div>
       
       
@@ -70,5 +71,8 @@ export default {
   .topten-item:hover {
     cursor: pointer;
     opacity: 70%;
+  }
+  .em-blank{
+    height: 2em;
   }
 </style>

@@ -3,8 +3,15 @@
     <div class="for-nav"></div>
     <!-- BGM -->
     <div >
-      <audio autoplay>
+      <audio autoplay loop>
         <source src="@/assets/sounds/horror.mp3" v-if="this.genreId === 1">
+        <source src="@/assets/sounds/SF.mp3" v-if="this.genreId === 2">
+        <source src="@/assets/sounds/Action.mp3" v-if="this.genreId === 4">
+        <source src="@/assets/sounds/Anime.mp3" v-if="this.genreId === 3">
+        <source src="@/assets/sounds/Drama.mp4" v-if="this.genreId === 5">
+        <source src="@/assets/sounds/Docu.mp4" v-if="this.genreId === 6">
+        <source src="@/assets/sounds/Comedy.mp4" v-if="this.genreId === 7">
+
       </audio>
     </div>
 
@@ -20,13 +27,13 @@
 
       </div>
       <div class="movie-overview">
-        <span v-if="this.genreId === 1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 6">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
-        <span v-if="this.genreId === 7">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, eos. Cum eaque, nemo explicabo, fugit distinctio nesciunt dolore temporibus, dignissimos ut accusamus soluta blanditiis maiores libero voluptatum numquam quae pariatur?</span>
+        <span v-if="this.genreId === 1" class="horror-content">All work and no play makes Jack a dull boy</span>
+        <span v-if="this.genreId === 2" class="sf-content">Do not gentle into that good night. rage, rage against the dying of the light.</span>
+        <span v-if="this.genreId === 3" class="anime-content d-flex flex-column">PLANT!<br><span class="align-self-end content-margin" >. . .   &lt;WALL- E&gt;</span></span>
+        <span v-if="this.genreId === 4">Age is no guarantee of efficiency And youth is no guarantee of innovation</span>
+        <span v-if="this.genreId === 5" class="drama-content">My momma always said, "Life was like a box chocolates. You never know what you're gonna get"</span>
+        <span v-if="this.genreId === 6" class="docu-content">One small step for a man, one giant leap for mankind.</span>
+        <span v-if="this.genreId === 7" class="comedy-content">지금까지 이런 맛은 없었다. 이것은 갈비인가 통닭인가.</span>
 
 
 
@@ -104,5 +111,25 @@ export default {
     background:linear-gradient(0deg, rgba(0,0,0,1), rgba(0, 0, 0, 0.2)), url('@/assets/Comedy.jpg');
     background-size: cover;
   }
-  
+  .horror-content{
+    font-size:2em;
+  }
+  .sf-content{
+    font-size:1.8em;
+  }
+  .anime-content{
+    font-size:1.5em;
+  }
+  .drama-content{
+    font-size:2.5em;
+  }
+  .docu-content{
+    font-size: 1.5em;
+  }
+  .comedy-content{
+    font-size: 1.8em;
+  }
+  .content-margin{
+    margin-right:15em;
+  }
 </style>
