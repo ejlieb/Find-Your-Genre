@@ -5,7 +5,7 @@ app_name = 'movies'
 
 urlpatterns = [
     # 회원가입시 영화 선택지 제공
-    path('signup_movies/', views.signup_movies),
+    path('signup_movies/<int:genre_sort>', views.signup_movies),
 
     # 회원정보 토대로 메인 페이지에 영화 추천
     path('main_page_recommend/', views.main_page_recommend),
@@ -19,11 +19,9 @@ urlpatterns = [
 
 
     # 영화 추천하는 url 모음
-    
+    path('genre_main_page/<int:genre_sort>', views.genre_main_page),
     path('genre_recommend/<int:genre_sort>/', views.genre_recommend),
-
     
-    # path('genre_main_page/<int:genre_sort>', views.genre_main_page),
 
     # 이하는 TMDB서버에서 장고 서버로 데이터 받아오는 URL
     # path('genre/', views.genre_register),
