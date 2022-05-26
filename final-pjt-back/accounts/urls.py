@@ -9,7 +9,10 @@ urlpatterns = [
 
     # 프로필 페이지
     path('profile/<str:username>/', views.profile),
+    
     # 유저 팔로우/언팔로우
     path('profile/<str:username>/follow', views.user_follow),
 
+    # 유저 검색
+    path('search/', views.user_search),
 ]

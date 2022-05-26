@@ -19,6 +19,7 @@ from movies import serializers
 import requests, random
 import pickle
 
+# 자연어 처리 알고리즘으로 추출받은 추천데이터 임포트
 with open('movies/recommendations.p', 'rb') as file:
     recomm = pickle.load(file)
 
@@ -93,20 +94,25 @@ def movie_detail(request, movie_id):
     
     serializer = MovieDetailSerializer(movie)
 
-    return Response(serializer.data)
+    results = {
+        'simliar_movies': recomm[movie_id] 
+        }
+
+    results.update(serializer.data)
+
+    
+    return Response(results)
 
 '''
 1. 내가 받은 영화 중 현재 OTT에서 상영하는 영화 (-> 메인페이지)
 2. 평점 순으로 Top 10
-3. 줄거리와 장르유사도를 고려해서 선정한 좋아요영화와 유사 영화들  (-> 만일 좋아요한 영화가 해당 장르에 없으면 장르 랜덤 추천)
-4. 기획전(e.g. 애니메이션은 미야자키 하야오 등)
-5. 현재 OTT에서 상영하는 영화들 ("지금 심심한 당신을 위해")
+3. 내가 팔로우한 친구들이 좋아하는 영화들 추천
+4. 줄거리와 장르유사도를 고려해서 선정한 좋아요영화와 유사 영화들 
+5. 기획전(e.g. 애니메이션은 미야자키 하야오 등)
+
 
 
 '''
-
-
-
 
 # 장르에서 가장 평점이 높은 영화 3개
 @api_view(['GET',])  
@@ -129,9 +135,8 @@ def genre_main_page(request, genre_sort):
     # 만일 해당 장르에 속하는 좋아요 영화가 n개 이하일 경우 평점이 좋은 영화를 추천
 
 
+
 # 이하는 genre_recommend에서 사용할 함수들 모음
-
-
 # 장르별 평점 순위 10 영화 추천 
 def genre_top_ten(request, genre_sort):
     genre_ids = genre_sorts[genre_sort]  # 요청받은 구분에 속하는 장르들
@@ -229,9 +234,6 @@ def user_info_movies(request, genre_sort):
             i += 1
     
     return results
-
-
-
 
 
 @api_view(['GET', ])
@@ -589,13 +591,16 @@ def search(request):
     
 #     return render(request, 'movies/register.html', context)
 
-@api_view(['GET',])
-def test(request, movie_id):
-    result = []
-    for i in range(10):
-        movie = Movie.objects.get(movie_id=recomm[movie_id][i])
-        result.append(movie)
 
-    serializers = MovieTestSerializer(result, many=True)
 
-    return Response(serializers.data)
+# POSTMAN 테스트용
+# @api_view(['GET',])
+# def test(request, movie_id):
+#     result = []
+#     for i in range(10):
+#         movie = Movie.objects.get(movie_id=recomm[movie_id][i])
+#         result.append(movie)
+
+#     serializers = MovieTestSerializer(result, many=True)
+
+#     return Response(serializers.data)

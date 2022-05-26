@@ -2,11 +2,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import UserSerializer, UserProfileSerializer
+from django.db.models import Q
+from .serializers import UserSerializer, UserProfileSerializer, UserSearchSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 from .models import GenreCounts, ActorCounts
 from movies.models import Movie, Genre
+
 
 
 
@@ -155,10 +157,11 @@ def user_follow(request, username):
 
 
 
-    pass
+@api_view(['GET', ])
+def user_search(request):
+    words = request.GET.get('search')
+    targets = User.objects.filter(username__contains=words)
+    
+    serializer = UserSearchSerializer(targets, many=True)
 
-
-'''
-data를 새로 받을 것인가?
-data set을 늘릴 게 아니라면 굳이?
-'''
+    return Response(serializer.data)
