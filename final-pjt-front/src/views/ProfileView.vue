@@ -1,13 +1,6 @@
 <template>
   <div>
-      <div class="sidebar col-1 d-flex flex-column align-items-end">
-          <div class="d-flex flex-column align-items-center sidebar-box">
-            <p class="mt-4"> 이런 영화는 어떤가요?</p>
-            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
-            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
-            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
-          </div>
-      </div>
+     
     <div class="container">
       <div class="for-nav"></div>
       <div class="profile-box">
@@ -213,21 +206,5 @@ h1{
   border-color: rgb(240, 240, 240)
 }
 
-.sidebar{
-    position: sticky;
-    width:100%;
-  }
-  .sidebar-box{
-    position: fixed;
-    top: 25vh;
-    width: 7%;
-    background:linear-gradient(0deg, rgba(15,15,15,1) 7%,rgba(50,50,50,1) 40%,rgba(50,50,50,1) 60%, rgba(15, 15, 15, 1)93%);
-    margin-right: 2.5%;
-    border-radius: 2em;
-    padding: 0.5em;
-  }
-  .sidebar-item{
-    width: 75%;
-    border-radius: 0.5em;;
-  }
+
 </style>

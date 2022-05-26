@@ -10,10 +10,17 @@
       <div class="dropdown me-2 ">
         <input class="form-control dropdown-toggle" type="search" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" :value="searchData" @input="changeKeyword"> 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" v-show="searchData !== ''" >
-          <li v-for="search, idx in searchList" :key="idx" class="d-flex align-items-center search-item dropdown-item" @click="goToDetail(search)" >
+          <li class="d-flex align-items-center search-item dropdown-item list-gr" > Movie </li>
+
+          <li v-for="search, idx in searchList.slice(0,5)" :key="idx" class="d-flex align-items-center search-item dropdown-item list-con" @click="goToDetail(search)" >
             <img :src="path + search.poster_path" alt="" class="search-img me-2">
-            <a href="#" style="text-decoration: none;">{{ search.title }}</a>
+            <a href="javascript:void(0);" style="text-decoration: none;">{{ search.title }}</a>
           </li>
+          <li class="d-flex align-items-center search-item dropdown-item list-gr" > User </li>
+          <li v-for="search in userSearchResult.slice(0,5)" :key="search.username" class="d-flex align-items-center search-item dropdown-item list-con" @click="goToProfile(search.username)" >
+            <a href="javascript:void(0);" style="text-decoration: none;">{{ search.username }}</a>
+          </li>
+          
         </ul>
       </div>
 
@@ -65,6 +72,9 @@ export default {
     sendSearchRequest: function() {
       this.$store.dispatch("sendSearchRequest", this.searchData )
     },
+    sendUserSearchRequest: function() {
+      this.$store.dispatch("sendUserSearchRequest", this.searchData)
+    },
     goToDetail: function(movieData) {
       console.log(movieData)
       this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
@@ -72,13 +82,17 @@ export default {
     changeKeyword: function(word) {
       this.searchData = word.target.value
       this.sendSearchRequest()
+      this.sendUserSearchRequest()
     },
     goBack: function() {
       this.$router.go(-1)
+    },
+    goToProfile: function(username) {
+      this.$router.push({name: 'profile', params: {username}})
     }
     },
   computed: {
-    ...mapGetters(['isLoggedIn', 'currentUser', 'searchList']),
+    ...mapGetters(['isLoggedIn', 'currentUser', 'searchList', 'userSearchResult']),
     username() {
       return this.currentUser.username ? this.currentUser.username : 'guest'
     },
@@ -105,5 +119,11 @@ export default {
   }
   .nav-route {
     color: rgba(240, 240, 240, 1)
+  }
+  .list-gr {
+    background-color: rgba(200, 200, 200, 1)
+  }
+  .list-con:hover{
+    cursor: pointer;
   }
 </style>

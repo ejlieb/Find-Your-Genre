@@ -91,11 +91,16 @@ def main_page_recommend(request):
 @api_view(['GET', ])
 def movie_detail(request, movie_id):
     movie = get_object_or_404(Movie, movie_id=movie_id)
-    
+    temp_results = []
+
+    for temp_id in recomm[movie_id]:
+        temp_results.append(Movie.objects.get(movie_id=temp_id))
+
+    temp_serializer = MovieRecommendSerializer(temp_results, many=True)
     serializer = MovieDetailSerializer(movie)
 
     results = {
-        'simliar_movies': recomm[movie_id] 
+        'similar_movies': temp_serializer.data
         }
 
     results.update(serializer.data)
