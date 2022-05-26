@@ -36,7 +36,6 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
 
 
-
 class UserCommnetSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
