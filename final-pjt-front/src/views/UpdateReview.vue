@@ -16,7 +16,8 @@
             </div>
             <div class="d-flex justify-content-between form-item align-items-center">
               <label for="password2" style="color: rgba(240,240,240,1);">Rating:</label>
-              <input v-model="credentials.rating" type="number" id="rating" class="my-1" required />
+              <!-- <input v-model="credentials.rating" type="number" id="rating" class="my-1" required /> -->
+              <star-rating :increment="0.5" :show-rating="false" v-model="credentials.rating"></star-rating>
             </div>
             <div class="d-flex form-item justify-content-end">
               <button class="my-1">Submit</button> 
@@ -29,8 +30,12 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating'
 export default {
   name: 'UpdateReview',
+  components:{
+    StarRating,
+  },
   created: function() {
     this.credentials.movie_id = this.$route.params.movieId
     this.credentials.title = this.$route.params.title
@@ -51,6 +56,7 @@ export default {
   },
   methods: {
     updateReview: function() {
+      this.credentials.rating = this.credentials.rating * 2
       this.$store.dispatch('updateReview', this.credentials)
     }
   }

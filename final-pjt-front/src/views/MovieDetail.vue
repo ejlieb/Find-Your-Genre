@@ -3,6 +3,7 @@
     <div class="for-nav" style="height: 5em;"></div>
     <div class="for-nav" style="height: 5em;"></div>
     <div class="container">
+      
       <div class="row poster-row">
         <div class="col-4 poster-box">
           <img :src="path + detail.poster_path" alt="" class="poster">
@@ -128,4 +129,5 @@ export default {
   .review-lst-item:hover{
     cursor: pointer;
   }
+  
 </style>

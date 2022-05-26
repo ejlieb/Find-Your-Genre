@@ -19,7 +19,8 @@
                 <div class="movie-add">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <button type="button" class="btn btn-outline-light mx-2">Add To Watchlist</button> 
+                <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i> 
                 </div>
               </div>
             </div>
@@ -45,7 +46,10 @@
 export default {
   name: "GenreMovieMain",
   mounted: function() {
-      this.$store.dispatch('getMovieForGenreMain', this.$route.params.movieId)
+      this.$store.dispatch('getMovieForGenreMain', this.$route.params.genreId)
+      if (this.isLoggedIn){
+        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      }
     },
   data: function() {
     return {
@@ -55,7 +59,13 @@ export default {
   computed: {
       genreMainMovies: function() {
         return this.$store.getters.movieForGenreMain.slice(0,3)
-      }
+      },
+      profile: function() {
+        return this.$store.getters.profile
+      },
+      currentUser: function() {
+        return this.$store.getters.currentUser
+      },
     },
   methods: {
     goToDetail: function(movieData) {
@@ -64,6 +74,13 @@ export default {
     },
     goToGenreCommunity: function() {
       this.$router.push({name: 'genreCommunity', params: {genreId: this.$route.params.genreId}})
+    },
+    saveLike: function(movie) {
+      const credentials = {
+        username: this.currentUser.username,
+        likeMovieIds: [movie],
+      }
+      this.$store.dispatch('saveLike', credentials)
     }
   }
 }

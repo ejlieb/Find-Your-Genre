@@ -1,102 +1,112 @@
 <template>
-  <div class="container">
-    <div class="for-nav"></div>
-    <div class="profile-box">
-      <div>
-        <h1>{{ profile.username }}님의 프로필 페이지</h1>
-        <div v-if="profile.username !== currentUser.username">
-          <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="!profile.followers.includes(currentUser.pk)">Follow</button>
-          <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="profile.followers.includes(currentUser.pk)">Unfollow</button>
-        </div>
-        <div class="test"></div>
-        <div class="test"></div>
-        <div class="row">
-          <div class="col-4 d-flex flex-column align-items-start">
-            <p class="mb-2">Favorite Genres</p>
-            <div class="d-flex">
-              <button type="button" class="btn btn-outline-secondary mx-1 profile-genre-btn" v-for="genre, idx in slicedGenreList" :key="idx">{{genre.genre_name}}</button>
-            </div>
+  <div>
+      <div class="sidebar col-1 d-flex flex-column align-items-end">
+          <div class="d-flex flex-column align-items-center sidebar-box">
+            <p class="mt-4"> 이런 영화는 어떤가요?</p>
+            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
+            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
+            <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/clnyhPqj1SNgpAdeSS6a6fwE6Bo.jpg" class="sidebar-item my-3" alt="">
           </div>
-           <div class="liked-movie-box d-flex flex-column col-8">
+      </div>
+    <div class="container">
+      <div class="for-nav"></div>
+      <div class="profile-box">
+        <div>
+          <h1>{{ profile.username }}님의 프로필 페이지</h1>
+          <div v-if="profile.username !== currentUser.username">
+            <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="!profile.followers.includes(currentUser.pk)">Follow</button>
+            <button type="button" class="btn btn-outline-light mx-2" @click="follow(profile.username)" v-if="profile.followers.includes(currentUser.pk)">Unfollow</button>
+          </div>
+          <div class="test"></div>
+          <div class="test"></div>
+          <div class="row">
+            <div class="col-4 d-flex flex-column align-items-start">
+              <p class="mb-2">Favorite Genres</p>
               <div class="d-flex">
-                <p class="liked-movie-p align-self-start mx-3 mb-2">Favorite Actors</p>
-              </div>
-            
-              <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
-                <div v-for=" (actor,index) in slicedActorList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
-                  <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
-                  <img :src="poster_path + actor.profile_path" alt="" class="movie-img" @click="goToDetail(movie)">
-                  <h5>{{actor.actor_name}}</h5>
-                </div>
+                <button type="button" class="btn btn-outline-secondary mx-1 profile-genre-btn" v-for="genre, idx in slicedGenreList" :key="idx">{{genre.genre_name}}</button>
               </div>
             </div>
-        </div>
-      </div>
-      
-    <!-- <h1>{{ profile}}</h1> -->
-    </div>
-    
-    <!-- 좋아요 누른 영화 -->
-    <div class="row">
-      <div class="liked-movie-box d-flex flex-column col-12">
-        <div class="d-flex">
-          <p class="liked-movie-p align-self-start mx-3">Liked Movies</p>
-          <button type="button" class="btn btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            See all
-          </button>
-        </div>
-        
-        <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
-          <div v-for=" (movie,index) in slicedMovieList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
-            <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
-            <img :src="poster_path + movie.poster_path" alt="" class="movie-img" @click="goToDetail(movie)">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal For liked Movies -->
-    <div>
-      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog liked-movie-modal-dialog modal-lg">
-            <div class="modal-content liked-movie-modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title liked-movie-p" id="staticBackdropLabel">Liked Movies</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="container-fluid">
-                  <div class="row row-cols-4">
-                    <img class="modal-img my-3" @click="goToDetail(movie)" data-bs-dismiss="modal" :src="poster_path + movie.poster_path" alt="" v-for="movie, idx in profile.movie_likes" :key="idx">
+            <div class="liked-movie-box d-flex flex-column col-8">
+                <div class="d-flex">
+                  <p class="liked-movie-p align-self-start mx-3 mb-2">Favorite Actors</p>
+                </div>
+              
+                <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
+                  <div v-for=" (actor,index) in slicedActorList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
+                    <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
+                    <img :src="poster_path + actor.profile_path" alt="" class="movie-img" @click="goToDetail(movie)">
+                    <h5>{{actor.actor_name}}</h5>
                   </div>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              </div>
+          </div>
+        </div>
+        
+      <!-- <h1>{{ profile}}</h1> -->
+      </div>
+      
+      <!-- 좋아요 누른 영화 -->
+      <div class="row">
+        <div class="liked-movie-box d-flex flex-column col-12">
+          <div class="d-flex">
+            <p class="liked-movie-p align-self-start mx-3">Liked Movies</p>
+            <button type="button" class="btn btn-danger mx-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              See all
+            </button>
+          </div>
+          
+          <div class="liked-movie-img-box d-flex justify-content-center align-items-center">
+            <div v-for=" (movie,index) in slicedMovieList" :key="index" class="liked-movie-img mx-3" :id="`movie-${index}`">
+              <!-- 클릭하면 영화 상세페이지로 가게 하기 -->
+              <img :src="poster_path + movie.poster_path" alt="" class="movie-img" @click="goToDetail(movie)">
             </div>
           </div>
         </div>
-    </div>
-
-    
-      <!-- 작성한 글 -->
-    <h2>작성한 글</h2>
-    <div class="row mt-5">
-        <ul class="list-group col-12">
-          <li class="list-group-item review-lst-item border-secondary d-flex justify-content-between align-items-center" v-for="review, idx in profile.review_set" :key="idx"
-          @click='goToReview(review.movie, review.id)'>
-            <span class="d-flex align-items-center"> {{ review.title}} </span>
-            <span> 
-              <i class="fa-solid fa-star ms-2"></i>
-              <span class="mx-2">{{review.rating}}</span>
-              <i class="fa-solid fa-thumbs-up ms-2"></i>
-              <span class="badge badge-primary badge-pill mx-1">{{review.user_good_eval.length}}</span>
-            </span>
-          </li>
-        </ul>
       </div>
-    <div class="test"></div>
+
+      <!-- Modal For liked Movies -->
+      <div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog liked-movie-modal-dialog modal-lg">
+              <div class="modal-content liked-movie-modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title liked-movie-p" id="staticBackdropLabel">Liked Movies</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                    <div class="row row-cols-4">
+                      <img class="modal-img my-3" @click="goToDetail(movie)" data-bs-dismiss="modal" :src="poster_path + movie.poster_path" alt="" v-for="movie, idx in profile.movie_likes" :key="idx">
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      
+        <!-- 작성한 글 -->
+      <h2>작성한 글</h2>
+      <div class="row mt-5">
+          <ul class="list-group col-12">
+            <li class="list-group-item review-lst-item border-secondary d-flex justify-content-between align-items-center" v-for="review, idx in profile.review_set" :key="idx"
+            @click='goToReview(review.movie, review.id)'>
+              <span class="d-flex align-items-center"> {{ review.title}} </span>
+              <span> 
+                <i class="fa-solid fa-star ms-2"></i>
+                <span class="mx-2">{{review.rating}}</span>
+                <i class="fa-solid fa-thumbs-up ms-2"></i>
+                <span class="badge badge-primary badge-pill mx-1">{{review.user_good_eval.length}}</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      <div class="test"></div>
+    </div>
   </div>
 </template>
 
@@ -202,4 +212,22 @@ h1{
   color: rgba(240,240,240,1);
   border-color: rgb(240, 240, 240)
 }
+
+.sidebar{
+    position: sticky;
+    width:100%;
+  }
+  .sidebar-box{
+    position: fixed;
+    top: 25vh;
+    width: 7%;
+    background:linear-gradient(0deg, rgba(15,15,15,1) 7%,rgba(50,50,50,1) 40%,rgba(50,50,50,1) 60%, rgba(15, 15, 15, 1)93%);
+    margin-right: 2.5%;
+    border-radius: 2em;
+    padding: 0.5em;
+  }
+  .sidebar-item{
+    width: 75%;
+    border-radius: 0.5em;;
+  }
 </style>

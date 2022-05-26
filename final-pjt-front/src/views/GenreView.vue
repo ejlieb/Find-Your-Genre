@@ -1,7 +1,12 @@
 <template>
   <div :class="{'sf': this.genreId === 2, 'horror': this.genreId === 1, 'anime': this.genreId === 3, 'action': this.genreId === 4, 'drama': this.genreId === 5, 'docu': this.genreId === 6, 'comedy': this.genreId === 7}">
     <div class="for-nav"></div>
-
+    <!-- BGM -->
+    <div >
+      <audio autoplay>
+        <source src="@/assets/sounds/horror.mp3" v-if="this.genreId === 1">
+      </audio>
+    </div>
 
     <div :class="{'sf-title': this.genreId === 2, 'horror-title': this.genreId === 1, 'anime-title': this.genreId === 3, 'action-title': this.genreId === 4, 'drama-title': this.genreId === 5, 'docu-title': this.genreId === 6,'comedy-title': this.genreId === 7 }" class="main-box" >
       <div class="movie-title">

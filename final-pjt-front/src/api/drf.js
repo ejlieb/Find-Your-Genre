@@ -52,8 +52,9 @@ export default {
   movies: {
     chooseMovies: () => HOST + MOVIES + 'signup_movies/',
     homeMainMovies: () => HOST + MOVIES + 'main_page_recommend/',
-    genreMainMovies: (genreId) => HOST + MOVIES + 'genre_top_ten/' + `${genreId}`,
+    genreMainMovies: (genreId) => HOST + MOVIES + 'genre_main_page/' + `${genreId}`,
     sendSearchRequest: () => HOST + MOVIES + 'search/',
-    sendDetailRequest: () => HOST + MOVIES + 'detail/'
+    sendDetailRequest: () => HOST + MOVIES + 'detail/',
+    movieRecommendation: (genreId) => HOST + MOVIES + 'genre_recommend/' + `${genreId}`
   }
 }

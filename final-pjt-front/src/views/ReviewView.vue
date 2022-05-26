@@ -18,8 +18,8 @@
           
           <div class="d-flex review-title aligh-self-start mt-5">
             <h1 class="text-start me-2">{{review.title}}</h1>
-            <button type="button" class="btn mx-2 red-btn" @click="updateReview" v-if="currentUser.pk === review.user.pk">Update</button>
-            <button type="button" class="btn mx-2 red-btn" @click="deleteReview" v-if="currentUser.pk === review.user.pk">Delete</button>
+            <button type="button" class="btn mx-2 btn-danger" @click="updateReview" v-if="currentUser.pk === review.user.pk">Update</button>
+            <button type="button" class="btn mx-2 btn-danger" @click="deleteReview" v-if="currentUser.pk === review.user.pk">Delete</button>
           </div>
           <div class="d-flex align-items-center mt-3">
             <p class="mt-1 mx-1 user-name" @click="goToProfile(review.user.username)"> posted by {{review.user.username}}</p>
@@ -73,7 +73,7 @@
                   {{cocomment.content}}
                 </div>
                 <div>
-                  <button class="btn red-btn mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === cocomment.user">
+                  <button class="btn btn-secondary mx-1" type="button"  @click="deleteComment(comment)" v-if="currentUser.pk === cocomment.user">
                     delete
                   </button>
                 </div>
@@ -240,8 +240,5 @@ export default {
   .review-title button{
     height: 80%;
   }
-  .red-btn {
-    border-color: rgba(219, 0, 0, 1);
-    color: rgba(219, 0, 0, 1);
-  }
+
 </style>

@@ -18,7 +18,7 @@ export default {
 </script>
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -84,5 +84,8 @@ body {
   @font-face{
     font-family: 'skyfall';
     src: url('@/assets/fonts/SkyFall Done.ttf')
+  }
+  .fa-heart{
+    color: #dc3545;
   }
 </style>

@@ -10,7 +10,7 @@ export default {
     searchList: [],
     movieDetail: {},
     movieForGenreMain: [],
-    topTen: [],
+    movieRecommendation: [],
   },
   getters: {
     movieForChoose: state => state.movieForChoose,
@@ -18,7 +18,8 @@ export default {
     searchList: state => state.searchList,
     movieDetail: state => state.movieDetail,
     movieForGenreMain: state => state.movieForGenreMain,
-    topTen: state => state.topTen,
+    movieRecommendation: state => state.movieRecommendation
+
   },
   mutations: {
     setMovieForChoose: function (state, movieList) {
@@ -36,9 +37,10 @@ export default {
     setDetailResult: function(state, movieDetail) {
       state.movieDetail = movieDetail
     },
-    setTopTen: function(state, movieList){
-      state.topTen = movieList
-    },
+    setMovieRecommendation: function(state, movieList) {
+      state.movieRecommendation = movieList
+    }
+
     
   },
   actions: {
@@ -92,28 +94,21 @@ export default {
     },
 
     // 장르 추천 알고리즘 디스패치
-    getRecommendation: function({dispatch}, genreId) {
-      dispatch('getTopTen', genreId)
-    },
-
-    getTopTen: function({commit, getters}, genreId) {
+    getRecommendation: function({commit, getters}, genreId) {
       const axiosObject = {
         method: 'get',
-        url: drf.movies.genreMainMovies(genreId),
+        url: drf.movies.movieRecommendation(genreId),
       }
       if (getters.isLoggedIn) {
         axiosObject.headers = getters.authHeader
       }
-
       axios(axiosObject)
-        .then(res => {
-          commit('setTopTen', res.data)
-        })
-        .catch(err => {
-          console.error(err.response.data)
-          commit('SET_AUTH_ERROR', err.response.data)
-        })
+        .then(function(res) {
+          commit('setMovieRecommendation', res.data)
+        }
+        )
     },
+
 
 
     sendSearchRequest: function({ commit }, search) {
