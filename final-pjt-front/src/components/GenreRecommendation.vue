@@ -13,7 +13,7 @@
           </div>
           <div class="carousel-item">
             <div class=" row row-cols-5 g-4 ">
-              <div class="col topten-item" v-for="movie, idx in algorithm.slice(5,10)" :key="idx" @click="goToDetai(movie)">
+              <div class="col topten-item" v-for="movie, idx in algorithm.slice(5,10)" :key="idx" @click="goToDetail(movie)">
                 <div class="topten-item" :style="`background-image: url(${ poster_path + movie.poster_path }); background-size: cover; background-position: center;`" @click="goToDetail(movie)"></div>
               </div>
             </div>
