@@ -9,7 +9,9 @@ from .serializers import (SignupMovieSerializer,
                         MovieSerializerWithImages,
                         MovieSearchSerializer,
                         MovieDetailSerializer,
-                        MovieTestSerializer)
+                        MovieTestSerializer,
+                        MovieRecommendSerializer,
+                        )
 from django.db.models import Q
 
 
@@ -164,6 +166,7 @@ def following_top_ten(request, genre_sort):
         followings_movies = followings_movies[:10]
     
     else:
+        movies = []
         for genre_id in genre_sorts[genre_sort]:
             genre = Genre.objects.get(genre_id=genre_id)
             movies.extend(list(genre.movies.filter(vote_average__gte=7.0)))
@@ -180,14 +183,21 @@ def following_top_ten(request, genre_sort):
 
 @api_view(['GET', ])
 def genre_recommend(request, genre_sort):
-    genre_recommend_lists = []
+    
+    top_ten_movies = MovieRecommendSerializer(genre_top_ten(request, genre_sort), many=True)
+    followings_movies = MovieRecommendSerializer(following_top_ten(request, genre_sort), many=True)
 
-    top_ten_movies = genre_top_ten(request, genre_sort)
-    followings_movies = following_top_ten(request, genre_sort)
+    
     # 좋아하는 감독, 배우 순회해서 영화 추천 (이 장르는 아니지만...)
     # 장르별 특화 캐루셀 
 
-    pass
+    results = {
+        'top_ten' : top_ten_movies.data,
+        'followings' : followings_movies.data,
+    }
+    
+
+    return Response(results)
 
 
 @api_view(['GET', ])
@@ -203,242 +213,242 @@ def search(request):
 
 
 # #  이하는 Data 받아오는 함수
-URL = 'https://api.themoviedb.org/3'
-API_KEY = 'ca33ee1ba3a143bb89f377cdff3e719c'
+# URL = 'https://api.themoviedb.org/3'
+# API_KEY = 'ca33ee1ba3a143bb89f377cdff3e719c'
 
-def genre_register(request):
-    path = '/genre/movie/list'
-    params = {
-        'api_key' : API_KEY,
-        'language' : 'ko-KR' 
-    }
+# def genre_register(request):
+#     path = '/genre/movie/list'
+#     params = {
+#         'api_key' : API_KEY,
+#         'language' : 'ko-KR' 
+#     }
 
-    genres = requests.get(URL+path, params=params).json().get('genres')
-    results = []
-    # all_genres_id = list(Genre.objects.values_list('genre_id', flat = True))
-    all_genres = list(Genre.objects.all())
-    for genre in genres:
-        instance = Genre()
-        instance.genre_id = genre['id']
-        instance.genre_name = genre['name']
-        if instance not in all_genres:
-            instance.save()
-        else:
-            results.append('중복입니다')
-    context = {
-        'results' : results,
-    }
+#     genres = requests.get(URL+path, params=params).json().get('genres')
+#     results = []
+#     # all_genres_id = list(Genre.objects.values_list('genre_id', flat = True))
+#     all_genres = list(Genre.objects.all())
+#     for genre in genres:
+#         instance = Genre()
+#         instance.genre_id = genre['id']
+#         instance.genre_name = genre['name']
+#         if instance not in all_genres:
+#             instance.save()
+#         else:
+#             results.append('중복입니다')
+#     context = {
+#         'results' : results,
+#     }
     
-    return render(request, 'movies/register.html', context)
+#     return render(request, 'movies/register.html', context)
         
 
-def movie_register(request):
-    path = '/discover/movie'
-    params = {
-        'api_key' : API_KEY,
-        'language' : 'ko-KR',
-        'sort_by' : 'vote_average.desc',
-        'include_adult': True,
-        'include_video': True,
-        'vote_count.gte': 1000,
-        'vote_average.gte': 7.0,
-        'with_genres': 18,
-        'with_watch_monetization_types': 'flatrate',
-        'page': 1,
-    }
-    results = []
-    all_genres_id = list(Genre.objects.values_list('genre_id', flat = True))
+# def movie_register(request):
+#     path = '/discover/movie'
+#     params = {
+#         'api_key' : API_KEY,
+#         'language' : 'ko-KR',
+#         'sort_by' : 'vote_average.desc',
+#         'include_adult': True,
+#         'include_video': True,
+#         'vote_count.gte': 1000,
+#         'vote_average.gte': 7.0,
+#         'with_genres': 18,
+#         'with_watch_monetization_types': 'flatrate',
+#         'page': 1,
+#     }
+#     results = []
+#     all_genres_id = list(Genre.objects.values_list('genre_id', flat = True))
 
-    for genre in all_genres_id:
-        temp = 0
-        all_movies = list(Movie.objects.all())
-        params['with_genres'] = genre
-        for i in range(1, 40):  # 모수복구
-            params['page'] = i
-            movies = requests.get(URL+path, params=params).json().get('results')
+#     for genre in all_genres_id:
+#         temp = 0
+#         all_movies = list(Movie.objects.all())
+#         params['with_genres'] = genre
+#         for i in range(1, 40):  # 모수복구
+#             params['page'] = i
+#             movies = requests.get(URL+path, params=params).json().get('results')
             
-            for movie in movies:
-                instance = Movie(
-                    movie_id=movie['id'],
-                    title=movie['title'],
-                    overview=movie['overview'],
-                    release_date=movie['release_date'],
-                    poster_path=movie['poster_path'],
-                    original_title=movie['original_title'],
-                    original_language=movie['original_language'],
-                    vote_count=movie['vote_count'],
-                    vote_average=movie['vote_average'],
-                )
-                if instance not in all_movies:
-                    instance.save()
+#             for movie in movies:
+#                 instance = Movie(
+#                     movie_id=movie['id'],
+#                     title=movie['title'],
+#                     overview=movie['overview'],
+#                     release_date=movie['release_date'],
+#                     poster_path=movie['poster_path'],
+#                     original_title=movie['original_title'],
+#                     original_language=movie['original_language'],
+#                     vote_count=movie['vote_count'],
+#                     vote_average=movie['vote_average'],
+#                 )
+#                 if instance not in all_movies:
+#                     instance.save()
 
-                    for genre_id in movie['genre_ids']:
-                        genre_instance = Genre.objects.get(genre_id=genre_id)
-                        instance.genres.add(genre_instance)
-                    instance.save()
-                    temp += 1
+#                     for genre_id in movie['genre_ids']:
+#                         genre_instance = Genre.objects.get(genre_id=genre_id)
+#                         instance.genres.add(genre_instance)
+#                     instance.save()
+#                     temp += 1
 
-            genre_name = list(Genre.objects.filter(genre_id=genre).values_list('genre_name', flat = True))[0]
-            results.append(f'{genre_name} : {temp}')                 
+#             genre_name = list(Genre.objects.filter(genre_id=genre).values_list('genre_name', flat = True))[0]
+#             results.append(f'{genre_name} : {temp}')                 
 
-    context = {
-        'results' : results,
-    }
+#     context = {
+#         'results' : results,
+#     }
     
-    return render(request, 'movies/register.html', context)
+#     return render(request, 'movies/register.html', context)
 
 
-def movie_detail_register(request):
-    all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
-    temp = 0
-    provider_sort = ['flatrate', 'buy', 'rent','nothing']
-    params = {
-        'api_key': API_KEY,
-        'language': 'en-US'
-    }
+# def movie_detail_register(request):
+#     all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
+#     temp = 0
+#     provider_sort = ['flatrate', 'buy', 'rent','nothing']
+#     params = {
+#         'api_key': API_KEY,
+#         'language': 'en-US'
+#     }
 
-    for movie_id in all_movie_ids:
-        path = f'/movie/{movie_id}'
-        res_1 = requests.get(URL+path, params=params).json()
-        movie = Movie.objects.get(movie_id=movie_id)
-        movie.imdb_id = res_1.get('imdb_id')
-        movie.en_overview = res_1.get('overview')
-        movie.runtime = res_1.get('runtime')
-        path = f'/movie/{movie_id}/watch/providers'
-        res_2 = requests.get(URL+path, params=params).json().get('results')
-        KR_data = res_2.get('KR')
+#     for movie_id in all_movie_ids:
+#         path = f'/movie/{movie_id}'
+#         res_1 = requests.get(URL+path, params=params).json()
+#         movie = Movie.objects.get(movie_id=movie_id)
+#         movie.imdb_id = res_1.get('imdb_id')
+#         movie.en_overview = res_1.get('overview')
+#         movie.runtime = res_1.get('runtime')
+#         path = f'/movie/{movie_id}/watch/providers'
+#         res_2 = requests.get(URL+path, params=params).json().get('results')
+#         KR_data = res_2.get('KR')
         
-        if KR_data:
-            for sort in provider_sort:
-                providers = KR_data.get(sort)
-                if providers:
-                    for provider in providers:
-                        provider_id = provider['provider_id']
-                        provider_name = provider['provider_name']
-                        provider_instance = Provider(
-                            provider_id = provider_id,
-                            provider_name = provider_name            
-                        )
-                        if not Provider.objects.filter(provider_id=provider_id).exists():
-                            provider_instance.save()
-                        else:
-                            provider_instance = Provider.objects.get(provider_id=provider_id)
-                    provider_instance.owned_movies.add(movie)
-                    provider_instance.save()
-                    temp += 1
+#         if KR_data:
+#             for sort in provider_sort:
+#                 providers = KR_data.get(sort)
+#                 if providers:
+#                     for provider in providers:
+#                         provider_id = provider['provider_id']
+#                         provider_name = provider['provider_name']
+#                         provider_instance = Provider(
+#                             provider_id = provider_id,
+#                             provider_name = provider_name            
+#                         )
+#                         if not Provider.objects.filter(provider_id=provider_id).exists():
+#                             provider_instance.save()
+#                         else:
+#                             provider_instance = Provider.objects.get(provider_id=provider_id)
+#                     provider_instance.owned_movies.add(movie)
+#                     provider_instance.save()
+#                     temp += 1
                 
-        movie.save()
+#         movie.save()
         
     
-    context = {
-        'results' : KR_data,
-        'temp': temp,
-    }
+#     context = {
+#         'results' : KR_data,
+#         'temp': temp,
+#     }
 
-    return render(request, 'movies/register.html', context)
+#     return render(request, 'movies/register.html', context)
 
 
-def movie_images_register(request):
-    all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
-    temp = 0
-    params = {
-    'api_key': API_KEY,
-    }
+# def movie_images_register(request):
+#     all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
+#     temp = 0
+#     params = {
+#     'api_key': API_KEY,
+#     }
     
-    for movie_id in all_movie_ids:
-        path = f'/movie/{movie_id}/images'
-        movie = Movie.objects.get(movie_id=movie_id)
-        images = requests.get(URL+path, params=params).json()['backdrops'][:3]
-        for image in images:
-            image_instance = MovieImage()
-            image_instance.movie = movie
-            image_instance.image_URL = 'https://www.themoviedb.org/t/p/original' + image['file_path']
-            image_instance.save()
-            temp += 1
+#     for movie_id in all_movie_ids:
+#         path = f'/movie/{movie_id}/images'
+#         movie = Movie.objects.get(movie_id=movie_id)
+#         images = requests.get(URL+path, params=params).json()['backdrops'][:3]
+#         for image in images:
+#             image_instance = MovieImage()
+#             image_instance.movie = movie
+#             image_instance.image_URL = 'https://www.themoviedb.org/t/p/original' + image['file_path']
+#             image_instance.save()
+#             temp += 1
 
-    context = {
-        'results': temp
-    }
+#     context = {
+#         'results': temp
+#     }
 
-    return render(request, 'movies/register.html', context)
+#     return render(request, 'movies/register.html', context)
 
 
 
-# 영화 배우와 감독 모두 저장하기 
-def actor_register(request):
+# # 영화 배우와 감독 모두 저장하기 
+# def actor_register(request):
    
-    results = []
-    temp = 0
+#     results = []
+#     temp = 0
 
-    all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
-    params = {
-        'api_key': API_KEY,
-        'language': 'ko-KR'
-    }
+#     all_movie_ids = list(Movie.objects.all().values_list('movie_id', flat=True))
+#     params = {
+#         'api_key': API_KEY,
+#         'language': 'ko-KR'
+#     }
     
-    for movie_id in all_movie_ids:
-        movie = Movie.objects.get(movie_id=movie_id)
-        path = f'/movie/{movie_id}/credits'
-        movie_credits = requests.get(URL+path, params=params).json()
-        movie_casts = movie_credits.get('cast')
-        movie_casts.sort(key=lambda x: x['popularity'], reverse=True)
-        movie_casts = movie_casts[:5]  # 영화당 5명만 저장할 것
+#     for movie_id in all_movie_ids:
+#         movie = Movie.objects.get(movie_id=movie_id)
+#         path = f'/movie/{movie_id}/credits'
+#         movie_credits = requests.get(URL+path, params=params).json()
+#         movie_casts = movie_credits.get('cast')
+#         movie_casts.sort(key=lambda x: x['popularity'], reverse=True)
+#         movie_casts = movie_casts[:5]  # 영화당 5명만 저장할 것
 
-        this_movie_cast = []
-        for cast in movie_casts:
-            results.append(cast['id'])  # 전체 목록과 비교
-            this_movie_cast.append(cast['id'])  # 해당 영화의 캐스트 목록 
+#         this_movie_cast = []
+#         for cast in movie_casts:
+#             results.append(cast['id'])  # 전체 목록과 비교
+#             this_movie_cast.append(cast['id'])  # 해당 영화의 캐스트 목록 
                 
-        for actor_id in this_movie_cast:
-            path = f'/person/{actor_id}'
-            actor = requests.get(URL+path, params=params).json()
-            actor_instance = Actor(
-                actor_id=actor['id'],
-                gender=actor['gender'],
-                name=actor['name'],
-                biography=actor['biography'],
-                imdb_id=actor['imdb_id'],
-                popularity = actor['popularity'],
-                profile_path=actor['profile_path'],
-            )
-            if not Actor.objects.filter(actor_id=actor_id).exists():
-                actor_instance.save()
-                temp += 1
-            else:
-                actor_instance = Actor.objects.get(actor_id=actor_id) 
-            actor_instance.filmographies.add(movie)
-            actor_instance.save()
+#         for actor_id in this_movie_cast:
+#             path = f'/person/{actor_id}'
+#             actor = requests.get(URL+path, params=params).json()
+#             actor_instance = Actor(
+#                 actor_id=actor['id'],
+#                 gender=actor['gender'],
+#                 name=actor['name'],
+#                 biography=actor['biography'],
+#                 imdb_id=actor['imdb_id'],
+#                 popularity = actor['popularity'],
+#                 profile_path=actor['profile_path'],
+#             )
+#             if not Actor.objects.filter(actor_id=actor_id).exists():
+#                 actor_instance.save()
+#                 temp += 1
+#             else:
+#                 actor_instance = Actor.objects.get(actor_id=actor_id) 
+#             actor_instance.filmographies.add(movie)
+#             actor_instance.save()
     
-        movie_director_ids = []
-        movie_crews = movie_credits.get('crew')
-        for crew in movie_crews:
-            if crew['job'] == 'Director':
-                movie_director_ids.append(crew['id'])
+#         movie_director_ids = []
+#         movie_crews = movie_credits.get('crew')
+#         for crew in movie_crews:
+#             if crew['job'] == 'Director':
+#                 movie_director_ids.append(crew['id'])
         
-        for director_id in movie_director_ids:
-            path = f'/person/{director_id}'
-            director = requests.get(URL+path, params=params).json()
-            director_instance = Director(
-                director_id= director['id'],
-                gender= director['gender'],
-                name= director['name'],
-                biography= director['biography'],
-                imdb_id= director['imdb_id'],
-                popularity = director['popularity'],
-                profile_path= director['profile_path'],
-            )
-            if not Director.objects.filter(director_id=director_id).exists():
-                director_instance.save()
-            else:
-                director_instance = Director.objects.get(actor_id=actor_id)
-            director_instance.filmographies.add(movie)
-            director_instance.save()
+#         for director_id in movie_director_ids:
+#             path = f'/person/{director_id}'
+#             director = requests.get(URL+path, params=params).json()
+#             director_instance = Director(
+#                 director_id= director['id'],
+#                 gender= director['gender'],
+#                 name= director['name'],
+#                 biography= director['biography'],
+#                 imdb_id= director['imdb_id'],
+#                 popularity = director['popularity'],
+#                 profile_path= director['profile_path'],
+#             )
+#             if not Director.objects.filter(director_id=director_id).exists():
+#                 director_instance.save()
+#             else:
+#                 director_instance = Director.objects.get(actor_id=actor_id)
+#             director_instance.filmographies.add(movie)
+#             director_instance.save()
 
         
         
-    context = {
-        'results' : results,
-        'temp' : temp,
-    }
+#     context = {
+#         'results' : results,
+#         'temp' : temp,
+#     }
     
-    return render(request, 'movies/register.html', context)
+#     return render(request, 'movies/register.html', context)

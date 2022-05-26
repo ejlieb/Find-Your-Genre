@@ -106,3 +106,11 @@ class MovieTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ('movie_id', 'title', 'overview', 'genres', )
+
+
+
+class MovieRecommendSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = ('movie_id', 'title', 'poster_path', )

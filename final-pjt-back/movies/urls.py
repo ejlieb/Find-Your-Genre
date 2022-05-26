@@ -19,11 +19,12 @@ urlpatterns = [
 
 
     # 영화 추천하는 url 모음
-    path('genre_main_page/<int:genre_sort>', views.genre_main_page),
-    path('genre_top_ten/<int:genre_sort>', views.genre_top_ten),
+    
+    path('genre_recommend/<int:genre_sort>/', views.genre_recommend),
 
     
-    
+    # path('genre_main_page/<int:genre_sort>', views.genre_main_page),
+
     # 이하는 TMDB서버에서 장고 서버로 데이터 받아오는 URL
     # path('genre/', views.genre_register),
     # path('movie/', views.movie_register),
