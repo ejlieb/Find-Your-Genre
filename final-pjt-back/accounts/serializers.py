@@ -66,3 +66,10 @@ class UserProfileActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
         fields = ('actor_id', 'name', 'profile_path', )
+
+
+class UserSearchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fileds = ('pk', 'username')
