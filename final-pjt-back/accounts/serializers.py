@@ -72,4 +72,4 @@ class UserSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fileds = ('pk', 'username')
+        fields = ('pk', 'username')

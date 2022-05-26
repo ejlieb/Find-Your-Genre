@@ -12,6 +12,7 @@ export default {
     currentUser: {},
     profile: {},
     authError: null,
+    userSearchResult: [],
   },
   // 모든 state는 getters 를 통해서 접근하겠다.
   getters: {
@@ -19,7 +20,8 @@ export default {
     currentUser: state => state.currentUser,
     profile: state => state.profile,
     authError: state => state.authError,
-    authHeader: state => ({ Authorization: `Token ${state.token}`})
+    authHeader: state => ({ Authorization: `Token ${state.token}`}),
+    userSearchResult: state => state.userSearchResult,
   },
 
   mutations: {
@@ -27,7 +29,10 @@ export default {
     SET_CURRENT_USER: (state, user) => {
       state.currentUser = user},
     SET_PROFILE: (state, profile) => state.profile = profile,
-    SET_AUTH_ERROR: (state, error) => state.authError = error
+    SET_AUTH_ERROR: (state, error) => state.authError = error,
+    setUserSearchResult: function(state, search) {
+      state.userSearchResult = search
+    }
   },
 
   actions: {
@@ -193,6 +198,20 @@ export default {
       })
         .then(() =>
         dispatch('fetchProfile', {username: username}))
-    }
+    },
+    sendUserSearchRequest: function({ commit }, search) {
+      console.log('hihi')
+      axios({
+        method: 'get',
+        url: drf.accounts.searchUser(),
+        params: {
+          search: search
+        },
+      })
+        .then(res => {
+          commit('setUserSearchResult', res.data)
+        })
+    },
   },
+  
 }

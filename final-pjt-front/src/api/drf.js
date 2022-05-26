@@ -15,7 +15,8 @@ export default {
     // username으로 프로필 제공
     profile: username => HOST + ACCOUNTS + 'profile/' + username,
     saveLikes: () => HOST + ACCOUNTS + 'likes_movie/',
-    follow: username => HOST + ACCOUNTS + 'profile/' + username +'/follow'
+    follow: username => HOST + ACCOUNTS + 'profile/' + username +'/follow',
+    searchUser: () => HOST + ACCOUNTS + 'search/'
   },
   communities: {
     // /articles/

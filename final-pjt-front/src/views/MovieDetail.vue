@@ -2,6 +2,13 @@
   <div>
     <div class="for-nav" style="height: 5em;"></div>
     <div class="for-nav" style="height: 5em;"></div>
+      <div class="sidebar col-1 d-flex flex-column align-items-end">
+          <div class="d-flex flex-column align-items-center sidebar-box">
+            <p class="mt-4">For you</p>
+            <img :src="path + movie.poster_path" class="sidebar-item my-3" alt="" v-for="movie, idx in detail.similar_movies.slice(1,4)" :key="idx" @click="goToDetail(movie)">
+            
+          </div>
+      </div>
     <div class="container">
       
       <div class="row poster-row">
@@ -106,7 +113,11 @@ export default {
         likeMovieIds: [movie],
       }
       this.$store.dispatch('saveLike', credentials)
-    }
+    },
+    goToDetail: function(movieData) {
+      console.log(movieData)
+      this.$router.push({name: 'movieDetail', params: { movieId: movieData.movie_id, movie: movieData}})
+    },
   }
 }
 </script>
@@ -129,5 +140,21 @@ export default {
   .review-lst-item:hover{
     cursor: pointer;
   }
-  
+  .sidebar{
+    position: sticky;
+    width:100%;
+  }
+  .sidebar-box{
+    position: fixed;
+    top: 25vh;
+    width: 7%;
+    background:linear-gradient(0deg, rgba(15,15,15,1) 7%,rgba(50,50,50,1) 40%,rgba(50,50,50,1) 60%, rgba(15, 15, 15, 1)93%);
+    margin-right: 2.5%;
+    border-radius: 2em;
+    padding: 0.5em;
+  }
+  .sidebar-item{
+    width: 75%;
+    border-radius: 0.5em;;
+  }
 </style>
