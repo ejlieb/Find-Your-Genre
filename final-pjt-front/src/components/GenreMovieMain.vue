@@ -19,8 +19,8 @@
                 <div class="movie-add">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
-                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i> 
+                <!-- <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>  -->
                 </div>
               </div>
             </div>
@@ -47,9 +47,9 @@ export default {
   name: "GenreMovieMain",
   mounted: function() {
       this.$store.dispatch('getMovieForGenreMain', this.$route.params.genreId)
-      if (this.isLoggedIn){
-        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
-      }
+      // if (this.isLoggedIn){
+      //   this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      // }
     },
   data: function() {
     return {

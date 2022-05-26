@@ -18,7 +18,7 @@
             <div class="d-flex justify-content-between form-item align-items-center">
               <label for="password2" style="color: rgba(240,240,240,1);">Rating:</label>
               <!-- <input v-model="credentials.rating" type="number" id="rating" class="my-1" required /> -->
-              <star-rating :increment="0.5" star-size="30" :show-rating="false" v-model="credentials.rating"></star-rating>
+              <star-rating :increment="0.5" :star-size="30" :show-rating="false" v-model="credentials.rating"></star-rating>
             </div>
             <div class="d-flex form-item justify-content-end">
               <button class="my-1">Submit</button> 

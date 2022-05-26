@@ -11,7 +11,7 @@
               <span style="font-size: 5em;">{{ movie.title }}</span>
             </div>
             <div class="movie-overview">
-              <span>{{ movie.overview }}</span>
+              <span>{{ currentUser }} {{isLoggedIn}}</span>
               <div class="movie-info">
               <!-- 장르 버튼에 v-for= "" key="#"넣기 -->
               <button type="button" class="btn btn-outline-light mx-2" v-for="genre, idx in movie.genres" :key="idx">{{ genre.genre_name }}</button> 
@@ -19,8 +19,8 @@
                 <div class="movie-add" v-if="isLoggedIn">
                 <!-- v-on click통해 디테일페이지로 라우트 / 영화 좋아요하기 -->
                 <button type="button" class="btn btn-danger mx-2" @click="goToDetail(movie)">Detail</button>
-                <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
-                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                <!-- <i class="fa-regular fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="!profile.liked_movie_ids.includes(movie.movie_id)"></i>
+                <i class="fa-solid fa-2xl fa-heart mx-2" @click="saveLike(movie.movie_id)" v-if="profile.liked_movie_ids.includes(movie.movie_id)"></i> -->
                 </div>
               </div>
             </div>
@@ -47,9 +47,9 @@ export default {
   name: "HomeMain",
   mounted: function() {
       this.$store.dispatch('getMovieForHome')
-      if (this.isLoggedIn){
-        this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
-      }
+      // if (this.isLoggedIn){
+      //   this.$store.dispatch('fetchProfile', { username: this.currentUser.username })
+      // }
     },
   data: function() {
     return {
@@ -68,7 +68,7 @@ export default {
       },
       isLoggedIn: function() {
         return this.$store.getters.isLoggedIn
-      }
+      },
     },
   methods: {
     goToDetail: function(movieData) {
